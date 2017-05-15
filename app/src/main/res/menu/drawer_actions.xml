@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_order"
+          android:enabled="true"
+          android:icon="@drawable/ic_library_books_black_24dp"
+          android:title="@string/action_order"
+          app:showAsAction="ifRoom"/>
+    <item android:id="@+id/action_orders"
+          android:title="@string/orders"
+          android:enabled="true"
+          android:icon="@drawable/ic_developer_board_black_24dp"
+          app:showAsAction="ifRoom"/>
+    <item android:id="@+id/action_stats"
+          android:title="@string/stats"
+          android:enabled="true"
+          android:icon="@drawable/ic_account_circle_black_24dp"
+          app:showAsAction="ifRoom"/>
+
+</menu>

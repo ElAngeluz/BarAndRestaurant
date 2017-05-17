@@ -65,9 +65,30 @@ public class ProductRepository implements ProductDataSource {
 
         Observable<List<Product>> remoteProducts = getAndSaveRemoteProducts();
 
+<<<<<<< HEAD
         // TODO: 5/13/2017
     return remoteProducts;
+=======
+        if(mCachedIsDirty){
+            return remoteProducts;
+        } else {
+            // Query the local storage if available, then query the remote network
+            Observable<List<Product>> localProducts = getAndCacheLocalProducts();
+            return Observable.merge(localProducts, remoteProducts);
+        }
 
+
+    }
+>>>>>>> 3f20903c5d7f38a7d0432e49ce0f992c1408cb72
+
+    private Observable<List<Product>> getAndCacheLocalProducts() {
+        return mProductLocalDataSource.getAll()
+                .observeOn(mScheduleProvider.ui())
+                .flatMap(products -> Observable
+                        .fromArray(products.toArray(new Product[products.size()]))
+                        .doOnNext(product -> mCachedProducts.put(product.getId(), product))
+                        .toList()
+                        .toObservable());
     }
 
     private Observable<List<Product>> getAndSaveRemoteProducts() {

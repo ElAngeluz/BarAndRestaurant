@@ -103,17 +103,11 @@ public class WaitersRepository implements WaitersDataSource {
         
         return mWaitersLocalDataSource.getAll()
                 .observeOn(mScheduleProvider.ui())
-                .flatMap(new Function<List<Waiter>, Observable<List<Waiter>>>(){
-
-                    @Override
-                    public Observable<List<Waiter>> apply(List<Waiter> waiters) throws Exception {
-                        return Observable
-                                .fromArray(waiters.toArray(new Waiter[waiters.size()]))
-                                .doOnNext(waiter -> mCachedWaiters.put(waiter.getId(), waiter))
-                                .toList()
-                                .toObservable();
-                    }
-                });
+                .flatMap(waiters -> Observable
+                        .fromArray(waiters.toArray(new Waiter[waiters.size()]))
+                        .doOnNext(waiter -> mCachedWaiters.put(waiter.getId(), waiter))
+                        .toList()
+                        .toObservable());
     }
 
 

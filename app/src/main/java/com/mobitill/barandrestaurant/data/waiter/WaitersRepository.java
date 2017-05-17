@@ -18,8 +18,6 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.Nullable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -113,28 +111,23 @@ public class WaitersRepository implements WaitersDataSource {
 
     @Override
     public Observable<Waiter> getOne(String id) {
+
         checkNotNull(id);
+
         final Waiter cachedWaiter = getWaiterWithId(id);
-        if (returnCachedWaiter(cachedWaiter)) {
+        if (isWaiterCached(cachedWaiter)) {
             return Observable.just(cachedWaiter);
         }
-
 
         // Is the waiter in the local data source if no query the network
         Observable<Waiter> localWaiter = getWaiterWithIdFromLocalRepository(id);
         Observable<Waiter> remoteWaiter = mWaitersRemoteDataSource
                 .getAll()
-                .flatMap(new Function<List<Waiter>, Observable<Waiter>>() {
-
-                    @Override
-                    public Observable<Waiter> apply(List<Waiter> waiters) throws Exception {
-                        return Observable
-                                .fromArray(waiters.toArray(new Waiter[waiters.size()]))
-                                .filter(waiter -> waiter.getId().equals(id))
-                                .firstElement()
-                                .toObservable();
-                    }
-                });
+                .flatMap(waiters -> Observable
+                        .fromArray(waiters.toArray(new Waiter[waiters.size()]))
+                        .filter(waiter -> waiter.getId().equals(id))
+                        .firstElement()
+                        .toObservable());
 
         return Observable.concat(localWaiter, remoteWaiter)
                 .first(null)
@@ -146,7 +139,7 @@ public class WaitersRepository implements WaitersDataSource {
                 }).toObservable();
     }
 
-    private boolean returnCachedWaiter(Waiter cachedWaiter) {
+    private boolean isWaiterCached(Waiter cachedWaiter) {
         // respond immediately with cache if available
         if(cachedWaiter != null){
             return true;
@@ -187,14 +180,8 @@ public class WaitersRepository implements WaitersDataSource {
     private Observable<Waiter> getWaiterWithIdFromLocalRepository(@NonNull String id) {
         return mWaitersLocalDataSource
                 .getOne(id)
-                .doOnNext(new Consumer<Waiter>() {
-
-                    @Override
-                    public void accept(Waiter waiter) throws Exception {
-                        Observable.just(waiter)
-                                .doOnNext(waiter1 ->  mCachedWaiters.put(id, waiter1));
-                    }
-                })
+                .doOnNext(waiter -> Observable.just(waiter)
+                        .doOnNext(waiter1 ->  mCachedWaiters.put(id, waiter1)))
                 .firstElement().toObservable();
 
     }
@@ -210,7 +197,7 @@ public class WaitersRepository implements WaitersDataSource {
 
         final Waiter cachedWaiter = getWaiterWithPin(pin);
 
-        if (returnCachedWaiter(cachedWaiter)) {
+        if (isWaiterCached(cachedWaiter)) {
             return Observable.just(cachedWaiter);
         }
 
@@ -218,17 +205,11 @@ public class WaitersRepository implements WaitersDataSource {
         Observable<Waiter> localWaiter = getWaiterWithPinFromLocalRepository(pin);
         Observable<Waiter> remoteWaiter = mWaitersRemoteDataSource
                 .getAll()
-                .flatMap(new Function<List<Waiter>, Observable<Waiter>>() {
-
-                    @Override
-                    public Observable<Waiter> apply(List<Waiter> waiters) throws Exception {
-                        return Observable
-                                .fromArray(waiters.toArray(new Waiter[waiters.size()]))
-                                .filter(waiter -> waiter.getPin().equals(pin))
-                                .firstElement()
-                                .toObservable();
-                    }
-                });
+                .flatMap(waiters -> Observable
+                        .fromArray(waiters.toArray(new Waiter[waiters.size()]))
+                        .filter(waiter -> waiter.getPin().equals(pin))
+                        .firstElement()
+                        .toObservable());
 
         return Observable.concat(localWaiter, remoteWaiter)
                 .firstOrError()
@@ -242,8 +223,7 @@ public class WaitersRepository implements WaitersDataSource {
 
     private Observable<Waiter> getWaiterWithPinFromLocalRepository(String pin) {
         return mWaitersLocalDataSource
-                .getWaiterFromPin(pin)
-                .firstElement().toObservable();
+                .getWaiterFromPin(pin);
     }
 
     private Waiter getWaiterWithPin(@NonNull String pin) {

@@ -19,8 +19,6 @@ public class RegisterPresenterModule {
         mContext = context;
     }
 
-
-
     @Provides
     @NonNull
     RegisterContract.View provideRegisterContractView(){

@@ -66,7 +66,7 @@ public class ProductRepository implements ProductDataSource {
         Observable<List<Product>> remoteProducts = getAndSaveRemoteProducts();
 
         // TODO: 5/13/2017
-
+    return remoteProducts;
 
     }
 

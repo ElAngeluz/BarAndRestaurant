@@ -11,6 +11,7 @@ import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
 
@@ -53,24 +54,20 @@ public class ProductRepository implements ProductDataSource {
     /**
      * Get waiters from cache, local data source (SQLite) or remote data source,
      * whichever is available first
-     * */
+     */
     @Override
     public Observable<List<Product>> getAll() {
         // Respond immediately with the cache if cached is available and not dirty
-        if(mCachedProducts != null && !mCachedIsDirty){
+        if (mCachedProducts != null && !mCachedIsDirty) {
             return Observable.fromIterable(mCachedProducts.values()).toList().toObservable();
-        } else if (mCachedProducts == null){
+        } else if (mCachedProducts == null) {
             mCachedProducts = new LinkedHashMap<>();
         }
 
         Observable<List<Product>> remoteProducts = getAndSaveRemoteProducts();
         return remoteProducts;
 
-<<<<<<< HEAD
-        // TODO: 5/13/2017
-    return remoteProducts;
-=======
-        if(mCachedIsDirty){
+        if (mCachedIsDirty) {
             return remoteProducts;
         } else {
              Query the local storage if available, then query the remote network
@@ -80,7 +77,6 @@ public class ProductRepository implements ProductDataSource {
 
 
     }
->>>>>>> 3f20903c5d7f38a7d0432e49ce0f992c1408cb72
 
     private Observable<List<Product>> getAndCacheLocalProducts() {
         return mProductLocalDataSource.getAll()
@@ -98,39 +94,145 @@ public class ProductRepository implements ProductDataSource {
                 .flatMap(products -> Observable
                         .fromArray(products.toArray(new Product[products.size()]))
                         .doOnNext(product -> {
-                    mProductLocalDataSource.save(product);
-                    mCachedProducts.put(product.getId(), product);
-                }).toList().toObservable())
+                            mProductLocalDataSource.getOne(product.getId())
+                                    .subscribe(
+                                            product1 -> {
+                                                if (product1 != null) {
+                                                    mProductLocalDataSource.update(product);
+                                                } else {
+                                                    mProductLocalDataSource.save(product);
+                                                }
+                                            },
+                                            throwable -> mProductLocalDataSource.save(product),
+                                            () -> {
+                                            });
+
+                            mCachedProducts.remove(product.getId());
+                            mCachedProducts.put(product.getId(), product);
+                        })
+                        .toList()
+                        .toObservable())
                 .doOnComplete(() -> mCachedIsDirty = false);
     }
 
     @Override
     public Observable<Product> getOne(String id) {
-        return null;
+        checkNotNull(id);
+
+        final Product cachedProduct = getProductWithId(id);
+        if (isProductCached(cachedProduct)) {
+            return Observable.just(cachedProduct);
+        }
+
+        // Is the product in the local data source? If no query the network
+        Observable<Product> localProduct = getProductFromLocalRepository(id);
+        Observable<Product> remoteProduct = mProductRemoteDataSource
+                .getAll()
+                .flatMap(products -> Observable
+                        .fromArray(products.toArray(new Product[products.size()]))
+                        .filter(product -> product.getId().equals(id)))
+                .firstElement()
+                .toObservable();
+
+        return Observable.concat(localProduct, remoteProduct)
+                .firstOrError()
+                .map(product -> {
+                    if (product == null) {
+                        throw new NoSuchElementException("No Waiter found with Id " + id);
+                    }
+                    return product;
+                }).toObservable();
+
+    }
+
+    private Observable<Product> getProductFromLocalRepository(String id) {
+        return mProductLocalDataSource
+                .getOne(id)
+                .observeOn(mScheduleProvider.ui())
+                .doOnNext(product -> Observable
+                        .just(product)
+                        .doOnNext(product1 -> mCachedProducts.put(id, product1)))
+                .firstElement()
+                .toObservable();
+    }
+
+    private boolean isProductCached(Product cachedProduct) {
+
+        //respond immediately with cache if available
+        if (cachedProduct != null) {
+            return true;
+        }
+
+        // do in memory cache update to keep UI up to date
+        if (mCachedProducts == null) {
+            mCachedProducts = new LinkedHashMap<>();
+        }
+        return false;
+    }
+
+    private Product getProductWithId(String id) {
+        checkNotNull(id);
+        if (mCachedProducts == null || mCachedProducts.isEmpty()) {
+            return null;
+        } else {
+            return mCachedProducts.get(id);
+        }
     }
 
     @Override
     public long save(Product item) {
-        return 0;
+        return mProductLocalDataSource.save(item);
     }
 
     @Override
     public int delete(String id) {
-        return 0;
+        return mProductLocalDataSource.delete(id);
     }
 
     @Override
     public int update(Product item) {
-        return 0;
+        return mProductLocalDataSource.update(item);
     }
 
     @Override
     public void deleteAll() {
-
+        mProductRemoteDataSource.deleteAll();
     }
 
     @Override
     public Observable<Product> getProductWithIdentifier(String identifier) {
-        return null;
+        checkNotNull(identifier);
+
+        final Observable<Product> cachedProduct = getCachedProductWithIdentifier(identifier);
+        final Observable<Product> localProduct = getProductWithIdentifierFromLocalDataSource(identifier);
+        final Observable<Product> remoteProduct = mProductRemoteDataSource
+                .getAll()
+                .flatMap(products -> Observable.fromArray(products.toArray(new Product[products.size()]))
+                        .filter(product -> product.getIdentifier().equals(identifier))
+                        .firstElement()
+                        .toObservable());
+
+        return Observable.concat(cachedProduct, localProduct, remoteProduct)
+                .filter(product -> product != null)
+                .firstOrError()
+                .toObservable();
+
     }
+
+    private Observable<Product> getProductWithIdentifierFromLocalDataSource(String identifier) {
+        return mProductLocalDataSource.getProductWithIdentifier(identifier);
+    }
+
+    private Observable<Product> getCachedProductWithIdentifier(@NonNull String identifier) {
+        checkNotNull(identifier);
+        if (mCachedProducts == null || mCachedProducts.isEmpty()) {
+            return null;
+        } else {
+            return Observable.fromIterable(mCachedProducts.values())
+                    .filter(product1 -> product1.getIdentifier().equals(identifier))
+                    .firstOrError()
+                    .toObservable();
+        }
+    }
+
 }

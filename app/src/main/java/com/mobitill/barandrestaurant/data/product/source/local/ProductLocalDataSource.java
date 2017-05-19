@@ -63,7 +63,7 @@ public class ProductLocalDataSource implements ProductDataSource {
 
     @Override
     public Observable<List<Product>> getAll() {
-        String sql = String.format("SELECT %s FROM @s", TextUtils.join(",", projection), ProductEntry.TABLE_NAME);
+        String sql = String.format("SELECT %s FROM %s", TextUtils.join(",", projection), ProductEntry.TABLE_NAME);
         rx.Observable<List<Product>> productObservableV1 =
                 mDatabaseHelper.createQuery(ProductEntry.TABLE_NAME, sql)
                 .mapToList(mProductMapperFunction).take(50, TimeUnit.MILLISECONDS);

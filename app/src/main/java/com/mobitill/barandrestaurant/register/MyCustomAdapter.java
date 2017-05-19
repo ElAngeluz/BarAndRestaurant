@@ -40,7 +40,9 @@ public class MyCustomAdapter extends RecyclerView.Adapter<MyCustomAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
+        //Products entered should go here e.g Tusker, Balozi and the likes
+        Product product = data.get(position);
+        holder.bindView(product);
     }
 
     @Override
@@ -56,6 +58,9 @@ public class MyCustomAdapter extends RecyclerView.Adapter<MyCustomAdapter.MyView
         public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+        }
+        public void bindView(Product product){
+            buttonProductItem.setText("Product names go here");
         }
     }
 }

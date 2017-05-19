@@ -65,11 +65,12 @@ public class ProductRepository implements ProductDataSource {
         }
 
         Observable<List<Product>> remoteProducts = getAndSaveRemoteProducts();
+        return remoteProducts;
 
         if (mCachedIsDirty) {
             return remoteProducts;
         } else {
-            // Query the local storage if available, then query the remote network
+             Query the local storage if available, then query the remote network
             Observable<List<Product>> localProducts = getAndCacheLocalProducts();
             return Observable.merge(localProducts, remoteProducts);
         }

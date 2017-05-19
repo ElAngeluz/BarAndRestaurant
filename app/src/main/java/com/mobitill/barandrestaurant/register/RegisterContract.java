@@ -2,6 +2,9 @@ package com.mobitill.barandrestaurant.register;
 
 import com.mobitill.barandrestaurant.BasePresenter;
 import com.mobitill.barandrestaurant.BaseView;
+import com.mobitill.barandrestaurant.data.product.models.Product;
+
+import java.util.List;
 
 /**
  * Created by james on 5/10/2017.
@@ -9,9 +12,9 @@ import com.mobitill.barandrestaurant.BaseView;
 
 public interface RegisterContract {
     interface View extends BaseView<Presenter> {
-
+        void showProducts(List<Product> products);
     }
     interface Presenter extends BasePresenter{
-
+        void getProducts();
     }
 }

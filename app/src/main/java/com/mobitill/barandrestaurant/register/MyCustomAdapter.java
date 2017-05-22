@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
  * Created by andronicus on 5/19/2017.
  */
 
-public class MyCustomAdapter extends RecyclerView.Adapter<MyCustomAdapter.MyViewHolder> {
+public class MyCustomAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     private Context context;
     private List<Product> data;
@@ -43,6 +43,8 @@ public class MyCustomAdapter extends RecyclerView.Adapter<MyCustomAdapter.MyView
         //Products entered should go here e.g Tusker, Balozi and the likes
         Product product = data.get(position);
         holder.bindView(product);
+
+
     }
 
     @Override
@@ -50,17 +52,4 @@ public class MyCustomAdapter extends RecyclerView.Adapter<MyCustomAdapter.MyView
         return data.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
-
-        @BindView(R.id.btn_product_item)
-        Button buttonProductItem;
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this,itemView);
-        }
-        public void bindView(Product product){
-            buttonProductItem.setText("Product names go here");
-        }
-    }
 }

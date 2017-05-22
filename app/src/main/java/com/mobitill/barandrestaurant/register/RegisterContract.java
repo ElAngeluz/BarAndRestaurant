@@ -13,6 +13,8 @@ import java.util.List;
 public interface RegisterContract {
     interface View extends BaseView<Presenter> {
         void showProducts(List<Product> products);
+
+        void showNoProducts();
     }
     interface Presenter extends BasePresenter{
         void getProducts();

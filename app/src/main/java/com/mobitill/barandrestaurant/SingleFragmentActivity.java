@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
-
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.nav_view) BottomNavigationView mNavigationView;
 

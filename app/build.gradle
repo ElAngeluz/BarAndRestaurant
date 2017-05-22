@@ -74,6 +74,7 @@ dependencies {
     compile "com.github.akarnokd:rxjava2-interop:0.9.7"
     compile 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC2'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'com.hannesdorfmann:adapterdelegates3:3.0.1'
 
 
     testCompile 'junit:junit:4.12'

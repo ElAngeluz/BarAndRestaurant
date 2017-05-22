@@ -1,9 +1,9 @@
 package com.mobitill.barandrestaurant.register;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.product.ProductRepository;
-import com.mobitill.barandrestaurant.data.product.models.Product;
 
 import javax.inject.Inject;
 
@@ -15,6 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class RegisterPresenter  implements RegisterContract.Presenter{
 
+    private static final String TAG = RegisterPresenter.class.getSimpleName();
     @NonNull
     private final RegisterContract.View mView;
 
@@ -52,11 +53,19 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
                 .getAll()
                 .subscribe(
                         //onNext
-                        products -> mView.showProducts(products)
+                        products -> {
+                            if(products != null && !products.isEmpty()){
+                                mView.showProducts(products);
+                            } else {
+                                mView.showNoProducts();
+                            }
 
-                        //onError
-
-                        //onCompleted
+                        },
+                        throwable -> {
+                            Log.e(TAG, "getProducts: ", throwable);
+                            mView.showNoProducts();
+                        },
+                        () -> {}
 
                 );
     }

@@ -106,12 +106,13 @@ public class ProductLocalDataSource implements ProductDataSource {
     @Override
     public int update(Product item) {
         ContentValues contentValues = new ContentValues();
+        contentValues.put(ProductEntry.COLUMN_NAME_ID, item.getId());
         contentValues.put(ProductEntry.COLUMN_NAME_BARCODE, item.getBarcode());
         contentValues.put(ProductEntry.COLUMN_NAME_IDENTIFIER, item.getIdentifier());
         contentValues.put(ProductEntry.COLUMN_NAME_PRICE, item.getPrice());
         contentValues.put(ProductEntry.COLUMN_NAME_VAT, item.getVat());
         contentValues.put(ProductEntry.COLUMN_NAME_PRODUCT_NAME, item.getName());
-        String selection = ProductEntry.TABLE_NAME + "LIKE ?";
+        String selection = ProductEntry.COLUMN_NAME_ID + "LIKE ?";
         String[] selectionArgs = {item.getId()};
         return mDatabaseHelper.update(ProductEntry.TABLE_NAME, contentValues, selection, selectionArgs);
     }

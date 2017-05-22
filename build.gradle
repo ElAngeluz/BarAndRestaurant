@@ -1,15 +1,20 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext.kotlin_version = '1.1.2-4'
     repositories {
         jcenter()
+        maven {
+            url 'https://maven.google.com'
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.4.0-alpha7'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha1'
 
         // Better IDE support for annotations (so Android Studio interacts better with Dagger)
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath "com.fernandocejas.frodo:frodo-plugin:0.8.3"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

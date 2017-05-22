@@ -10,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.product.models.Product;
-import com.mobitill.barandrestaurant.data.product.models.ProductResponse;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,9 +31,17 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
 
     private static final String TAG = RegisterFragment.class.getSimpleName();
 
+    @Inject
+    RegisterPresenter mRegisterPresenter;
+
     private RegisterContract.Presenter mPresenter;
     private Unbinder mUnbinder;
 
+<<<<<<< HEAD
+=======
+    @BindView(R.id.productsRecyclerView) public RecyclerView recyclerView;
+
+>>>>>>> 124c572a0bcfdc73a01495bb7ffedcb06426a7bd
     private MyCustomAdapter myCustomAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -57,6 +67,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
 
         DaggerRegisterComponent.builder()
                 .registerPresenterModule(new RegisterPresenterModule(this, getActivity()))
+                .productRepositoryComponent(((MainApplication)getActivity().getApplication()).getProductRepositoryComponent())
                 .build()
                 .inject(this);
     }
@@ -66,7 +77,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_register, container, false);
-        mUnbinder = ButterKnife.bind(getActivity(), view);
+        mUnbinder = ButterKnife.bind(this, view);
         layoutManager = new GridLayoutManager(getActivity(),3);
         recyclerView.setLayoutManager(layoutManager);
         return view;

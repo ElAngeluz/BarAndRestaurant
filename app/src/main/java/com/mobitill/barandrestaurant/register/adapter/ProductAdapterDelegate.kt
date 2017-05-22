@@ -17,10 +17,10 @@ import com.mobitill.barandrestaurant.data.product.models.Product
 
 class ProductAdapterDelegate(activity: Activity) : AdapterDelegate<List<Product>>() {
 
-    private val mLayoutInflater: LayoutInflater
+    private val mLayoutInflater: LayoutInflater = activity.layoutInflater
 
-    init {
-        mLayoutInflater = activity.layoutInflater
+    companion object {
+        val TAG = ProductAdapterDelegate::class.java.simpleName
     }
 
     override fun isForViewType(products: List<Product>, i: Int): Boolean {
@@ -47,8 +47,5 @@ class ProductAdapterDelegate(activity: Activity) : AdapterDelegate<List<Product>
         }
     }
 
-    companion object {
 
-        val TAG = ProductAdapterDelegate::class.java.simpleName
-    }
 }

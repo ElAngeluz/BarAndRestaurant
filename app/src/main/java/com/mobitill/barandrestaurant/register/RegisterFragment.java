@@ -3,6 +3,7 @@ package com.mobitill.barandrestaurant.register;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.product.models.Product;
+import com.mobitill.barandrestaurant.register.adapter.RegisterAdapter;
 
 import java.util.List;
 
@@ -41,8 +43,12 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
 =======
     @BindView(R.id.productsRecyclerView) public RecyclerView recyclerView;
 
+<<<<<<< HEAD
 >>>>>>> 124c572a0bcfdc73a01495bb7ffedcb06426a7bd
     private MyCustomAdapter myCustomAdapter;
+=======
+    private RegisterAdapter mRegisterAdapter;
+>>>>>>> 1a5eed11cd9c282159b4030f5ac31d6db0c1323d
     private RecyclerView.LayoutManager layoutManager;
 
     @BindView(R.id.productsRecyclerView)
@@ -108,6 +114,19 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
 
     @Override
     public void showProducts(List<Product> products) {
-        recyclerView.setAdapter(myCustomAdapter);
+        if(isAdded()){
+            if(mRegisterAdapter == null){
+                mRegisterAdapter = new RegisterAdapter(getActivity(), products);
+                recyclerView.setAdapter(mRegisterAdapter);
+            } else {
+                mRegisterAdapter.setItems(products);
+                mRegisterAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void showNoProducts() {
+        Snackbar.make(recyclerView, "Products", Snackbar.LENGTH_SHORT).show();
     }
 }

@@ -79,6 +79,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     provided 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.android.support:multidex:1.0.0'
+    compile 'com.hannesdorfmann:adapterdelegates3:3.0.1'
 
 
     testCompile 'junit:junit:4.12'

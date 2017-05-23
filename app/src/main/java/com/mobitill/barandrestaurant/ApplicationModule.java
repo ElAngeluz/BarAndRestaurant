@@ -60,7 +60,9 @@ public class ApplicationModule {
 
     @Provides
     OkHttpClient provideOkHttpClient(HttpLoggingInterceptor httpLoggingInterceptor){
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(httpLoggingInterceptor)
+                .build();
         return client;
     }
 

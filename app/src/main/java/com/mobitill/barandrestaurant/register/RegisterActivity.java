@@ -19,7 +19,6 @@ public class RegisterActivity extends SingleFragmentActivity {
 
     public static Intent newIntent(Context context){
         Intent intent = new Intent(context, RegisterActivity.class);
-
         return intent;
     }
 

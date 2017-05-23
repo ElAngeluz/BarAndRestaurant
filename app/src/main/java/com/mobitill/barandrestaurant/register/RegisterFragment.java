@@ -48,12 +48,21 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
     private RegisterContract.Presenter mPresenter;
     private Unbinder mUnbinder;
 
+<<<<<<< HEAD
+=======
     @BindView(R.id.productsRecyclerView) public RecyclerView recyclerView;
 
+<<<<<<< HEAD
+>>>>>>> 124c572a0bcfdc73a01495bb7ffedcb06426a7bd
+    private MyCustomAdapter myCustomAdapter;
+=======
     private RegisterAdapter mRegisterAdapter;
+>>>>>>> 1a5eed11cd9c282159b4030f5ac31d6db0c1323d
     private RecyclerView.LayoutManager layoutManager;
     private List<Product> mProducts = new ArrayList<>();
 
+    @BindView(R.id.productsRecyclerView)
+    private RecyclerView recyclerView;
 
     public RegisterFragment() {
         // Required empty public constructor

@@ -1,6 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.fernandocejas.frodo'
 
 android {
@@ -13,7 +11,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -62,31 +59,20 @@ dependencies {
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
     compile "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
     compile "com.squareup.okhttp3:logging-interceptor:$rootProject.logginInterceptor"
+    provided 'org.glassfish:javax.annotation:10.0-b28'
 
     //Butterknife
     compile "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
 
 
-
-
     compile 'com.squareup.sqlbrite:sqlbrite:1.1.1'
     compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'com.github.akarnokd:rxjava2-interop:0.9.7'
+    compile "com.github.akarnokd:rxjava2-interop:0.9.7"
     compile 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:support-v4:25.3.1'
-    testCompile 'junit:junit:4.12'
-    provided 'org.glassfish:javax.annotation:10.0-b28'
-    compile 'com.android.support:multidex:1.0.0'
-    compile 'com.hannesdorfmann:adapterdelegates3:3.0.1'
 
 
     testCompile 'junit:junit:4.12'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-}
-repositories {
-    mavenCentral()
 }

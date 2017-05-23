@@ -84,4 +84,32 @@ public class Product {
         this.vat = vat;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Product product = (Product) o;
+
+        if (barcode != null ? !barcode.equals(product.barcode) : product.barcode != null)
+            return false;
+        if (!id.equals(product.id)) return false;
+        if (identifier != null ? !identifier.equals(product.identifier) : product.identifier != null)
+            return false;
+        if (!name.equals(product.name)) return false;
+        if (price != null ? !price.equals(product.price) : product.price != null) return false;
+        return vat != null ? vat.equals(product.vat) : product.vat == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = barcode != null ? barcode.hashCode() : 0;
+        result = 31 * result + id.hashCode();
+        result = 31 * result + (identifier != null ? identifier.hashCode() : 0);
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (vat != null ? vat.hashCode() : 0);
+        return result;
+    }
 }

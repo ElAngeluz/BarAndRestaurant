@@ -10,6 +10,7 @@ public class Constants {
         public final static String MOBITILL = "mobitill";
         public final static String COUNTERA =  "counter_a";
         public final static String COUNTERB = "counter_b";
+        public static final String POS = "pos";
     }
 
     public static final class BaseUrl{

@@ -1,9 +1,12 @@
 package com.mobitill.barandrestaurant.data.product.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Product {
+public class Product implements Parcelable {
 
     @SerializedName("barcode")
     @Expose
@@ -112,4 +115,41 @@ public class Product {
         result = 31 * result + (vat != null ? vat.hashCode() : 0);
         return result;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.barcode);
+        dest.writeString(this.id);
+        dest.writeString(this.identifier);
+        dest.writeString(this.name);
+        dest.writeString(this.price);
+        dest.writeString(this.vat);
+    }
+
+    protected Product(Parcel in) {
+        this.barcode = in.readString();
+        this.id = in.readString();
+        this.identifier = in.readString();
+        this.name = in.readString();
+        this.price = in.readString();
+        this.vat = in.readString();
+    }
+
+    public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel source) {
+            return new Product(source);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 }

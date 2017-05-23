@@ -27,6 +27,7 @@ public class ProductRepository implements ProductDataSource {
 
     private static final String TAG = ProductRepository.class.getSimpleName();
 
+
     private final ProductDataSource mProductRemoteDataSource;
     private final ProductDataSource mProductLocalDataSource;
 
@@ -65,19 +66,11 @@ public class ProductRepository implements ProductDataSource {
         }
 
         Observable<List<Product>> remoteProducts = getAndSaveRemoteProducts();
-<<<<<<< HEAD
-=======
-        //return remoteProducts;
->>>>>>> 124c572a0bcfdc73a01495bb7ffedcb06426a7bd
 
         if (mCachedIsDirty) {
             return remoteProducts;
         } else {
-<<<<<<< HEAD
          //    Query the local storage if available, then query the remote network
-=======
-             //Query the local storage if available, then query the remote network
->>>>>>> 124c572a0bcfdc73a01495bb7ffedcb06426a7bd
             Observable<List<Product>> localProducts = getAndCacheLocalProducts();
             return Observable.merge(localProducts, remoteProducts);
         }

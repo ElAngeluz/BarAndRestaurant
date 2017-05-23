@@ -72,7 +72,7 @@ class RegisterAdapter(val activity: Activity,  val mComparator: Comparator<Produ
     }
 
     override fun getItemCount(): Int {
-        return mSortedList!!.size()
+        return mSortedList.size()
     }
 
     fun setItems(items: SortedList<Product>) {

@@ -2,6 +2,7 @@ package com.mobitill.barandrestaurant.register;
 
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class RegisterFragment extends Fragment implements RegisterContract.View{
 
     private static final String TAG = RegisterFragment.class.getSimpleName();
+    private static final String ARG_PRODUCT_LIST = "product_list";
 
     private static final Comparator<Product> PRODUCT_COMPARATOR = (o1, o2) -> o1.getName().compareTo(o2.getName());
 
@@ -48,21 +50,14 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
     private RegisterContract.Presenter mPresenter;
     private Unbinder mUnbinder;
 
-<<<<<<< HEAD
-=======
+
     @BindView(R.id.productsRecyclerView) public RecyclerView recyclerView;
 
-<<<<<<< HEAD
->>>>>>> 124c572a0bcfdc73a01495bb7ffedcb06426a7bd
-    private MyCustomAdapter myCustomAdapter;
-=======
+
     private RegisterAdapter mRegisterAdapter;
->>>>>>> 1a5eed11cd9c282159b4030f5ac31d6db0c1323d
     private RecyclerView.LayoutManager layoutManager;
     private List<Product> mProducts = new ArrayList<>();
 
-    @BindView(R.id.productsRecyclerView)
-    private RecyclerView recyclerView;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -82,6 +77,10 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+        if(savedInstanceState!=null){
+            mProducts = savedInstanceState.getParcelableArrayList(ARG_PRODUCT_LIST);
+        }
+
         DaggerRegisterComponent.builder()
                 .registerPresenterModule(new RegisterPresenterModule(this, getActivity()))
                 .productRepositoryComponent(((MainApplication)getActivity().getApplication()).getProductRepositoryComponent())
@@ -98,6 +97,12 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
         layoutManager = new GridLayoutManager(getActivity(),3);
         recyclerView.setLayoutManager(layoutManager);
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(ARG_PRODUCT_LIST, (ArrayList<? extends Parcelable>) mProducts);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -190,6 +195,10 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
 
     @Override
     public void showNoProducts() {
-        Snackbar.make(recyclerView, "Products", Snackbar.LENGTH_SHORT).show();
+        if(isAdded()){
+            Snackbar.make(recyclerView, "Products fetch failed", Snackbar.LENGTH_SHORT).show();
+        }
     }
+
+
 }

@@ -8,8 +8,15 @@ import javax.inject.Inject;
 
 public class ReceiptsPresenter implements ReceiptsContract.Presenter {
 
+<<<<<<< HEAD
     @Inject
     public ReceiptsPresenter() {
+=======
+
+    @Inject
+    public ReceiptsPresenter(){
+
+>>>>>>> edde276d1c41cbff95cb0790f3d3820719958084
     }
 
     @Override

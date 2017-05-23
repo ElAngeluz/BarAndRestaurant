@@ -26,8 +26,12 @@ import butterknife.Unbinder;
 public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     private static final String TAG = ReceiptsFragment.class.getSimpleName();
 
+<<<<<<< HEAD
     @Inject
     ReceiptsPresenter receiptsPresenter;
+=======
+    @Inject ReceiptsPresenter mReceiptsPresenter;
+>>>>>>> edde276d1c41cbff95cb0790f3d3820719958084
 
     private ReceiptsContract.Presenter presenter;
     private Unbinder unbinder;

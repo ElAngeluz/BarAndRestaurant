@@ -2,16 +2,11 @@
     <Button
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/btn_product_item"
-<<<<<<< HEAD
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tusker"
         android:textSize="25sp"
         android:padding="@dimen/dp20"
         android:layout_margin="@dimen/dp20"/>
-=======
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:textSize="@dimen/product_text_size"/>
->>>>>>> 1a5eed11cd9c282159b4030f5ac31d6db0c1323d
+
 

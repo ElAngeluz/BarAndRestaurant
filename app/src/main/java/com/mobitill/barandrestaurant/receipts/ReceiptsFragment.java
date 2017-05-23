@@ -14,6 +14,8 @@ import com.mobitill.barandrestaurant.data.product.models.Product;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -24,6 +26,9 @@ import butterknife.Unbinder;
 public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     private static final String TAG = ReceiptsFragment.class.getSimpleName();
 
+    @Inject
+    ReceiptsPresenter receiptsPresenter;
+
     private ReceiptsContract.Presenter presenter;
     private Unbinder unbinder;
 
@@ -31,7 +36,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     private RecyclerView.LayoutManager manager;
 
     @BindView(R.id.recView_receipts_products)
-    private RecyclerView receiptsRecyclerView;
+    public RecyclerView receiptsRecyclerView;
 
     public ReceiptsFragment() {
         // Required empty public constructor

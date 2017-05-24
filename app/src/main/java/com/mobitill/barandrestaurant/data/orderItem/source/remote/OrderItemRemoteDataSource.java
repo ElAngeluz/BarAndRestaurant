@@ -1,7 +1,7 @@
 package com.mobitill.barandrestaurant.data.orderItem.source.remote;
 
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemDataSource;
-import com.mobitill.barandrestaurant.data.product.models.Product;
+import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 
 import java.util.List;
 
@@ -20,18 +20,19 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
     @Inject
     OrderItemRemoteDataSource(){}
 
+
     @Override
-    public Observable<List<Product>> getAll() {
+    public Observable<List<OrderItem>> getAll() {
         return null;
     }
 
     @Override
-    public Observable<Product> getOne(String id) {
+    public Observable<OrderItem> getOne(String id) {
         return null;
     }
 
     @Override
-    public long save(Product item) {
+    public long save(OrderItem item) {
         return 0;
     }
 
@@ -41,7 +42,7 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
     }
 
     @Override
-    public int update(Product item) {
+    public int update(OrderItem item) {
         return 0;
     }
 
@@ -51,7 +52,7 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
     }
 
     @Override
-    public android.database.Observable<Product> getProductWithIdentifier(String identifier) {
+    public Observable<OrderItem> getOrderItemWithIdentifier(String identifier) {
         return null;
     }
 }

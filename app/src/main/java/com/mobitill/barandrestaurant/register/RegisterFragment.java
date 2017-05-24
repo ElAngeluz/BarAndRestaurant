@@ -50,20 +50,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
     private RegisterContract.Presenter mPresenter;
     private Unbinder mUnbinder;
 
-<<<<<<< HEAD
-
-
-    private MyCustomAdapter myCustomAdapter;
-
-    private RegisterAdapter mRegisterAdapter;
-
-    private RecyclerView.LayoutManager layoutManager;
-    private List<Product> mProducts = new ArrayList<>();
-
-    @BindView(R.id.productsRecyclerView)
-    public RecyclerView recyclerView;
-=======
-
     @BindView(R.id.productsRecyclerView) public RecyclerView recyclerView;
 
 
@@ -71,7 +57,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
     private RecyclerView.LayoutManager layoutManager;
     private List<Product> mProducts = new ArrayList<>();
 
->>>>>>> edde276d1c41cbff95cb0790f3d3820719958084
 
     public RegisterFragment() {
         // Required empty public constructor

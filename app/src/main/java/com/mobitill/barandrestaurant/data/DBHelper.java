@@ -4,6 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.mobitill.barandrestaurant.data.orderItem.source.local.OrderItemPersistenceContract;
+
+import static com.mobitill.barandrestaurant.data.orderItem.source.local.OrderItemPersistenceContract.*;
+import static com.mobitill.barandrestaurant.data.orderItem.source.local.OrderItemPersistenceContract.OrderItemEntry.*;
 import static com.mobitill.barandrestaurant.data.product.source.local.ProductPersistenceContract.ProductEntry;
 import static com.mobitill.barandrestaurant.data.waiter.source.local.WaitersPersistenceContract.WaitersEntry;
 
@@ -40,6 +44,15 @@ public class DBHelper extends SQLiteOpenHelper {
                     ProductEntry.COLUMN_NAME_PRICE + TEXT_TYPE + COMMA_SEP +
                     ProductEntry.COLUMN_NAME_VAT + TEXT_TYPE + " )";
 
+    private static final String SQL_CREATE_ORDER_ITEM_ENTRIES =
+            "CREATE TABLE " + OrderItemEntry.TABLE_NAME + " (" +
+                    OrderItemEntry._ID + TEXT_TYPE + " PRIMARY KEY AUTOINCREMENT " +
+                    OrderItemEntry.COLUMN_NAME_PRODUCT_ID + TEXT_TYPE + COMMA_SEP +
+                    OrderItemEntry.COLUMN_NAME_ORDER_ID + TEXT_TYPE + COMMA_SEP +
+                    OrderItemEntry.COLUMN_NAME_COUNTER + TEXT_TYPE + COMMA_SEP +
+                    OrderItemEntry.COLUMN_NAME_SYNCED + TEXT_TYPE + COMMA_SEP +
+                    OrderItemEntry.COLUMN_NAME_CHECKED_OUT + TEXT_TYPE + " )";
+
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,6 +62,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_WAITER_ENTRIES);
         db.execSQL(SQL_CREATE_PRODUCT_ENTRIES);
+        db.execSQL(SQL_CREATE_ORDER_ITEM_ENTRIES);
 
     }
 

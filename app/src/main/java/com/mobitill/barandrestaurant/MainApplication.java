@@ -9,7 +9,6 @@ import android.app.Application;
 
 public class MainApplication extends Application {
 
-
     private BaseComponent mBaseComponent;
 
     @Override

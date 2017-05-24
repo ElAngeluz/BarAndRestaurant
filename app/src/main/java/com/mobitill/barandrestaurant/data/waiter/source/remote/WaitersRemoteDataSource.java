@@ -64,8 +64,8 @@ public class WaitersRemoteDataSource implements WaitersDataSource{
     }
 
     @Override
-    public long save(Waiter item) {
-        return 0;
+    public Waiter save(Waiter item) {
+        return null;
     }
 
     @Override

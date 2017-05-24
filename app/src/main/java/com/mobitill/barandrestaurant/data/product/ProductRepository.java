@@ -94,19 +94,7 @@ public class ProductRepository implements ProductDataSource {
                 .flatMap(products -> Observable
                         .fromArray(products.toArray(new Product[products.size()]))
                         .doOnNext(product -> {
-                            mProductLocalDataSource.getOne(product.getId())
-                                    .subscribe(
-                                            product1 -> {
-                                                if (product1 != null) {
-                                                    mProductLocalDataSource.update(product);
-                                                } else {
-                                                    mProductLocalDataSource.save(product);
-                                                }
-                                            },
-                                            throwable -> mProductLocalDataSource.save(product),
-                                            () -> {
-                                            });
-
+                            mProductLocalDataSource.save(product);
                             mCachedProducts.remove(product.getId());
                             mCachedProducts.put(product.getId(), product);
                         })
@@ -180,7 +168,7 @@ public class ProductRepository implements ProductDataSource {
     }
 
     @Override
-    public long save(Product item) {
+    public Product save(Product item) {
         return mProductLocalDataSource.save(item);
     }
 

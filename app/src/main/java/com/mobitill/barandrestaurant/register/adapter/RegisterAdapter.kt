@@ -16,8 +16,7 @@ import java.util.*
  * Created by james on 5/22/2017.
  */
 
-class RegisterAdapter(val activity: Activity,  val mComparator: Comparator<Product>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+class RegisterAdapter(val activity: Activity,  val mComparator: Comparator<Product>, val callback: AdapterCallback) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     private var mSortedList = SortedList(Product::class.java, object : SortedList.Callback<Product>() {
@@ -63,12 +62,12 @@ class RegisterAdapter(val activity: Activity,  val mComparator: Comparator<Produ
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(activity)
-        return ProductViewHolder(inflater.inflate(R.layout.product_item, parent, false))
+        return ProductViewHolder(activity, inflater.inflate(R.layout.product_item, parent, false), callback)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         val vh = holder as ProductViewHolder
-        vh.mProductButton.text = mSortedList[position].name
+        vh.bind(mSortedList[position])
     }
 
     override fun getItemCount(): Int {
@@ -111,13 +110,25 @@ class RegisterAdapter(val activity: Activity,  val mComparator: Comparator<Produ
     }
 
 
-    internal class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    internal class ProductViewHolder(val activity: Activity, itemView: View, val callback: AdapterCallback) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
 
         var mProductButton: Button
+        var mProduct: Product? = null
 
         init {
             mProductButton = itemView.findViewById(R.id.btn_product_item) as Button
+            itemView.setOnClickListener(this)
         }
+
+        fun bind(product: Product){
+            mProduct = product
+            mProductButton.text = product.name
+        }
+
+        override fun onClick(v: View?) {
+            callback.addToOrder(mProduct)
+        }
+
     }
 
 }

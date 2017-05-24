@@ -18,6 +18,9 @@ public final class OrderPersistenceContract{
         public static final String TABLE_NAME = "order";
         public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_NAME = "name";
-        public static final String COLUMN_NAME_WAITER = "name";
+        public static final String COLUMN_NAME_WAITER_ID = "waiter_id";
+        public static final String COLUMN_NAME_SYNCED = "synced";
+        public static final String COLUMN_NAME_CHECKED_OUT = "checked_out";
     }
+
 }

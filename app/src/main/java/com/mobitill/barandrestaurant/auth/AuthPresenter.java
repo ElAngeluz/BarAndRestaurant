@@ -1,7 +1,6 @@
 package com.mobitill.barandrestaurant.auth;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -53,8 +52,7 @@ public class AuthPresenter implements AuthContract.Presenter {
                   @NonNull Context context,
                   @NonNull WaitersRepository waitersRepository,
                   @NonNull BaseScheduleProvider scheduleProvider,
-                  @NonNull RxSharedPreferences rxSharedPreferences,
-                  @NonNull SharedPreferences sharedPreferences){
+                  @NonNull RxSharedPreferences rxSharedPreferences){
         mContext = checkNotNull(context);
         mView = checkNotNull(view);
         mWaitersRepository = checkNotNull(waitersRepository);
@@ -76,7 +74,6 @@ public class AuthPresenter implements AuthContract.Presenter {
     @Override
     public void login() {
         mSubscriptions.clear();
-        Log.i(TAG, "login: " + "fetch waiters");
         Disposable disposable = mWaitersRepository
                 .getAll()
                 .subscribe(
@@ -93,7 +90,6 @@ public class AuthPresenter implements AuthContract.Presenter {
                         () -> mView.showLoadingIndicator(false));
 
         mSubscriptions.add(disposable);
-        Log.i(TAG, "login: waiters fetched");
     }
 
     @Override

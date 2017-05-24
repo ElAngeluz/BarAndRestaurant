@@ -1,5 +1,8 @@
 package com.mobitill.barandrestaurant;
 
+import android.content.Context;
+
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
 import com.mobitill.barandrestaurant.data.order.OrderRepositoryModule;
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemRepository;
@@ -8,6 +11,7 @@ import com.mobitill.barandrestaurant.data.product.ProductRepository;
 import com.mobitill.barandrestaurant.data.product.ProductRepositoryModule;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepositoryModule;
+import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
 import javax.inject.Singleton;
 
@@ -29,4 +33,7 @@ public interface BaseComponent {
     OrderRepository orderRepository();
     OrderItemRepository orderItemRepository();
     ProductRepository productRepository();
+    BaseScheduleProvider baseScheduleProvider();
+    RxSharedPreferences rxSharedPreferences();
+    Context context();
 }

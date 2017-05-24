@@ -1,11 +1,21 @@
 package com.mobitill.barandrestaurant.register;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
+import com.mobitill.barandrestaurant.data.order.OrderRepository;
+import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.product.ProductRepository;
+import com.mobitill.barandrestaurant.data.product.models.Product;
+import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
+import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
 import javax.inject.Inject;
+
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -22,11 +32,42 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
     @NonNull
     private final ProductRepository mProductRepository;
 
+    @NonNull
+    private final OrderRepository mOrderRepository;
+
+    @NonNull
+    private final Context mContext;
+
+    @NonNull
+    private final WaitersRepository mWaitersRepository;
+
+    @NonNull
+    private final BaseScheduleProvider mScheduleProvider;
+
+    @NonNull
+    private final RxSharedPreferences mRxSharedPreferences;
+
+    @NonNull
+    private CompositeDisposable mDisposable;
+
+    private Order mOrder;
+
     @Inject
     public RegisterPresenter(@NonNull RegisterContract.View view,
-                             @NonNull ProductRepository productRepository){
+                             @NonNull ProductRepository productRepository,
+                             @NonNull OrderRepository orderRepository,
+                             @NonNull WaitersRepository waitersRepository,
+                             @NonNull BaseScheduleProvider scheduleProvider,
+                             @NonNull RxSharedPreferences rxSharedPreferences,
+                             @NonNull Context context){
         mView = checkNotNull(view);
         mProductRepository = productRepository;
+        mOrderRepository = orderRepository;
+        mWaitersRepository = waitersRepository;
+        mScheduleProvider = checkNotNull(scheduleProvider, "schedule provider should not be null");
+        mRxSharedPreferences = rxSharedPreferences;
+        mContext = context;
+        mDisposable = new CompositeDisposable();
     }
 
     /**
@@ -44,12 +85,14 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
 
     @Override
     public void unsubscribe() {
-
+        mOrder = null;
+        mDisposable.clear();
     }
 
     @Override
     public void getProducts() {
-        mProductRepository
+        mDisposable.clear();
+        Disposable disposable = mProductRepository
                 .getAll()
                 .subscribe(
                         //onNext
@@ -68,5 +111,17 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
                         () -> {}
 
                 );
+        mDisposable.add(disposable);
     }
+
+    @Override
+    public void createOrder(Product product) {
+        if(mOrder == null){
+            mOrder = new Order();
+
+        } else {
+
+        }
+    }
+
 }

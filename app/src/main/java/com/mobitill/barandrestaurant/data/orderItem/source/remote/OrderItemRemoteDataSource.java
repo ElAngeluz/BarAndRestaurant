@@ -33,8 +33,8 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
     }
 
     @Override
-    public long save(OrderItem item) {
-        return 0;
+    public OrderItem save(OrderItem item) {
+        return null;
     }
 
     @Override

@@ -21,7 +21,7 @@ import io.reactivex.Observable;
 import rx.functions.Func1;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.mobitill.barandrestaurant.data.orderItem.source.local.OrderItemPersistenceContract.*;
+import static com.mobitill.barandrestaurant.data.orderItem.source.local.OrderItemPersistenceContract.OrderItemEntry;
 
 /**
  * Created by andronicus on 5/23/2017.
@@ -86,7 +86,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
     }
 
     @Override
-    public long save(OrderItem item) {
+    public OrderItem save(OrderItem item) {
         checkNotNull(item);
         ContentValues contentValues = new ContentValues();
         contentValues.put(OrderItemEntry.COLUMN_NAME_ORDER_ID, item.getOrderId());
@@ -94,7 +94,16 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         contentValues.put(OrderItemEntry.COLUMN_NAME_COUNTER, item.getCounter());
         contentValues.put(OrderItemEntry.COLUMN_NAME_SYNCED, item.getSynced());
         contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getChecked_out());
-        return databaseHelper.insert(OrderItemEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        long rowId = databaseHelper.insert(OrderItemEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        return getOrderItemUsingRowId(rowId);
+    }
+
+    private OrderItem getOrderItemUsingRowId(Long rowId){
+        checkNotNull(rowId);
+        String sql = String.format("SELECT * FROM %s WHERE ROWID = %d LIMIT 1",
+                OrderItemEntry.TABLE_NAME, rowId);
+        Cursor cursor = databaseHelper.query(sql, null);
+        return getOrderItem(cursor);
     }
 
     @Override

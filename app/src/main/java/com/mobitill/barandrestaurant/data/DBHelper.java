@@ -20,19 +20,20 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TEXT_TYPE = " TEXT";
 
     private static final String BOOLEAN_TYPE = " INTEGER";
+    private static final String INTEGER_TYPE = " INTEGER";
 
     private static final String COMMA_SEP = " ,";
 
     private static final String SQL_CREATE_WAITER_ENTRIES =
             "CREATE TABLE " + WaitersEntry.TABLE_NAME + " (" +
-                    WaitersEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
+                    WaitersEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     WaitersEntry.COLUMN_NAME_ID + TEXT_TYPE + " UNIQUE," +
                     WaitersEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     WaitersEntry.COLUMN_NAME_PIN + TEXT_TYPE + " )";
 
     private static final String SQL_CREATE_PRODUCT_ENTRIES =
             "CREATE TABLE " + ProductEntry.TABLE_NAME + " (" +
-                    ProductEntry._ID + TEXT_TYPE + " PRIMARY KEY," +
+                    ProductEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     ProductEntry.COLUMN_NAME_ID + TEXT_TYPE + " UNIQUE," +
                     ProductEntry.COLUMN_NAME_BARCODE + TEXT_TYPE + COMMA_SEP +
                     ProductEntry.COLUMN_NAME_IDENTIFIER + TEXT_TYPE + COMMA_SEP +
@@ -47,14 +48,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_WAITER_ENTRIES);
         db.execSQL(SQL_CREATE_PRODUCT_ENTRIES);
-
+        db.execSQL(SQL_CREATE_WAITER_ENTRIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // not required as at version 1
     }
 
     @Override

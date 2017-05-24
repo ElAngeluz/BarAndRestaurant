@@ -4,7 +4,6 @@ package com.mobitill.barandrestaurant.data.orderItem;
 
 import com.mobitill.barandrestaurant.data.DataSource;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
-import com.mobitill.barandrestaurant.data.product.models.Product;
 
 import io.reactivex.Observable;
 
@@ -15,4 +14,5 @@ import io.reactivex.Observable;
 public interface OrderItemDataSource extends DataSource<OrderItem, String> {
 
     Observable<OrderItem> getOrderItemWithIdentifier(String identifier);
+
 }

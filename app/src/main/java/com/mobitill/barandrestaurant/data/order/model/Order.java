@@ -23,20 +23,22 @@ public class Order {
 
     @SerializedName("synced")
     @Expose
-    private String synced;
+    private Integer synced;
 
     @SerializedName("checkedOut")
     @Expose
-    private String checkedOut;
+    private Integer checkedOut;
 
 
     public Order() {
     }
 
-    public Order(String id, String name, String waiterId) {
+    public Order(String id, String name, String waiterId, Integer synced, Integer checkedOut) {
         this.id = id;
         this.name = name;
         this.waiterId = waiterId;
+        this.synced = synced;
+        this.checkedOut = checkedOut;
     }
 
     public String getId() {
@@ -62,4 +64,21 @@ public class Order {
     public void setWaiterId(String waiterId) {
         this.waiterId = waiterId;
     }
+
+    public Integer getSynced() {
+        return synced;
+    }
+
+    public void setSynced(Integer synced) {
+        this.synced = synced;
+    }
+
+    public Integer getCheckedOut() {
+        return checkedOut;
+    }
+
+    public void setCheckedOut(Integer checkedOut) {
+        this.checkedOut = checkedOut;
+    }
+
 }

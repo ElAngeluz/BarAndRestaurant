@@ -151,7 +151,7 @@ public class WaitersRepository implements WaitersDataSource {
     }
 
     @Override
-    public long save(Waiter item) {
+    public Waiter save(Waiter item) {
         return mWaitersLocalDataSource.save(item);
     }
 

@@ -6,13 +6,11 @@ import android.support.annotation.Nullable;
 import com.mobitill.barandrestaurant.data.Local;
 import com.mobitill.barandrestaurant.data.Remote;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
-import com.mobitill.barandrestaurant.data.product.models.Product;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
 
@@ -121,7 +119,7 @@ public class OrderItemRepository implements OrderItemDataSource {
     }
 
     @Override
-    public long save(OrderItem item) {
+    public OrderItem save(OrderItem item) {
         return orderItemLocalDataSource.save(item);
     }
 

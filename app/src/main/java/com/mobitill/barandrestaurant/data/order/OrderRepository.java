@@ -56,7 +56,7 @@ public class OrderRepository implements OrderDataSource {
     }
 
     @Override
-    public long save(Order item) {
+    public Order save(Order item) {
         return mOrderLocalDataSource.save(item);
     }
 
@@ -73,5 +73,11 @@ public class OrderRepository implements OrderDataSource {
     @Override
     public void deleteAll() {
         mOrderLocalDataSource.deleteAll();
+    }
+
+
+    @Override
+    public Order getOrderFromRowId(Long rowId) {
+        return null;
     }
 }

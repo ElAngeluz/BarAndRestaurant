@@ -103,8 +103,8 @@ public class ProductRemoteDataSource implements ProductDataSource {
     }
 
     @Override
-    public long save(Product item) {
-        return 0;
+    public Product save(Product item) {
+        return null;
     }
 
     @Override

@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.product.models.Product;
+import com.mobitill.barandrestaurant.register.adapter.AdapterCallback;
 import com.mobitill.barandrestaurant.register.adapter.RegisterAdapter;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RegisterFragment extends Fragment implements RegisterContract.View{
+public class RegisterFragment extends Fragment implements RegisterContract.View, AdapterCallback{
 
     private static final String TAG = RegisterFragment.class.getSimpleName();
     private static final String ARG_PRODUCT_LIST = "product_list";
@@ -152,8 +153,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
             }
         });
 
-
-
         searchView.setOnSearchClickListener(v -> {
 
         });
@@ -182,7 +181,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
         mProducts = products;
         if(isAdded()){
             if(mRegisterAdapter == null){
-                mRegisterAdapter = new RegisterAdapter(getActivity(), PRODUCT_COMPARATOR);
+                mRegisterAdapter = new RegisterAdapter(getActivity(), PRODUCT_COMPARATOR, this);
                 mRegisterAdapter.add(products);
                 recyclerView.setAdapter(mRegisterAdapter);
             } else {
@@ -199,5 +198,8 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
         }
     }
 
-
+    @Override
+    public void addToOrder(Product product) {
+        mPresenter.createOrder(product);
+    }
 }

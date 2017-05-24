@@ -13,7 +13,7 @@ public interface DataSource<T, E> {
     Observable<List<T>>  getAll();
     Observable<T> getOne(E id);
 
-    long save(T item);
+    T save(T item);
     int delete(E id);
     int update(T item);
     void deleteAll();

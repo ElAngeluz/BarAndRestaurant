@@ -29,7 +29,7 @@ public class AuthActivity extends AppCompatActivity {
         }
 
         DaggerAuthComponent.builder()
-                .authPresenterModule(new AuthPresenterModule(authFragment, this))
+                .authPresenterModule(new AuthPresenterModule(authFragment))
                 .baseComponent(((MainApplication) getApplication()).mBaseComponent())
                 .build()
                 .inject(this);

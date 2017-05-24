@@ -79,13 +79,11 @@ public class ProductLocalDataSource implements ProductDataSource {
         rx.Observable<Product> productObservableV1 =
                 mDatabaseHelper.createQuery(ProductEntry.TABLE_NAME, sql, id)
                 .mapToOneOrDefault(mProductMapperFunction, null);
-
         return RxJavaInterop.toV2Observable(productObservableV1);
-
     }
 
     @Override
-    public long save(Product item) {
+    public Product save(Product item) {
         checkNotNull(item);
         ContentValues contentValues = new ContentValues();
         contentValues.put(ProductEntry.COLUMN_NAME_ID, item.getId());
@@ -94,8 +92,18 @@ public class ProductLocalDataSource implements ProductDataSource {
         contentValues.put(ProductEntry.COLUMN_NAME_PRICE, item.getPrice());
         contentValues.put(ProductEntry.COLUMN_NAME_VAT, item.getVat());
         contentValues.put(ProductEntry.COLUMN_NAME_PRODUCT_NAME, item.getName());
-        return mDatabaseHelper.insert(ProductEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        Long rowId = mDatabaseHelper.insert(ProductEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        return getProductUsingRowId(rowId);
     }
+
+    private Product getProductUsingRowId(Long rowId){
+        checkNotNull(rowId);
+        String selectQuery = "SELECT * FROM " + ProductEntry.TABLE_NAME + " sqlite_sequence";
+        Cursor cursor = mDatabaseHelper.query(selectQuery, null);
+        cursor.moveToLast();
+        return getProduct(cursor);
+    }
+
 
     @Override
     public int delete(String id) {

@@ -18,5 +18,7 @@ public interface RegisterContract {
     }
     interface Presenter extends BasePresenter{
         void getProducts();
+
+        void createOrder(Product product);
     }
 }

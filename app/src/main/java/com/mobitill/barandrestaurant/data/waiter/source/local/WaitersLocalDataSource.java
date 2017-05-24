@@ -87,14 +87,24 @@ public class WaitersLocalDataSource implements WaitersDataSource {
     }
 
     @Override
-    public long save(Waiter item) {
+    public Waiter save(Waiter item) {
         checkNotNull(item);
         ContentValues contentValues = new ContentValues();
         contentValues.put(WaitersEntry.COLUMN_NAME_ID, item.getId());
         contentValues.put(WaitersEntry.COLUMN_NAME_NAME, item.getName());
         contentValues.put(WaitersEntry.COLUMN_NAME_PIN, item.getPin());
-        return mDatabaseHelper.insert(WaitersEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        long rowId = mDatabaseHelper.insert(WaitersEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+        return getWaiterUsingRowId(rowId);
     }
+
+    private Waiter getWaiterUsingRowId(Long rowId){
+        checkNotNull(rowId);
+        String selectQuery = "SELECT * FROM " + WaitersEntry.TABLE_NAME + " sqlite_sequence";
+        Cursor cursor = mDatabaseHelper.query(selectQuery, null);
+        cursor.moveToLast();
+        return getWaiter(cursor);
+    }
+
 
     @Override
     public int delete(String id) {

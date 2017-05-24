@@ -32,8 +32,8 @@ public class OrderRemoteDataSource implements OrderDataSource {
     }
 
     @Override
-    public long save(Order item) {
-        return 0;
+    public Order save(Order item) {
+        return null;
     }
 
     @Override
@@ -47,7 +47,10 @@ public class OrderRemoteDataSource implements OrderDataSource {
     }
 
     @Override
-    public void deleteAll() {
+    public void deleteAll() {}
 
+    @Override
+    public Order getOrderFromRowId(Long rowId) {
+        return null;
     }
 }

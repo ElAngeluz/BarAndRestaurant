@@ -1,8 +1,6 @@
 package com.mobitill.barandrestaurant.utils.interceptors;
 
 
-import android.util.Log;
-
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -30,8 +28,6 @@ public class EncryptionResponseInterceptor implements Interceptor {
         MediaType mediaType = oldBody.contentType();
         try {
             String newBody = AESEncryptor.decrypt(strOldBody);
-            Log.i(TAG, "intercept: test : strOldBody: " + strOldBody);
-            Log.i(TAG, "intercept: test: " + AESEncryptor.decrypt("F1071D03CF6A69538871D34C6DF003325C9CF48C2B2A88EABDBB34BBB59E3659B1826085BBC5076E8C493D4C46361DDB"));
             ResponseBody responseBody = ResponseBody.create(mediaType, newBody);
             return response.newBuilder().body(responseBody).build();
         } catch (Exception e) {

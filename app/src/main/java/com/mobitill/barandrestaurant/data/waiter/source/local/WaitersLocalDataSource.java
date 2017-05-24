@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import hu.akarnokd.rxjava.interop.RxJavaInterop;
 import io.reactivex.Observable;
@@ -26,7 +27,7 @@ import static com.mobitill.barandrestaurant.data.waiter.source.local.WaitersPers
 /**
  * Created by james on 4/27/2017.
  */
-
+@Singleton
 public class WaitersLocalDataSource implements WaitersDataSource {
 
     private static final String TAG = WaitersLocalDataSource.class.getSimpleName();

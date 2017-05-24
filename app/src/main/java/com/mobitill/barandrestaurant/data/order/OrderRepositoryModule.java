@@ -1,5 +1,6 @@
 package com.mobitill.barandrestaurant.data.order;
 
+import com.mobitill.barandrestaurant.data.Local;
 import com.mobitill.barandrestaurant.data.Remote;
 import com.mobitill.barandrestaurant.data.order.source.local.OrderDataSource;
 import com.mobitill.barandrestaurant.data.order.source.local.OrderLocalDataSource;
@@ -15,7 +16,7 @@ import dagger.Module;
  */
 
 @Module
-abstract class OrderRepositoryModule {
+public abstract class OrderRepositoryModule {
     @Singleton
     @Binds
     @Remote
@@ -23,6 +24,6 @@ abstract class OrderRepositoryModule {
 
     @Singleton
     @Binds
-    @Remote
+    @Local
     abstract OrderDataSource provideOrderLocalDataSource (OrderLocalDataSource orderLocalDataSource);
 }

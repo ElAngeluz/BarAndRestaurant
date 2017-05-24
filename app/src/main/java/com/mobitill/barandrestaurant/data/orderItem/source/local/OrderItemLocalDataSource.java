@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import hu.akarnokd.rxjava.interop.RxJavaInterop;
 import io.reactivex.Observable;
@@ -25,7 +26,7 @@ import static com.mobitill.barandrestaurant.data.orderItem.source.local.OrderIte
 /**
  * Created by andronicus on 5/23/2017.
  */
-
+@Singleton
 public class OrderItemLocalDataSource implements OrderItemDataSource{
 
     public static final String TAG = OrderItemLocalDataSource.class.getSimpleName();

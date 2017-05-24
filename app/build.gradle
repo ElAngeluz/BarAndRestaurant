@@ -37,6 +37,10 @@ android {
 
 }
 
+kapt {
+    generateStubs = true
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -84,6 +88,7 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
+    kapt 'com.google.dagger:dagger-compiler:2.4'
 
 }
 repositories {

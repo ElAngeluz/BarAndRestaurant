@@ -15,7 +15,7 @@ import dagger.Module;
  */
 
 @Module
-abstract class OrderItemRepositoryModule {
+public abstract class OrderItemRepositoryModule {
 
     @Singleton
     @Binds

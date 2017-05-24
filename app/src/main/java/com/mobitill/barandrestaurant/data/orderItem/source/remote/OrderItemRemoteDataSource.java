@@ -6,13 +6,14 @@ import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 
 /**
  * Created by andronicus on 5/23/2017.
  */
-
+@Singleton
 public class OrderItemRemoteDataSource implements OrderItemDataSource{
 
     private static final String TAG = OrderItemRemoteDataSource.class.getSimpleName();

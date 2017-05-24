@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.Nullable;
@@ -24,7 +23,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by james on 4/27/2017.
  */
-@Singleton
 public class WaitersRepository implements WaitersDataSource {
 
     private static final String TAG = WaitersRepository.class.getSimpleName();

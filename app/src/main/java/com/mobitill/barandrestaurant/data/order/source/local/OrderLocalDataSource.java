@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 
 import hu.akarnokd.rxjava.interop.RxJavaInterop;
@@ -23,6 +24,7 @@ import rx.functions.Func1;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.mobitill.barandrestaurant.data.order.source.local.OrderPersistenceContract.*;
 
+@Singleton
 public class OrderLocalDataSource implements OrderDataSource {
 
     private static final String TAG = OrderLocalDataSource.class.getSimpleName();

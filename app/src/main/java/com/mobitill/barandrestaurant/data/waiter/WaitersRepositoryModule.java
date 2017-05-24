@@ -14,7 +14,7 @@ import dagger.Module;
  * Created by james on 4/27/2017.
  */
 @Module
-abstract class WaitersRepositoryModule {
+public abstract class WaitersRepositoryModule {
     @Singleton
     @Binds
     @Remote

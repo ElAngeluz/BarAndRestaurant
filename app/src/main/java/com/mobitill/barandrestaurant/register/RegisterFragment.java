@@ -82,7 +82,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View{
 
         DaggerRegisterComponent.builder()
                 .registerPresenterModule(new RegisterPresenterModule(this, getActivity()))
-                .productRepositoryComponent(((MainApplication)getActivity().getApplication()).getProductRepositoryComponent())
                 .build()
                 .inject(this);
     }

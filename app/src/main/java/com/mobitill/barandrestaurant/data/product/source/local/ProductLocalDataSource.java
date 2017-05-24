@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import hu.akarnokd.rxjava.interop.RxJavaInterop;
 import io.reactivex.Observable;
@@ -25,7 +26,7 @@ import static com.mobitill.barandrestaurant.data.product.source.local.ProductPer
 /**
  * Created by james on 5/12/2017.
  */
-
+@Singleton
 public class ProductLocalDataSource implements ProductDataSource {
 
     public static final String TAG = ProductDataSource.class.getSimpleName();

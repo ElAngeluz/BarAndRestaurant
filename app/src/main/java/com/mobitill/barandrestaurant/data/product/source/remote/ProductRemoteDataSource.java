@@ -123,6 +123,11 @@ public class ProductRemoteDataSource implements ProductDataSource {
     }
 
     @Override
+    public Product getLastCreated() {
+        return null;
+    }
+
+    @Override
     public Observable<Product> getProductWithIdentifier(String identifier) {
         return null;
     }

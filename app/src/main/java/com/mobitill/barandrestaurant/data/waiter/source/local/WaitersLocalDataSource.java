@@ -129,6 +129,11 @@ public class WaitersLocalDataSource implements WaitersDataSource {
     }
 
     @Override
+    public Waiter getLastCreated() {
+        return null;
+    }
+
+    @Override
     public Observable<Waiter> getWaiterFromPin(String pin) {
         String[] projection = {
                 WaitersEntry.COLUMN_NAME_ID,

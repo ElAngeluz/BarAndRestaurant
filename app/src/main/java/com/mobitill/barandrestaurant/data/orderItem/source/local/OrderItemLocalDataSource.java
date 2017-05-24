@@ -54,13 +54,12 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
     }
 
     private OrderItem getOrderItem(@NonNull Cursor c){
-        String id = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_ID));
         String product_Id = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_PRODUCT_ID));
         String order_Id = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_ORDER_ID));
         String counter = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_COUNTER));
         String synced = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_SYNCED));
         String checked_Out = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_CHECKED_OUT));
-        return new OrderItem(id, product_Id, order_Id, counter, synced, checked_Out);
+        return new OrderItem(product_Id, order_Id, counter, synced, checked_Out);
     }
 
 
@@ -130,6 +129,11 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
     public void deleteAll() {
 
         databaseHelper.delete(OrderItemEntry.TABLE_NAME, null);
+    }
+
+    @Override
+    public OrderItem getLastCreated() {
+        return null;
     }
 
     @Override

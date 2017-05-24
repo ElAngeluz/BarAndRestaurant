@@ -50,6 +50,11 @@ public class OrderRemoteDataSource implements OrderDataSource {
     public void deleteAll() {}
 
     @Override
+    public Order getLastCreated() {
+        return null;
+    }
+
+    @Override
     public Order getOrderFromRowId(Long rowId) {
         return null;
     }

@@ -21,7 +21,6 @@ public final class OrderItemPersistenceContract {
 
     public static abstract class OrderItemEntry implements BaseColumns {
         public static final String TABLE_NAME = "order_item";
-        public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_PRODUCT_ID = "product_id";
         public static final String COLUMN_NAME_ORDER_ID = "order_id";
         public static final String COLUMN_NAME_COUNTER = "counter";

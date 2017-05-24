@@ -132,6 +132,11 @@ public class ProductLocalDataSource implements ProductDataSource {
     }
 
     @Override
+    public Product getLastCreated() {
+        return null;
+    }
+
+    @Override
     public Observable<Product> getProductWithIdentifier(String identifier) {
         String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
                 TextUtils.join(",", projection), ProductEntry.TABLE_NAME, ProductEntry.COLUMN_NAME_IDENTIFIER);

@@ -4,9 +4,13 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
+import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
 import com.mobitill.barandrestaurant.data.order.model.Order;
+import com.mobitill.barandrestaurant.data.orderItem.OrderItemRepository;
+import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.product.ProductRepository;
 import com.mobitill.barandrestaurant.data.product.models.Product;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
@@ -45,6 +49,9 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
     private final BaseScheduleProvider mScheduleProvider;
 
     @NonNull
+    private final OrderItemRepository mOrderItemRepository;
+
+    @NonNull
     private final RxSharedPreferences mRxSharedPreferences;
 
     @NonNull
@@ -57,6 +64,7 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
                              @NonNull ProductRepository productRepository,
                              @NonNull OrderRepository orderRepository,
                              @NonNull WaitersRepository waitersRepository,
+                             @NonNull OrderItemRepository orderItemRepository,
                              @NonNull BaseScheduleProvider scheduleProvider,
                              @NonNull RxSharedPreferences rxSharedPreferences,
                              @NonNull Context context){
@@ -64,6 +72,7 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
         mProductRepository = productRepository;
         mOrderRepository = orderRepository;
         mWaitersRepository = waitersRepository;
+        mOrderItemRepository = orderItemRepository;
         mScheduleProvider = checkNotNull(scheduleProvider, "schedule provider should not be null");
         mRxSharedPreferences = rxSharedPreferences;
         mContext = context;
@@ -116,11 +125,19 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
 
     @Override
     public void createOrder(Product product) {
+        OrderItem orderItem;
         if(mOrder == null){
-            mOrder = new Order();
-
+            Preference<String> waiterIdPreference = mRxSharedPreferences.getString(mContext.getString(R.string.key_waiter_id));
+            String waiterId = waiterIdPreference.get();
+            mOrder = new Order(waiterId, 0, 0);
+            mOrderRepository.save(mOrder);
+            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0);
         } else {
+            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0);
+        }
 
+        if(mOrderItemRepository.save(orderItem) != null){
+            mView.showOrderItemCreated(orderItem);
         }
     }
 

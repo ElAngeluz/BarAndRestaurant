@@ -190,6 +190,11 @@ public class WaitersRepository implements WaitersDataSource {
     }
 
     @Override
+    public Waiter getLastCreated() {
+        return null;
+    }
+
+    @Override
     public Observable<Waiter> getWaiterFromPin(String pin) {
         checkNotNull(pin);
 

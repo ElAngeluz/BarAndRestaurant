@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static com.mobitill.barandrestaurant.data.order.source.local.OrderPersistenceContract.OrderEntry;
 import static com.mobitill.barandrestaurant.data.product.source.local.ProductPersistenceContract.ProductEntry;
 import static com.mobitill.barandrestaurant.data.waiter.source.local.WaitersPersistenceContract.WaitersEntry;
 
@@ -41,6 +42,16 @@ public class DBHelper extends SQLiteOpenHelper {
                     ProductEntry.COLUMN_NAME_PRICE + TEXT_TYPE + COMMA_SEP +
                     ProductEntry.COLUMN_NAME_VAT + TEXT_TYPE + " )";
 
+    private static final String SQL_CREATE_ORDER_ENTRIES =
+            "CREATE TABLE " + OrderEntry.TABLE_NAME + " (" +
+                    OrderEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
+                    OrderEntry.COLUMN_NAME_NAME + TEXT_TYPE + " UNIQUE," +
+                    OrderEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + " UNIQUE," +
+                    OrderEntry.COLUMN_NAME_WAITER_ID + TEXT_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + " )";
+
+
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -50,6 +61,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_PRODUCT_ENTRIES);
         db.execSQL(SQL_CREATE_WAITER_ENTRIES);
+        db.execSQL(SQL_CREATE_ORDER_ENTRIES);
     }
 
     @Override

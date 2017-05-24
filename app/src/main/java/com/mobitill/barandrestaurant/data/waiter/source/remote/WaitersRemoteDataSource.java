@@ -56,8 +56,6 @@ public class WaitersRemoteDataSource implements WaitersDataSource{
                 });
     }
 
-
-
     @Override
     public Observable<Waiter> getOne(String id) {
         return null;
@@ -80,6 +78,11 @@ public class WaitersRemoteDataSource implements WaitersDataSource{
 
     @Override
     public void deleteAll() {
+    }
+
+    @Override
+    public Waiter getLastCreated() {
+        return null;
     }
 
     @Override

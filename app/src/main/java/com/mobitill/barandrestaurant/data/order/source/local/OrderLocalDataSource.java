@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.mobitill.barandrestaurant.data.order.model.Order;
+import com.mobitill.barandrestaurant.data.waiter.source.local.WaitersPersistenceContract;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class OrderLocalDataSource implements OrderDataSource {
     }
 
     private Order getOrder(@NonNull Cursor c) {
-        String orderId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_ID));
+        String orderId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_ENTRY_ID));
         String name = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_NAME));
         String waiterId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_WAITER_ID));
         Integer synced = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_SYNCED));
@@ -51,7 +52,7 @@ public class OrderLocalDataSource implements OrderDataSource {
     @Override
     public Observable<List<Order>> getAll() {
         String[] projection = {
-                OrderEntry.COLUMN_NAME_ID,
+                OrderEntry.COLUMN_NAME_ENTRY_ID,
                 OrderEntry.COLUMN_NAME_NAME,
                 OrderEntry.COLUMN_NAME_WAITER_ID,
                 OrderEntry.COLUMN_NAME_SYNCED,
@@ -70,7 +71,7 @@ public class OrderLocalDataSource implements OrderDataSource {
     public Observable<Order> getOne(String id) {
         checkNotNull(id);
         String[] projection = {
-                OrderEntry.COLUMN_NAME_ID,
+                OrderEntry.COLUMN_NAME_ENTRY_ID,
                 OrderEntry.COLUMN_NAME_NAME,
                 OrderEntry.COLUMN_NAME_WAITER_ID,
                 OrderEntry.COLUMN_NAME_SYNCED,
@@ -78,7 +79,7 @@ public class OrderLocalDataSource implements OrderDataSource {
         };
 
         String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
-                TextUtils.join(",", projection), OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_ID);
+                TextUtils.join(",", projection), OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_ENTRY_ID);
         rx.Observable<Order> orderObservableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME,
                 sql, id).mapToOneOrDefault(mOrderMapperFunction, null);
         Observable<Order> orderObservableV2 = RxJavaInterop.toV2Observable(orderObservableV1);
@@ -96,12 +97,20 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_SYNCED, item.getSynced());
         contentValues.put(OrderEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
         long rowId = mDatabaseHelper.insert(OrderEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-        return getOrderFromRowId(rowId);
+        return getLastCreated();
+    }
+
+    @Override
+    public Order getLastCreated(){
+        String selectQuery = "SELECT * FROM " + WaitersPersistenceContract.WaitersEntry.TABLE_NAME + " sqlite_sequence";
+        Cursor cursor = mDatabaseHelper.query(selectQuery, null);
+        cursor.moveToLast();
+        return getOrder(cursor);
     }
 
     @Override
     public int delete(String id) {
-        String selection = OrderEntry.COLUMN_NAME_ID + "LIKE ?";
+        String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + "LIKE ?";
         String selectionArgs[] = {id};
         return mDatabaseHelper.delete(OrderEntry.TABLE_NAME, selection, selectionArgs);
     }
@@ -109,13 +118,13 @@ public class OrderLocalDataSource implements OrderDataSource {
     @Override
     public int update(Order item) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(OrderEntry.COLUMN_NAME_ID, item.getId());
+        contentValues.put(OrderEntry.COLUMN_NAME_ENTRY_ID, item.getEntryId());
         contentValues.put(OrderEntry.COLUMN_NAME_NAME, item.getName());
         contentValues.put(OrderEntry.COLUMN_NAME_WAITER_ID, item.getWaiterId());
         contentValues.put(OrderEntry.COLUMN_NAME_SYNCED, item.getSynced());
         contentValues.put(OrderEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
-        String selection = OrderEntry.COLUMN_NAME_ID + " LIKE?";
-        String[] selectionArgs = {item.getId()};
+        String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE?";
+        String[] selectionArgs = {item.getEntryId()};
         return mDatabaseHelper.update(OrderEntry.TABLE_NAME, contentValues, selection, selectionArgs);
     }
 

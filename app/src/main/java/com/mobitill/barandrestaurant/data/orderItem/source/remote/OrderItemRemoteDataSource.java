@@ -53,6 +53,11 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
     }
 
     @Override
+    public OrderItem getLastCreated() {
+        return null;
+    }
+
+    @Override
     public Observable<OrderItem> getOrderItemWithIdentifier(String identifier) {
         return null;
     }

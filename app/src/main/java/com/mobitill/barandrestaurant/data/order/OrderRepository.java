@@ -75,6 +75,11 @@ public class OrderRepository implements OrderDataSource {
         mOrderLocalDataSource.deleteAll();
     }
 
+    @Override
+    public Order getLastCreated() {
+        return null;
+    }
+
 
     @Override
     public Order getOrderFromRowId(Long rowId) {

@@ -17,5 +17,6 @@ public interface DataSource<T, E> {
     int delete(E id);
     int update(T item);
     void deleteAll();
+    T getLastCreated();
 
 }

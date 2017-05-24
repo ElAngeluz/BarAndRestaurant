@@ -3,6 +3,10 @@ package com.mobitill.barandrestaurant.data.order.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.util.UUID;
+
 /**
  * Created by andronicus on 5/16/2017.
  */
@@ -11,7 +15,7 @@ public class Order {
 
     @SerializedName("id")
     @Expose
-    private String id;
+    private String entryId;
 
     @SerializedName("name")
     @Expose
@@ -31,22 +35,30 @@ public class Order {
 
 
     public Order() {
+        this.entryId = String.valueOf(generateUniqueId());
+        this.name = "Order " + this.entryId;
     }
 
-    public Order(String id, String name, String waiterId, Integer synced, Integer checkedOut) {
-        this.id = id;
+    public Order(String waiterId, Integer synced, Integer checkedOut) {
+        this.waiterId = waiterId;
+        this.synced = synced;
+        this.checkedOut = checkedOut;
+    }
+
+    public Order(String entryId, String name, String waiterId, Integer synced, Integer checkedOut) {
+        this.entryId = entryId;
         this.name = name;
         this.waiterId = waiterId;
         this.synced = synced;
         this.checkedOut = checkedOut;
     }
 
-    public String getId() {
-        return id;
+    public String getEntryId() {
+        return entryId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setEntryId(String entryId) {
+        this.entryId = entryId;
     }
 
     public String getName() {
@@ -79,6 +91,25 @@ public class Order {
 
     public void setCheckedOut(Integer checkedOut) {
         this.checkedOut = checkedOut;
+    }
+
+    /**
+     * Gnereate unique ID from UUID in positive space
+     * @return long value representing UUID
+     */
+    private Long generateUniqueId()
+    {
+        long val = -1;
+        do
+        {
+            final UUID uid = UUID.randomUUID();
+            final ByteBuffer buffer = ByteBuffer.wrap(new byte[16]);
+            buffer.putLong(uid.getLeastSignificantBits());
+            buffer.putLong(uid.getMostSignificantBits());
+            final BigInteger bi = new BigInteger(buffer.array());
+            val = bi.intValue();
+        } while (val < 0);
+        return val;
     }
 
 }

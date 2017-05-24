@@ -2,6 +2,7 @@ package com.mobitill.barandrestaurant.register;
 
 import com.mobitill.barandrestaurant.BasePresenter;
 import com.mobitill.barandrestaurant.BaseView;
+import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.product.models.Product;
 
 import java.util.List;
@@ -15,6 +16,8 @@ public interface RegisterContract {
         void showProducts(List<Product> products);
 
         void showNoProducts();
+
+        void showOrderItemCreated(OrderItem orderItem);
     }
     interface Presenter extends BasePresenter{
         void getProducts();

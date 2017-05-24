@@ -93,16 +93,10 @@ public class ProductLocalDataSource implements ProductDataSource {
         contentValues.put(ProductEntry.COLUMN_NAME_VAT, item.getVat());
         contentValues.put(ProductEntry.COLUMN_NAME_PRODUCT_NAME, item.getName());
         Long rowId = mDatabaseHelper.insert(ProductEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-        return getProductUsingRowId(rowId);
+        return getLastCreated();
     }
 
-    private Product getProductUsingRowId(Long rowId){
-        checkNotNull(rowId);
-        String selectQuery = "SELECT * FROM " + ProductEntry.TABLE_NAME + " sqlite_sequence";
-        Cursor cursor = mDatabaseHelper.query(selectQuery, null);
-        cursor.moveToLast();
-        return getProduct(cursor);
-    }
+
 
 
     @Override
@@ -133,7 +127,10 @@ public class ProductLocalDataSource implements ProductDataSource {
 
     @Override
     public Product getLastCreated() {
-        return null;
+        String selectQuery = "SELECT * FROM " + ProductEntry.TABLE_NAME + " sqlite_sequence";
+        Cursor cursor = mDatabaseHelper.query(selectQuery, null);
+        cursor.moveToLast();
+        return getProduct(cursor);
     }
 
     @Override

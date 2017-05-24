@@ -46,8 +46,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ORDER_ENTRIES =
             "CREATE TABLE " + OrderEntry.TABLE_NAME + " (" +
                     OrderEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
-                    OrderEntry.COLUMN_NAME_NAME + TEXT_TYPE + " UNIQUE," +
                     OrderEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + " UNIQUE," +
+                    OrderEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_WAITER_ID + TEXT_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + " )";
@@ -57,8 +57,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     OrderItemEntry.COLUMN_NAME_PRODUCT_ID + TEXT_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_ORDER_ID + TEXT_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_COUNTER + TEXT_TYPE + COMMA_SEP +
-                    OrderItemEntry.COLUMN_NAME_SYNCED + TEXT_TYPE + COMMA_SEP +
-                    OrderItemEntry.COLUMN_NAME_CHECKED_OUT + TEXT_TYPE +
+                    OrderItemEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
+                    OrderItemEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + COMMA_SEP +
                     "PRIMARY KEY (" + OrderItemEntry.COLUMN_NAME_PRODUCT_ID  + COMMA_SEP + OrderItemEntry.COLUMN_NAME_ORDER_ID + " )" +" )";
 
 

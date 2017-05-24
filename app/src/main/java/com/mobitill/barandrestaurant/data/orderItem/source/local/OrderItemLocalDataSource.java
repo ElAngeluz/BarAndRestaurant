@@ -38,7 +38,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
     private Func1<Cursor, OrderItem> orderItemMapperFunction;
 
     String projection[] = {
-            OrderItemEntry.COLUMN_NAME_ID,
+            OrderItemEntry.COLUMN_NAME_ORDER_ID,
             OrderItemEntry.COLUMN_NAME_PRODUCT_ID,
             OrderItemEntry.COLUMN_NAME_ORDER_ID,
             OrderItemEntry.COLUMN_NAME_COUNTER,
@@ -54,12 +54,12 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
     }
 
     private OrderItem getOrderItem(@NonNull Cursor c){
-        String product_Id = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_PRODUCT_ID));
-        String order_Id = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_ORDER_ID));
+        String productId = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_PRODUCT_ID));
+        String orderId = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_ORDER_ID));
         String counter = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_COUNTER));
-        String synced = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_SYNCED));
-        String checked_Out = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_CHECKED_OUT));
-        return new OrderItem(product_Id, order_Id, counter, synced, checked_Out);
+        Integer synced = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_SYNCED));
+        Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_CHECKED_OUT));
+        return new OrderItem(productId, orderId, counter, synced, checkedOut);
     }
 
 
@@ -75,13 +75,14 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 
     @Override
     public Observable<OrderItem> getOne(String id) {
-        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
-                TextUtils.join(",", projection), OrderItemEntry.TABLE_NAME, OrderItemEntry.COLUMN_NAME_ID);
-        rx.Observable<OrderItem> orderItemObservableV1 =
-                databaseHelper.createQuery(OrderItemEntry.TABLE_NAME, sql, id)
-                        .mapToOneOrDefault(orderItemMapperFunction, null);
-
-        return RxJavaInterop.toV2Observable(orderItemObservableV1);
+//        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
+//                TextUtils.join(",", projection), OrderItemEntry.TABLE_NAME, OrderItemEntry.COLUMN_NAME_ID);
+//        rx.Observable<OrderItem> orderItemObservableV1 =
+//                databaseHelper.createQuery(OrderItemEntry.TABLE_NAME, sql, id)
+//                        .mapToOneOrDefault(orderItemMapperFunction, null);
+//
+//        return RxJavaInterop.toV2Observable(orderItemObservableV1);
+        return null;
     }
 
     @Override
@@ -94,7 +95,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         contentValues.put(OrderItemEntry.COLUMN_NAME_SYNCED, item.getSynced());
         contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getChecked_out());
         long rowId = databaseHelper.insert(OrderItemEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-        return getOrderItemUsingRowId(rowId);
+        return getLastCreated();
     }
 
     private OrderItem getOrderItemUsingRowId(Long rowId){
@@ -102,27 +103,30 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         String sql = String.format("SELECT * FROM %s WHERE ROWID = %d LIMIT 1",
                 OrderItemEntry.TABLE_NAME, rowId);
         Cursor cursor = databaseHelper.query(sql, null);
+        cursor.moveToLast();
         return getOrderItem(cursor);
     }
 
     @Override
     public int delete(String id) {
-        String selection = OrderItemEntry.COLUMN_NAME_ID + "LIKE ?";
-        String selectionArgs[] = {id};
-        return databaseHelper.delete(OrderItemEntry.TABLE_NAME, selection, selectionArgs);
+//        String selection = OrderItemEntry.COLUMN_NAME_ID + "LIKE ?";
+//        String selectionArgs[] = {id};
+//        return databaseHelper.delete(OrderItemEntry.TABLE_NAME, selection, selectionArgs);
+        return 0;
     }
 
     @Override
     public int update(OrderItem item) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(OrderItemEntry.COLUMN_NAME_ORDER_ID, item.getOrderId());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_ID, item.getProductId());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_COUNTER, item.getCounter());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_SYNCED, item.getSynced());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getChecked_out());
-        String selection = OrderItemEntry.COLUMN_NAME_ID + "LIKE ?";
-        String[] selectionArgs = {item.getOrderId()};
-        return databaseHelper.update(OrderItemEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put(OrderItemEntry.COLUMN_NAME_ORDER_ID, item.getOrderId());
+//        contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_ID, item.getProductId());
+//        contentValues.put(OrderItemEntry.COLUMN_NAME_COUNTER, item.getCounter());
+//        contentValues.put(OrderItemEntry.COLUMN_NAME_SYNCED, item.getSynced());
+//        contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getChecked_out());
+//        String selection = OrderItemEntry.COLUMN_NAME_ID + "LIKE ?";
+//        String[] selectionArgs = {item.getOrderId()};
+//        return databaseHelper.update(OrderItemEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+        return 0;
     }
 
     @Override
@@ -133,7 +137,10 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 
     @Override
     public OrderItem getLastCreated() {
-        return null;
+        String selectQuery = "SELECT * FROM " + OrderItemEntry.TABLE_NAME + " sqlite_sequence";
+        Cursor cursor = databaseHelper.query(selectQuery, null);
+        cursor.moveToLast();
+        return getOrderItem(cursor);
     }
 
     @Override

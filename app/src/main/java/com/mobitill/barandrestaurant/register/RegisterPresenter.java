@@ -126,10 +126,14 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
     @Override
     public void createOrder(Product product) {
         OrderItem orderItem;
+
         if(mOrder == null){
             Preference<String> waiterIdPreference = mRxSharedPreferences.getString(mContext.getString(R.string.key_waiter_id));
             String waiterId = waiterIdPreference.get();
-            mOrder = new Order(waiterId, 0, 0);
+            mOrder = new Order();
+            mOrder.setWaiterId(waiterId);
+            mOrder.setCheckedOut(0);
+            mOrder.setSynced(0);
             mOrderRepository.save(mOrder);
             orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0);
         } else {
@@ -139,6 +143,7 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
         if(mOrderItemRepository.save(orderItem) != null){
             mView.showOrderItemCreated(orderItem);
         }
+
     }
 
 }

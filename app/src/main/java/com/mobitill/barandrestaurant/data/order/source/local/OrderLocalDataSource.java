@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.mobitill.barandrestaurant.data.order.model.Order;
-import com.mobitill.barandrestaurant.data.waiter.source.local.WaitersPersistenceContract;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import java.util.List;
@@ -41,12 +40,12 @@ public class OrderLocalDataSource implements OrderDataSource {
     }
 
     private Order getOrder(@NonNull Cursor c) {
-        String orderId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_ENTRY_ID));
+        String entryId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_ENTRY_ID));
         String name = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_NAME));
         String waiterId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_WAITER_ID));
         Integer synced = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_SYNCED));
         Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_CHECKED_OUT));
-        return new Order(orderId, name, waiterId, synced, checkedOut);
+        return new Order(entryId, name, waiterId, synced, checkedOut);
     }
 
     @Override
@@ -102,7 +101,7 @@ public class OrderLocalDataSource implements OrderDataSource {
 
     @Override
     public Order getLastCreated(){
-        String selectQuery = "SELECT * FROM " + WaitersPersistenceContract.WaitersEntry.TABLE_NAME + " sqlite_sequence";
+        String selectQuery = "SELECT * FROM " + OrderEntry.TABLE_NAME + " sqlite_sequence";
         Cursor cursor = mDatabaseHelper.query(selectQuery, null);
         cursor.moveToLast();
         return getOrder(cursor);

@@ -116,8 +116,66 @@ public class OrderItemRepository implements OrderItemDataSource {
 
     @Override
     public Observable<OrderItem> getOne(String id) {
-        return null;
+        checkNotNull(id);
 
+        final OrderItem cachedOrderItem = getOrderItemWithId(id);
+        if (isOrderItemCached(cachedOrderItem)) {
+            return Observable.just(cachedOrderItem);
+        }
+
+        // Is the product in the local data source? If no query the network
+        Observable<OrderItem> localOrderItem = getOrderItemFromLocalRepository(id);
+        Observable<OrderItem> remoteOrderItem = orderItemRemoteDataSource
+                .getAll()
+                .flatMap(orderItems -> Observable
+                        .fromArray(orderItems.toArray(new OrderItem[orderItems.size()]))
+                        .filter(orderItem -> orderItem.getOrderId().equals(id)))
+                .firstElement()
+                .toObservable();
+
+        return Observable.concat(localOrderItem, remoteOrderItem)
+                .firstOrError()
+                .map(orderItem -> {
+                    if (orderItem == null) {
+                        throw new NoSuchElementException("No Order Item found with Order Id " + id);
+                    }
+                    return orderItem;
+                }).toObservable();
+
+    }
+
+    private Observable<OrderItem> getOrderItemFromLocalRepository(String id) {
+        return orderItemLocalDataSource
+                .getOne(id)
+                .observeOn(scheduleProvider.ui())
+                .doOnNext(orderItem -> Observable
+                        .just(orderItem)
+                        .doOnNext(orderItem1 -> cachedOrderItems.put(id, orderItem1)))
+                .firstElement()
+                .toObservable();
+    }
+
+    private boolean isOrderItemCached(OrderItem cachedOrderItem) {
+
+        //respond immediately with cache if available
+        if (cachedOrderItem != null) {
+            return true;
+        }
+
+        // do in memory cache update to keep UI up to date
+        if (cachedOrderItems == null) {
+            cachedOrderItems = new LinkedHashMap<>();
+        }
+        return false;
+    }
+
+    private OrderItem getOrderItemWithId(String id) {
+        checkNotNull(id);
+        if (cachedOrderItems == null || cachedOrderItems.isEmpty()) {
+            return null;
+        } else {
+            return cachedOrderItems.get(id);
+        }
     }
 
     @Override

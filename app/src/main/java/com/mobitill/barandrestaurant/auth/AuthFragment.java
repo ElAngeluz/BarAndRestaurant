@@ -54,9 +54,7 @@ public class AuthFragment extends Fragment implements AuthContract.View {
 
 
     public static AuthFragment newInstance() {
-        
         Bundle args = new Bundle();
-        
         AuthFragment fragment = new AuthFragment();
         fragment.setArguments(args);
         return fragment;
@@ -73,7 +71,6 @@ public class AuthFragment extends Fragment implements AuthContract.View {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_auth, container, false);
         mUnbinder = ButterKnife.bind(this, view);
-
         return view;
     }
 

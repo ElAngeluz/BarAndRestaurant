@@ -5,4 +5,5 @@
     <dimen name="dp10">10dp</dimen>
     <dimen name="dp20">20dp</dimen>
     <dimen name="product_text_size">24sp</dimen>
+    <dimen name="padding_margin_small">8dp</dimen>
 </resources>

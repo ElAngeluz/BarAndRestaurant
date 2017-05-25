@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
-import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
+import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.product.models.Product;
 import com.mobitill.barandrestaurant.register.adapter.AdapterCallback;
 import com.mobitill.barandrestaurant.register.adapter.RegisterAdapter;
@@ -201,8 +201,12 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
     }
 
     @Override
-    public void showOrderItemCreated(OrderItem orderItem) {
-        Toast.makeText(getActivity(), orderItem.getOrderId() + " created", Toast.LENGTH_SHORT).show();
+    public void showOrderItemCreated(Order order) {
+        if(order != null){
+            mPresenter.getOrderItems(order);
+        }
+
+        Toast.makeText(getActivity(), order.getEntryId() + " created", Toast.LENGTH_SHORT).show();
     }
 
     @Override

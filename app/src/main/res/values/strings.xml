@@ -20,4 +20,5 @@
     <string name="login_failed">Login Failed Please Try Again</string>
     <string name="key_waiter_id">waiter_id</string>
     <string name="key_products_version">products_version</string>
+    <string name="ticket">Ticket</string>
 </resources>

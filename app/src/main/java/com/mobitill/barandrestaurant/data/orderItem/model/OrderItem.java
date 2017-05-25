@@ -1,13 +1,20 @@
 package com.mobitill.barandrestaurant.data.orderItem.model;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.UUID;
 
 /**
  * Created by andronicus on 5/23/2017.
  */
 
 public class OrderItem {
+
+    @NonNull
+    private  String id;
 
     @SerializedName("ProductId")
     @Expose
@@ -30,13 +37,36 @@ public class OrderItem {
     private Integer checkedOut;
 
     public OrderItem() {
+        this.id = UUID.randomUUID().toString();
     }
 
     public OrderItem(String productId, String orderId, String counter, Integer synced, Integer checkedOut) {
+        this(UUID.randomUUID().toString(), productId, orderId, counter, synced, checkedOut);
+    }
+
+    public OrderItem(String id, String productId, String orderId, String counter, Integer synced, Integer checkedOut) {
+        this.id = id;
         this.productId = productId;
         this.orderId = orderId;
         this.counter = counter;
         this.synced = synced;
+        this.checkedOut = checkedOut;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
+    public Integer getCheckedOut() {
+        return checkedOut;
+    }
+
+    public void setCheckedOut(Integer checkedOut) {
         this.checkedOut = checkedOut;
     }
 

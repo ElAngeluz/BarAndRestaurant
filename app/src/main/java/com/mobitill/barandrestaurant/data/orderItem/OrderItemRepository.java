@@ -202,8 +202,11 @@ public class OrderItemRepository implements OrderItemDataSource {
         return null;
     }
 
+
     @Override
-    public Observable<OrderItem> getOrderItemWithIdentifier(String identifier) {
-        return null;
+    public Observable<List<OrderItem>> getOrderItemWithOrderId(String orderId) {
+        return orderItemLocalDataSource
+                .getOrderItemWithOrderId(orderId)
+                .observeOn(scheduleProvider.ui());
     }
 }

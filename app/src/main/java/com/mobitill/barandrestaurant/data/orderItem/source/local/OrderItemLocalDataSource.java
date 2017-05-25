@@ -38,13 +38,12 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
     private Func1<Cursor, OrderItem> orderItemMapperFunction;
 
     String projection[] = {
-            OrderItemEntry.COLUMN_NAME_ORDER_ID,
+            OrderItemEntry.COLUMN_NAME_ENTRY_ID,
             OrderItemEntry.COLUMN_NAME_PRODUCT_ID,
             OrderItemEntry.COLUMN_NAME_ORDER_ID,
             OrderItemEntry.COLUMN_NAME_COUNTER,
             OrderItemEntry.COLUMN_NAME_SYNCED,
             OrderItemEntry.COLUMN_NAME_CHECKED_OUT,
-
     };
 
     @Inject
@@ -54,12 +53,13 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
     }
 
     private OrderItem getOrderItem(@NonNull Cursor c){
+        String entryId = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_ENTRY_ID));
         String productId = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_PRODUCT_ID));
         String orderId = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_ORDER_ID));
         String counter = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_COUNTER));
         Integer synced = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_SYNCED));
         Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_CHECKED_OUT));
-        return new OrderItem(productId, orderId, counter, synced, checkedOut);
+        return new OrderItem(entryId,productId, orderId, counter, synced, checkedOut);
     }
 
 
@@ -131,7 +131,6 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 
     @Override
     public void deleteAll() {
-
         databaseHelper.delete(OrderItemEntry.TABLE_NAME, null);
     }
 
@@ -143,13 +142,17 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         return getOrderItem(cursor);
     }
 
+
     @Override
-    public Observable<OrderItem> getOrderItemWithIdentifier(String identifier) {
-        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
+    public Observable<List<OrderItem>> getOrderItemWithOrderId(String orderId) {
+                String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
                 TextUtils.join(",", projection), OrderItemEntry.TABLE_NAME, OrderItemEntry.COLUMN_NAME_ORDER_ID);
-        rx.Observable<OrderItem> orderItemObservableV1 = databaseHelper
-                .createQuery(OrderItemEntry.TABLE_NAME, sql, identifier)
-                .mapToOneOrDefault(orderItemMapperFunction, null);
+        rx.Observable<List<OrderItem>> orderItemObservableV1 =
+                databaseHelper
+                        .createQuery(OrderItemEntry.TABLE_NAME, sql, orderId)
+                        .mapToList(orderItemMapperFunction).take(50, TimeUnit.MILLISECONDS);
         return RxJavaInterop.toV2Observable(orderItemObservableV1);
     }
+
+
 }

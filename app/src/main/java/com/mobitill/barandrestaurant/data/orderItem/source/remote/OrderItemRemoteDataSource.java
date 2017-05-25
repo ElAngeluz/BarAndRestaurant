@@ -57,8 +57,10 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
         return null;
     }
 
+
     @Override
-    public Observable<OrderItem> getOrderItemWithIdentifier(String identifier) {
+    public Observable<List<OrderItem>> getOrderItemWithOrderId(String orderId) {
         return null;
     }
+
 }

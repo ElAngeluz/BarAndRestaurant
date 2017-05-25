@@ -27,9 +27,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by james on 5/10/2017.
  */
 
-public class RegisterPresenter  implements RegisterContract.Presenter{
+public class RegisterPresenter implements RegisterContract.Presenter {
 
     private static final String TAG = RegisterPresenter.class.getSimpleName();
+
     @NonNull
     private final RegisterContract.View mView;
 
@@ -67,7 +68,7 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
                              @NonNull OrderItemRepository orderItemRepository,
                              @NonNull BaseScheduleProvider scheduleProvider,
                              @NonNull RxSharedPreferences rxSharedPreferences,
-                             @NonNull Context context){
+                             @NonNull Context context) {
         mView = checkNotNull(view);
         mProductRepository = productRepository;
         mOrderRepository = orderRepository;
@@ -106,7 +107,7 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
                 .subscribe(
                         //onNext
                         products -> {
-                            if(products != null && !products.isEmpty()){
+                            if (products != null && !products.isEmpty()) {
                                 mView.showProducts(products);
                             } else {
                                 mView.showNoProducts();
@@ -117,7 +118,8 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
                             Log.e(TAG, "getProducts: ", throwable);
                             mView.showNoProducts();
                         },
-                        () -> {}
+                        () -> {
+                        }
 
                 );
         mDisposable.add(disposable);
@@ -127,7 +129,7 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
     public void createOrder(Product product) {
         OrderItem orderItem;
 
-        if(mOrder == null){
+        if (mOrder == null) {
             Preference<String> waiterIdPreference = mRxSharedPreferences.getString(mContext.getString(R.string.key_waiter_id));
             String waiterId = waiterIdPreference.get();
             mOrder = new Order();
@@ -140,9 +142,27 @@ public class RegisterPresenter  implements RegisterContract.Presenter{
             orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0);
         }
 
-        if(mOrderItemRepository.save(orderItem) != null){
-            mView.showOrderItemCreated(orderItem);
+        if (mOrderItemRepository.save(orderItem) != null) {
+            mView.showOrderItemCreated(mOrder);
         }
+
+    }
+
+    @Override
+    public void getOrderItems(Order order) {
+        Disposable disposable = mOrderItemRepository
+                .getOrderItemWithOrderId(order.getEntryId())
+                .subscribe(
+                        orderItems -> {
+                            for(OrderItem orderItem: orderItems){
+                                Log.i(TAG, "getOrderItems: " + orderItem.getProductId());
+                            }
+                        },
+                        throwable -> Log.e(TAG, "getOrderItems: ", throwable),
+                        () -> {
+                        });
+
+        mDisposable.add(disposable);
 
     }
 

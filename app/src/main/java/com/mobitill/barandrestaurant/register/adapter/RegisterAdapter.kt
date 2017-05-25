@@ -121,6 +121,7 @@ class RegisterAdapter(val activity: Activity,  val mComparator: Comparator<Produ
         }
 
         fun bind(product: Product){
+            mProduct = Product();
             mProduct = product
             mProductButton.text = product.name
         }

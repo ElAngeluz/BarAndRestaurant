@@ -54,12 +54,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_ORDER_ITEM_ENTRIES =
             "CREATE TABLE " + OrderItemEntry.TABLE_NAME + " (" +
+                    OrderItemEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
+                    OrderItemEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_PRODUCT_ID + TEXT_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_ORDER_ID + TEXT_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_COUNTER + TEXT_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
-                    OrderItemEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + COMMA_SEP +
-                    "PRIMARY KEY (" + OrderItemEntry.COLUMN_NAME_PRODUCT_ID  + COMMA_SEP + OrderItemEntry.COLUMN_NAME_ORDER_ID + " )" +" )";
+                    OrderItemEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE +" )";
 
 
     public DBHelper(Context context) {

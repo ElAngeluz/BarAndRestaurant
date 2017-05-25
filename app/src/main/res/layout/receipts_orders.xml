@@ -9,12 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/tv_product"
+            android:id="@+id/tv_order"
             android:layout_width="wrap_content"
             android:padding="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_height="wrap_content"
-            android:text="Product1"
+            android:text="Order1"
             android:textSize="20sp"/>
         <CheckBox
             android:id="@+id/chkbx_checked_out"

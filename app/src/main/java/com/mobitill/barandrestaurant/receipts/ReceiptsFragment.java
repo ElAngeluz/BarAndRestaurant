@@ -2,6 +2,7 @@ package com.mobitill.barandrestaurant.receipts;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
+import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.product.models.Product;
 
 import java.util.List;
@@ -19,6 +22,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,14 +36,35 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     private ReceiptsContract.Presenter presenter;
     private Unbinder unbinder;
 
-    private ReceiptsProductAdapter receiptsProductAdapter;
-    private RecyclerView.LayoutManager manager;
+    private ReceiptsOrdersAdapter receiptsOrdersAdapter;
+    public RecyclerView.LayoutManager manager;
 
-    @BindView(R.id.recView_receipts_products)
+    @BindView(R.id.recView_receipts_orders)
     public RecyclerView receiptsRecyclerView;
+
+    public static ReceiptsFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        ReceiptsFragment fragment = new ReceiptsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public ReceiptsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+        DaggerReceiptsComponent.builder()
+                .receiptsPresenterModule(new ReceiptsPresenterModule(this, getActivity()))
+                .baseComponent(((MainApplication) getActivity().getApplication()).mBaseComponent())
+                .build()
+                .inject(this);
     }
 
 
@@ -47,8 +73,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
        View view = inflater.inflate(R.layout.receipts_fragment, container, false);
-
-        unbinder = ButterKnife.bind(getActivity(),view);
+        unbinder = ButterKnife.bind(this,view);
         manager = new GridLayoutManager(getActivity(),3);
         receiptsRecyclerView.setLayoutManager(manager);
         return view;
@@ -74,17 +99,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
     @Override
     public void setPresenter(ReceiptsContract.Presenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void showProducts(List<Product> products) {
-        /*
-         *May still need revisiting
-         */
-        receiptsProductAdapter = new ReceiptsProductAdapter(products);
-        receiptsRecyclerView.setAdapter(receiptsProductAdapter);
-
+        this.presenter =checkNotNull(presenter);
     }
 
     @Override
@@ -96,4 +111,19 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     public void notCheckedOut() {
 
     }
+
+    @Override
+    public void showOrders(List<Order> orders) {
+
+        receiptsOrdersAdapter = new ReceiptsOrdersAdapter(orders);
+
+        receiptsRecyclerView.setAdapter(receiptsOrdersAdapter);
+
+    }
+
+    @Override
+    public void showNoOrders() {
+
+    }
+
 }

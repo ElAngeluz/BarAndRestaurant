@@ -4,5 +4,5 @@
         android:id="@+id/btn_product_item"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:textSize="@dimen/product_text_size"/>
+        android:textSize="@dimen/text_size_large"/>
 

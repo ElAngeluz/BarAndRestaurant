@@ -50,7 +50,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     OrderEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_WAITER_ID + TEXT_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
-                    OrderEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + " )";
+                    OrderEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_TIME_STAMP + INTEGER_TYPE + " )";
 
     private static final String SQL_CREATE_ORDER_ITEM_ENTRIES =
             "CREATE TABLE " + OrderItemEntry.TABLE_NAME + " (" +
@@ -61,7 +62,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     OrderItemEntry.COLUMN_NAME_COUNTER + TEXT_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + COMMA_SEP +
-                    OrderItemEntry.COLUMN_NAME_PRODUCT_NAME + TEXT_TYPE + " )";
+                    OrderItemEntry.COLUMN_NAME_PRODUCT_NAME + TEXT_TYPE + COMMA_SEP +
+                    OrderItemEntry.COLUMN_NAME_TIME_STAMP + INTEGER_TYPE + " )";
 
 
     public DBHelper(Context context) {

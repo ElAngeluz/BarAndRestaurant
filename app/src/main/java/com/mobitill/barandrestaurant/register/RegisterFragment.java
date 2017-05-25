@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -219,20 +220,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
     public void showOrderItemsOnTicket(List<OrderItem> orderItems) {
 
         mTicketLinearLayout.removeAllViews();
-        Map<String, Stack<OrderItem>> orderItemMap = new HashMap<>();
-
-        // aggregate items into a stack
-        for(OrderItem orderItem: orderItems){
-
-            if(orderItemMap.containsKey(orderItem.getProductId())){
-                orderItemMap.get(orderItem.getProductId()).push(orderItem);
-            } else {
-                Stack<OrderItem> orderItemStack = new Stack<>();
-                orderItemStack.push(orderItem);
-                orderItemMap.put(orderItem.getProductId(), orderItemStack);
-            }
-
-        }
+        Map<String, Stack<OrderItem>> orderItemMap = mPresenter.aggregateOrderItems(orderItems);
 
         // display the items
         for(HashMap.Entry<String, Stack<OrderItem>> entry : orderItemMap.entrySet()){
@@ -240,12 +228,26 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
             String productName = entry.getValue().peek().getProductName();
             String quantity = String.valueOf(entry.getValue().size());
 
+            OrderItem orderItem = entry.getValue().peek();
+
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             View view = inflater.inflate(R.layout.order_item, mTicketLinearLayout, false);
             TextView mProductNameTextView = (TextView) view.findViewById(R.id.product_name);
             mProductNameTextView.setText(productName);
             TextView mQuantityTextView = (TextView) view.findViewById(R.id.quantity);
             mQuantityTextView.setText("x" + quantity);
+
+            ImageButton addButton = (ImageButton) view.findViewById(R.id.button_add);
+            addButton.setOnClickListener(v -> {
+                mPresenter.addOrderItem(orderItem);
+            });
+
+            ImageButton removeButton = (ImageButton) view.findViewById(R.id.button_remove);
+            removeButton.setOnClickListener(v -> {
+                OrderItem orderItemToDelete = entry.getValue().pop();
+                mPresenter.removeOrderItem(orderItemToDelete);
+            });
+
             mTicketLinearLayout.addView(view);
 
         }

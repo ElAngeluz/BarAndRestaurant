@@ -45,7 +45,8 @@ public class OrderLocalDataSource implements OrderDataSource {
         String waiterId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_WAITER_ID));
         Integer synced = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_SYNCED));
         Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_CHECKED_OUT));
-        return new Order(entryId, name, waiterId, synced, checkedOut);
+        Long timestamp = c.getLong(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_TIME_STAMP));
+        return new Order(entryId, name, waiterId, synced, checkedOut, timestamp);
     }
 
     @Override
@@ -55,7 +56,8 @@ public class OrderLocalDataSource implements OrderDataSource {
                 OrderEntry.COLUMN_NAME_NAME,
                 OrderEntry.COLUMN_NAME_WAITER_ID,
                 OrderEntry.COLUMN_NAME_SYNCED,
-                OrderEntry.COLUMN_NAME_CHECKED_OUT
+                OrderEntry.COLUMN_NAME_CHECKED_OUT,
+                OrderEntry.COLUMN_NAME_TIME_STAMP
         };
 
         String sql = String.format("SELECT %s FROM %s", TextUtils.join(",", projection), OrderEntry.TABLE_NAME);
@@ -74,7 +76,8 @@ public class OrderLocalDataSource implements OrderDataSource {
                 OrderEntry.COLUMN_NAME_NAME,
                 OrderEntry.COLUMN_NAME_WAITER_ID,
                 OrderEntry.COLUMN_NAME_SYNCED,
-                OrderEntry.COLUMN_NAME_CHECKED_OUT
+                OrderEntry.COLUMN_NAME_CHECKED_OUT,
+                OrderEntry.COLUMN_NAME_TIME_STAMP
         };
 
         String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
@@ -96,6 +99,7 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_WAITER_ID, item.getWaiterId());
         contentValues.put(OrderEntry.COLUMN_NAME_SYNCED, item.getSynced());
         contentValues.put(OrderEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
+        contentValues.put(OrderEntry.COLUMN_NAME_TIME_STAMP, item.getTimeStamp());
         long rowId = mDatabaseHelper.insert(OrderEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }
@@ -123,6 +127,7 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_WAITER_ID, item.getWaiterId());
         contentValues.put(OrderEntry.COLUMN_NAME_SYNCED, item.getSynced());
         contentValues.put(OrderEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
+        contentValues.put(OrderEntry.COLUMN_NAME_TIME_STAMP, item.getTimeStamp());
         String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE?";
         String[] selectionArgs = {item.getEntryId()};
         return mDatabaseHelper.update(OrderEntry.TABLE_NAME, contentValues, selection, selectionArgs);

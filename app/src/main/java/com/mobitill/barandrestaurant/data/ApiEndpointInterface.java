@@ -14,6 +14,7 @@ import retrofit2.http.POST;
  */
 
 public interface ApiEndpointInterface {
+
     @POST("waiters/fetch")
     Observable<WaiterResponse> getWaiters(@Body Request request);
 

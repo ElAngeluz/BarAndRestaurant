@@ -4,6 +4,7 @@
     <dimen name="dp16">16dp</dimen>
     <dimen name="dp10">10dp</dimen>
     <dimen name="dp20">20dp</dimen>
-    <dimen name="product_text_size">24sp</dimen>
+    <dimen name="text_size_large">24sp</dimen>
     <dimen name="padding_margin_small">8dp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
 </resources>

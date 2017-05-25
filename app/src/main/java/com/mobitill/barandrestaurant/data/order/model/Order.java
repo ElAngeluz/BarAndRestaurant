@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -33,24 +34,32 @@ public class Order {
     @Expose
     private Integer checkedOut;
 
+    private Long timeStamp;
+
 
     public Order() {
         this.entryId = String.valueOf(generateUniqueId());
         this.name = "Order " + this.entryId;
+        this.timeStamp = new Date().getTime();
     }
 
     public Order(String waiterId, Integer synced, Integer checkedOut) {
+        this.entryId = String.valueOf(generateUniqueId());
+        this.name = "Order " + this.entryId;
+        this.timeStamp = new Date().getTime();
         this.waiterId = waiterId;
         this.synced = synced;
         this.checkedOut = checkedOut;
     }
 
-    public Order(String entryId, String name, String waiterId, Integer synced, Integer checkedOut) {
+
+    public Order(String entryId, String name, String waiterId, Integer synced, Integer checkedOut, Long timeStamp) {
         this.entryId = entryId;
         this.name = name;
         this.waiterId = waiterId;
         this.synced = synced;
         this.checkedOut = checkedOut;
+        this.timeStamp = timeStamp;
     }
 
     public String getEntryId() {
@@ -91,6 +100,14 @@ public class Order {
 
     public void setCheckedOut(Integer checkedOut) {
         this.checkedOut = checkedOut;
+    }
+
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     /**

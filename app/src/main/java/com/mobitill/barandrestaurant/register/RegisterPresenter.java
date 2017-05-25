@@ -16,6 +16,11 @@ import com.mobitill.barandrestaurant.data.product.models.Product;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -158,6 +163,41 @@ public class RegisterPresenter implements RegisterContract.Presenter {
                         () -> {
                         });
         mDisposable.add(disposable);
+    }
+
+    @Override
+    public Map<String, Stack<OrderItem>> aggregateOrderItems(List<OrderItem> orderItems) {
+
+        Map<String, Stack<OrderItem>> orderItemMap = new HashMap<>();
+        // aggregate items into a stack
+        for(OrderItem orderItem: orderItems){
+
+            if(orderItemMap.containsKey(orderItem.getProductId())){
+                orderItemMap.get(orderItem.getProductId()).push(orderItem);
+            } else {
+                Stack<OrderItem> orderItemStack = new Stack<>();
+                orderItemStack.push(orderItem);
+                orderItemMap.put(orderItem.getProductId(), orderItemStack);
+            }
+
+        }
+
+        return orderItemMap;
+    }
+
+    @Override
+    public void addOrderItem(OrderItem orderItem) {
+        OrderItem orderItemToSave = new OrderItem(orderItem.getProductId(), orderItem.getOrderId(), orderItem.getCounter(), 0, 0, orderItem.getProductName());
+        if (mOrderItemRepository.save(orderItemToSave) != null) {
+            mView.showOrderItemCreated(mOrder);
+        }
+    }
+
+    @Override
+    public void removeOrderItem(OrderItem orderItemToDelete) {
+        if(mOrderItemRepository.delete(orderItemToDelete.getId()) > 0){
+            mView.showOrderItemCreated(mOrder);
+        }
     }
 
 

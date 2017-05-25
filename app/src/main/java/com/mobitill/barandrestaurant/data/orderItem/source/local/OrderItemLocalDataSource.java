@@ -44,7 +44,8 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
             OrderItemEntry.COLUMN_NAME_COUNTER,
             OrderItemEntry.COLUMN_NAME_SYNCED,
             OrderItemEntry.COLUMN_NAME_CHECKED_OUT,
-            OrderItemEntry.COLUMN_NAME_PRODUCT_NAME
+            OrderItemEntry.COLUMN_NAME_PRODUCT_NAME,
+            OrderItemEntry.COLUMN_NAME_TIME_STAMP
     };
 
     @Inject
@@ -61,7 +62,8 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         Integer synced = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_SYNCED));
         Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_CHECKED_OUT));
         String productName = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_PRODUCT_NAME));
-        return new OrderItem(entryId,productId, orderId, counter, synced, checkedOut, productName);
+        Long timestamp = c.getLong(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_TIME_STAMP));
+        return new OrderItem(entryId,productId, orderId, counter, synced, checkedOut, productName, timestamp);
     }
 
 
@@ -98,6 +100,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         contentValues.put(OrderItemEntry.COLUMN_NAME_SYNCED, item.getSynced());
         contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
         contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_NAME, item.getProductName());
+        contentValues.put(OrderItemEntry.COLUMN_NAME_TIME_STAMP, item.getTimeStamp());
         long rowId = databaseHelper.insert(OrderItemEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }
@@ -113,10 +116,9 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 
     @Override
     public int delete(String id) {
-//        String selection = OrderItemEntry.COLUMN_NAME_ID + "LIKE ?";
-//        String selectionArgs[] = {id};
-//        return databaseHelper.delete(OrderItemEntry.TABLE_NAME, selection, selectionArgs);
-        return 0;
+        String selection = OrderItemEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        String selectionArgs[] = {id};
+        return databaseHelper.delete(OrderItemEntry.TABLE_NAME, selection, selectionArgs);
     }
 
     @Override
@@ -149,8 +151,8 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 
     @Override
     public Observable<List<OrderItem>> getOrderItemWithOrderId(String orderId) {
-                String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
-                TextUtils.join(",", projection), OrderItemEntry.TABLE_NAME, OrderItemEntry.COLUMN_NAME_ORDER_ID);
+                String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ? ORDER BY %s",
+                TextUtils.join(",", projection), OrderItemEntry.TABLE_NAME, OrderItemEntry.COLUMN_NAME_ORDER_ID, OrderItemEntry.COLUMN_NAME_TIME_STAMP);
         rx.Observable<List<OrderItem>> orderItemObservableV1 =
                 databaseHelper
                         .createQuery(OrderItemEntry.TABLE_NAME, sql, orderId)

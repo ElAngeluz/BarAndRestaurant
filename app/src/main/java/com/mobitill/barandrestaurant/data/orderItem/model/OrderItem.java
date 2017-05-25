@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -38,15 +39,17 @@ public class OrderItem {
 
     private String productName;
 
+    private Long timeStamp;
+
     public OrderItem() {
         this.id = UUID.randomUUID().toString();
     }
 
     public OrderItem(String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName) {
-        this(UUID.randomUUID().toString(), productId, orderId, counter, synced, checkedOut, productName);
+        this(UUID.randomUUID().toString(), productId, orderId, counter, synced, checkedOut, productName, new Date().getTime());
     }
 
-    public OrderItem(String id, String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName) {
+    public OrderItem(String id, String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName, Long timeStamp) {
         this.id = id;
         this.productId = productId;
         this.orderId = orderId;
@@ -54,6 +57,7 @@ public class OrderItem {
         this.synced = synced;
         this.checkedOut = checkedOut;
         this.productName = productName;
+        this.timeStamp = timeStamp;
     }
 
     @NonNull
@@ -112,5 +116,13 @@ public class OrderItem {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

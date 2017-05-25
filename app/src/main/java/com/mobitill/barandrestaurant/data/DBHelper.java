@@ -60,7 +60,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     OrderItemEntry.COLUMN_NAME_ORDER_ID + TEXT_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_COUNTER + TEXT_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
-                    OrderItemEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE +" )";
+                    OrderItemEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + COMMA_SEP +
+                    OrderItemEntry.COLUMN_NAME_PRODUCT_NAME + TEXT_TYPE + " )";
 
 
     public DBHelper(Context context) {

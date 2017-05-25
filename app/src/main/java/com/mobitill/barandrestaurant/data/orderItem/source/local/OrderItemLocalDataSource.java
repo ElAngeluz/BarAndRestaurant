@@ -44,6 +44,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
             OrderItemEntry.COLUMN_NAME_COUNTER,
             OrderItemEntry.COLUMN_NAME_SYNCED,
             OrderItemEntry.COLUMN_NAME_CHECKED_OUT,
+            OrderItemEntry.COLUMN_NAME_PRODUCT_NAME
     };
 
     @Inject
@@ -59,7 +60,8 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         String counter = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_COUNTER));
         Integer synced = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_SYNCED));
         Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_CHECKED_OUT));
-        return new OrderItem(entryId,productId, orderId, counter, synced, checkedOut);
+        String productName = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_PRODUCT_NAME));
+        return new OrderItem(entryId,productId, orderId, counter, synced, checkedOut, productName);
     }
 
 
@@ -89,11 +91,13 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
     public OrderItem save(OrderItem item) {
         checkNotNull(item);
         ContentValues contentValues = new ContentValues();
+        contentValues.put(OrderItemEntry.COLUMN_NAME_ENTRY_ID, item.getId());
         contentValues.put(OrderItemEntry.COLUMN_NAME_ORDER_ID, item.getOrderId());
         contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_ID, item.getProductId());
         contentValues.put(OrderItemEntry.COLUMN_NAME_COUNTER, item.getCounter());
         contentValues.put(OrderItemEntry.COLUMN_NAME_SYNCED, item.getSynced());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getChecked_out());
+        contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
+        contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_NAME, item.getProductName());
         long rowId = databaseHelper.insert(OrderItemEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }

@@ -128,7 +128,6 @@ public class RegisterPresenter implements RegisterContract.Presenter {
     @Override
     public void createOrder(Product product) {
         OrderItem orderItem;
-
         if (mOrder == null) {
             Preference<String> waiterIdPreference = mRxSharedPreferences.getString(mContext.getString(R.string.key_waiter_id));
             String waiterId = waiterIdPreference.get();
@@ -137,15 +136,14 @@ public class RegisterPresenter implements RegisterContract.Presenter {
             mOrder.setCheckedOut(0);
             mOrder.setSynced(0);
             mOrderRepository.save(mOrder);
-            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0);
+            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0, product.getName());
         } else {
-            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0);
+            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0, product.getName());
         }
 
         if (mOrderItemRepository.save(orderItem) != null) {
             mView.showOrderItemCreated(mOrder);
         }
-
     }
 
     @Override
@@ -154,16 +152,13 @@ public class RegisterPresenter implements RegisterContract.Presenter {
                 .getOrderItemWithOrderId(order.getEntryId())
                 .subscribe(
                         orderItems -> {
-                            for(OrderItem orderItem: orderItems){
-                                Log.i(TAG, "getOrderItems: " + orderItem.getProductId());
-                            }
+                            mView.showOrderItemsOnTicket(orderItems);
                         },
                         throwable -> Log.e(TAG, "getOrderItems: ", throwable),
                         () -> {
                         });
-
         mDisposable.add(disposable);
-
     }
+
 
 }

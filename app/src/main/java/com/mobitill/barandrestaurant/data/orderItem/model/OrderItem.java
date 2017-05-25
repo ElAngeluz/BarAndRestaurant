@@ -36,21 +36,24 @@ public class OrderItem {
     @Expose
     private Integer checkedOut;
 
+    private String productName;
+
     public OrderItem() {
         this.id = UUID.randomUUID().toString();
     }
 
-    public OrderItem(String productId, String orderId, String counter, Integer synced, Integer checkedOut) {
-        this(UUID.randomUUID().toString(), productId, orderId, counter, synced, checkedOut);
+    public OrderItem(String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName) {
+        this(UUID.randomUUID().toString(), productId, orderId, counter, synced, checkedOut, productName);
     }
 
-    public OrderItem(String id, String productId, String orderId, String counter, Integer synced, Integer checkedOut) {
+    public OrderItem(String id, String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName) {
         this.id = id;
         this.productId = productId;
         this.orderId = orderId;
         this.counter = counter;
         this.synced = synced;
         this.checkedOut = checkedOut;
+        this.productName = productName;
     }
 
     @NonNull
@@ -102,11 +105,12 @@ public class OrderItem {
         this.synced = synced;
     }
 
-    public Integer getChecked_out() {
-        return checkedOut;
+
+    public String getProductName() {
+        return productName;
     }
 
-    public void setChecked_out(Integer checkedOut) {
-        this.checkedOut = checkedOut;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }

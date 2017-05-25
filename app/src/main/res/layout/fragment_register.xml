@@ -16,10 +16,10 @@
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
 
-    <RelativeLayout
-        android:id="@+id/ticketRelativeLayout"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_weight="1"
+        android:orientation="vertical"
         android:elevation="@dimen/elevation_small"
         android:layout_margin="@dimen/padding_margin_small"
         android:padding="@dimen/padding_margin_small"
@@ -30,16 +30,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/product_text_size"
-            android:text="@string/ticket"
-            android:id="@+id/textView"/>
+            android:text="@string/ticket"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorAccent"
-            android:layout_below="@+id/textView"
             android:layout_alignParentStart="true"/>
 
-    </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/ticketLinearLayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
 </LinearLayout>

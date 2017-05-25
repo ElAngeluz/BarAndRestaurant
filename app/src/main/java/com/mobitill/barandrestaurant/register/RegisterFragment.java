@@ -16,18 +16,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
+import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.product.models.Product;
 import com.mobitill.barandrestaurant.register.adapter.AdapterCallback;
 import com.mobitill.barandrestaurant.register.adapter.RegisterAdapter;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 
 import javax.inject.Inject;
 
@@ -54,7 +60,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
     private Unbinder mUnbinder;
 
     @BindView(R.id.productsRecyclerView) public RecyclerView recyclerView;
-
+    @BindView(R.id.ticketLinearLayout) public LinearLayout mTicketLinearLayout;
 
     private RegisterAdapter mRegisterAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -207,6 +213,42 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
         }
 
         Toast.makeText(getActivity(), order.getEntryId() + " created", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showOrderItemsOnTicket(List<OrderItem> orderItems) {
+
+        mTicketLinearLayout.removeAllViews();
+        Map<String, Stack<OrderItem>> orderItemMap = new HashMap<>();
+
+        // aggregate items into a stack
+        for(OrderItem orderItem: orderItems){
+
+            if(orderItemMap.containsKey(orderItem.getProductId())){
+                orderItemMap.get(orderItem.getProductId()).push(orderItem);
+            } else {
+                Stack<OrderItem> orderItemStack = new Stack<>();
+                orderItemStack.push(orderItem);
+                orderItemMap.put(orderItem.getProductId(), orderItemStack);
+            }
+
+        }
+
+        // display the items
+        for(HashMap.Entry<String, Stack<OrderItem>> entry : orderItemMap.entrySet()){
+
+            String productName = entry.getValue().peek().getProductName();
+            String quantity = String.valueOf(entry.getValue().size());
+
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View view = inflater.inflate(R.layout.order_item, mTicketLinearLayout, false);
+            TextView mProductNameTextView = (TextView) view.findViewById(R.id.product_name);
+            mProductNameTextView.setText(productName);
+            TextView mQuantityTextView = (TextView) view.findViewById(R.id.quantity);
+            mQuantityTextView.setText("x" + quantity);
+            mTicketLinearLayout.addView(view);
+
+        }
     }
 
     @Override

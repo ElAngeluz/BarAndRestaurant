@@ -207,5 +207,13 @@ public class RegisterPresenter implements RegisterContract.Presenter {
         }
     }
 
+    @Override
+    public void completeOrderRequest() {
+        if(mOrder!=null){
+            mOrder = null;
+            mView.showOrderRequestComplete();
+        }
+    }
+
 
 }

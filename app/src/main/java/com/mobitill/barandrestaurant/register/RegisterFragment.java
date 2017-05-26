@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
@@ -64,6 +63,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
 
     @BindView(R.id.productsRecyclerView) public RecyclerView recyclerView;
     @BindView(R.id.ticketLinearLayout) public LinearLayout mTicketLinearLayout;
+    @BindView(R.id.button_request) public Button mButtonRequest;
 
 
     private RegisterAdapter mRegisterAdapter;
@@ -100,6 +100,11 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
                 .inject(this);
     }
 
+    @OnClick(R.id.button_request)
+    public void completeOrderRequest(View view){
+        mPresenter.completeOrderRequest();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -134,6 +139,8 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
         super.onPause();
         mPresenter.unsubscribe();
     }
+
+
 
     @Override
     public void setPresenter(RegisterContract.Presenter presenter) {
@@ -210,13 +217,13 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
         }
     }
 
+
+
     @Override
     public void showOrderItemCreated(Order order) {
         if(order != null){
             mPresenter.getOrderItems(order);
         }
-
-        Toast.makeText(getActivity(), order.getEntryId() + " created", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -247,14 +254,16 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
             removeButton.setOnClickListener(v -> mPresenter.removeOrderItem(entry.getValue().pop()));
 
 
-            Button requestButton = (Button) view.findViewById(R.id.button_request);
-            requestButton.setOnClickListener(v -> {
-                mPresenter.sendOrderRequest();
-            });
 
             mTicketLinearLayout.addView(view);
 
         }
+
+    }
+
+    @Override
+    public void showOrderRequestComplete() {
+        mTicketLinearLayout.removeAllViews();
     }
 
     @Override

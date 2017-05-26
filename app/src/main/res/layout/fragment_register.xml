@@ -23,7 +23,6 @@
         android:layout_margin="@dimen/padding_margin_small"
         android:padding="@dimen/padding_margin_small"
         android:background="@color/foreground"
-        android:baselineAligned="false"
         android:layout_height="match_parent">
 
         <TextView

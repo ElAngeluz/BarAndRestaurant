@@ -6,10 +6,9 @@
               android:background="@color/background"
               tools:context="com.mobitill.barandrestaurant.register.RegisterFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical"
         android:elevation="@dimen/elevation_small"
         android:layout_margin="@dimen/padding_margin_small"
         android:padding="@dimen/padding_margin_small"
@@ -20,17 +19,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_large"
-            android:text="@string/ticket"/>
+            android:text="@string/ticket"
+            android:id="@+id/textView"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorAccent"
-            android:layout_alignParentStart="true"/>
+            android:layout_below="@+id/textView"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="32dp"
+            android:id="@+id/view"/>
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/button_request"
+            android:layout_below="@+id/view">
             <LinearLayout
                 android:id="@+id/ticketLinearLayout"
                 android:orientation="vertical"
@@ -38,7 +44,16 @@
                 android:layout_height="wrap_content"/>
         </ScrollView>
 
-    </LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/request_order"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/button_request"/>
+
+    </RelativeLayout>
 
 
     <android.support.v7.widget.RecyclerView

@@ -23,6 +23,8 @@ public interface RegisterContract {
         void showOrderItemCreated(Order orderItem);
 
         void showOrderItemsOnTicket(List<OrderItem> orderItems);
+
+        void showOrderRequestComplete();
     }
     interface Presenter extends BasePresenter{
         void getProducts();
@@ -38,5 +40,7 @@ public interface RegisterContract {
         void removeOrderItem(OrderItem orderItemToDelete);
 
         void sendOrderRequest();
+
+        void completeOrderRequest();
     }
 }

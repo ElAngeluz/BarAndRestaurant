@@ -62,8 +62,6 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ButterKnife.bind(this,getActivity());
-
         DaggerReceiptsDetailComponent.builder()
                 .receiptsDetailPresenterModule(new ReceiptsDetailPresenterModule(this, getActivity()))
                 .baseComponent(((MainApplication)getActivity().getApplication()).mBaseComponent())
@@ -78,6 +76,7 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.receipts_detail_fragment, container, false);
+        ButterKnife.bind(this,view);
         return view;
     }
 

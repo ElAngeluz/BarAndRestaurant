@@ -41,6 +41,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -63,6 +64,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
 
     @BindView(R.id.productsRecyclerView) public RecyclerView recyclerView;
     @BindView(R.id.ticketLinearLayout) public LinearLayout mTicketLinearLayout;
+
 
     private RegisterAdapter mRegisterAdapter;
     private RecyclerView.LayoutManager layoutManager;

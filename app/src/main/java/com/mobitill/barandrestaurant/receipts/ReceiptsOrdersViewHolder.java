@@ -6,6 +6,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.mobitill.barandrestaurant.R;
+import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.product.models.Product;
 
 import butterknife.BindView;
@@ -15,22 +16,22 @@ import butterknife.ButterKnife;
  * Created by andronicus on 5/22/2017.
  */
 
-public class ReceiptsViewHolder extends RecyclerView.ViewHolder {
+public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.tv_product)
-    TextView textViewProduct;
+    @BindView(R.id.tv_order)
+    TextView textViewOrder;
 
     @BindView(R.id.chkbx_checked_out)
     CheckBox checkBoxCheckedOut;
 
-    public ReceiptsViewHolder(View itemView) {
+    public ReceiptsOrdersViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this,itemView);
         itemView.setClickable(true);
     }
     /*Subject to Change*/
 
-    public void bindView(Product product){
-        textViewProduct.setText("Product names go here");
+    public void bindView(Order order){
+        textViewOrder.setText("Orders");
     }
 }

@@ -13,6 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.mobitill.barandrestaurant.receipts.ReceiptsFragment;
+import com.mobitill.barandrestaurant.register.RegisterFragment;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -22,7 +25,10 @@ import butterknife.ButterKnife;
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
+    @Nullable
     @BindView(R.id.toolbar) Toolbar mToolbar;
+
+    @Nullable
     @BindView(R.id.nav_view) BottomNavigationView mNavigationView;
 
     protected abstract Fragment createFragment();
@@ -67,14 +73,12 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
                 FragmentTransaction ft = fm.beginTransaction();
                 switch (item.getItemId()){
                     case R.id.action_order:
-                        //startActivity(ArticlesActivity.newIntent(SingleFragmentActivity.this));
-                        /*ft.replace(R.id.contentFrame, ArticlesFragment.newInstance())
-                            .commit();*/
+                        ft.replace(R.id.contentFrame, RegisterFragment.newInstance())
+                            .commit();
                         break;
                     case R.id.action_orders:
-                        //startActivity(SourcesActivity.newIntent(SingleFragmentActivity.this));
-                        /*ft.replace(R.id.contentFrame, SourcesFragment.newInstance())
-                                .commit();*/
+                        ft.replace(R.id.contentFrame, ReceiptsFragment.newInstance())
+                                .commit();
                         break;
 
                     case R.id.action_stats:

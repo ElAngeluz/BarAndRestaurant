@@ -22,6 +22,10 @@ public class Order {
     @Expose
     private String name;
 
+    @SerializedName("displayId")
+    @Expose
+    private String displayId;
+
     @SerializedName("waiterId")
     @Expose
     private String waiterId;
@@ -53,8 +57,9 @@ public class Order {
     }
 
 
-    public Order(String entryId, String name, String waiterId, Integer synced, Integer checkedOut, Long timeStamp) {
+    public Order(String entryId,String displayId, String name, String waiterId, Integer synced, Integer checkedOut, Long timeStamp) {
         this.entryId = entryId;
+        this.displayId = displayId;
         this.name = name;
         this.waiterId = waiterId;
         this.synced = synced;
@@ -68,6 +73,14 @@ public class Order {
 
     public void setEntryId(String entryId) {
         this.entryId = entryId;
+    }
+
+    public String getDisplayId() {
+        return displayId;
+    }
+
+    public void setDisplayId(String displayId) {
+        this.displayId = displayId;
     }
 
     public String getName() {

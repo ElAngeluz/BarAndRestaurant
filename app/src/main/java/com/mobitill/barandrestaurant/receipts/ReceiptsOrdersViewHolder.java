@@ -1,13 +1,16 @@
 package com.mobitill.barandrestaurant.receipts;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.product.models.Product;
+import com.mobitill.barandrestaurant.receipts_detail.ReceiptsDetailActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,7 +19,7 @@ import butterknife.ButterKnife;
  * Created by andronicus on 5/22/2017.
  */
 
-public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder {
+public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     @BindView(R.id.tv_order)
     TextView textViewOrder;
@@ -24,14 +27,27 @@ public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.chkbx_checked_out)
     CheckBox checkBoxCheckedOut;
 
-    public ReceiptsOrdersViewHolder(View itemView) {
+    private Order mOrder;
+    private Context mContext;
+
+    public ReceiptsOrdersViewHolder(View itemView, Context context) {
         super(itemView);
         ButterKnife.bind(this,itemView);
         itemView.setClickable(true);
+        itemView.setOnClickListener(this);
+        mContext = context;
     }
-    /*Subject to Change*/
 
     public void bindView(Order order){
-        textViewOrder.setText("Orders");
+        mOrder = order;
+        textViewOrder.setText( "Order " + order.getDisplayId());
+        checkBoxCheckedOut.setChecked(order.getCheckedOut() == 1 ? true : false);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+       mContext.startActivity(ReceiptsDetailActivity.newIntent(mContext, mOrder.getEntryId().toString()));
+
     }
 }

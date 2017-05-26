@@ -4,7 +4,7 @@ package com.mobitill.barandrestaurant.receipts;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +15,7 @@ import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.product.models.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,7 +38,9 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     private Unbinder unbinder;
 
     private ReceiptsOrdersAdapter receiptsOrdersAdapter;
-    public RecyclerView.LayoutManager manager;
+    private RecyclerView.LayoutManager manager;
+    private List<Order> orders = new ArrayList<>();
+
 
     @BindView(R.id.recView_receipts_orders)
     public RecyclerView receiptsRecyclerView;
@@ -74,7 +77,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
         // Inflate the layout for this fragment
        View view = inflater.inflate(R.layout.receipts_fragment, container, false);
         unbinder = ButterKnife.bind(this,view);
-        manager = new GridLayoutManager(getActivity(),3);
+        manager = new LinearLayoutManager(getActivity(), 1, false);
         receiptsRecyclerView.setLayoutManager(manager);
         return view;
     }
@@ -115,9 +118,21 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     @Override
     public void showOrders(List<Order> orders) {
 
-        receiptsOrdersAdapter = new ReceiptsOrdersAdapter(orders);
+        if(isAdded()){
+            if (receiptsOrdersAdapter == null){
 
-        receiptsRecyclerView.setAdapter(receiptsOrdersAdapter);
+                receiptsOrdersAdapter = new ReceiptsOrdersAdapter(orders, getActivity());
+
+                receiptsRecyclerView.setAdapter(receiptsOrdersAdapter);
+            }else {
+
+                /*
+                * Not yet complete
+                * */
+//                receiptsOrdersAdapter.addOrders();
+//                receiptsOrdersAdapter.notifyItemChanged(orders.getOrderId);
+            }
+        }
 
     }
 

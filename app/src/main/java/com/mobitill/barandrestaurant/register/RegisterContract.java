@@ -36,5 +36,7 @@ public interface RegisterContract {
         void addOrderItem(OrderItem orderItem);
 
         void removeOrderItem(OrderItem orderItemToDelete);
+
+        void sendOrderRequest();
     }
 }

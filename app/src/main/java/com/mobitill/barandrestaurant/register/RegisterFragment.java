@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -238,14 +239,15 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
             mQuantityTextView.setText("x" + quantity);
 
             ImageButton addButton = (ImageButton) view.findViewById(R.id.button_add);
-            addButton.setOnClickListener(v -> {
-                mPresenter.addOrderItem(orderItem);
-            });
+            addButton.setOnClickListener(v -> mPresenter.addOrderItem(orderItem));
 
             ImageButton removeButton = (ImageButton) view.findViewById(R.id.button_remove);
-            removeButton.setOnClickListener(v -> {
-                OrderItem orderItemToDelete = entry.getValue().pop();
-                mPresenter.removeOrderItem(orderItemToDelete);
+            removeButton.setOnClickListener(v -> mPresenter.removeOrderItem(entry.getValue().pop()));
+
+
+            Button requestButton = (Button) view.findViewById(R.id.button_request);
+            requestButton.setOnClickListener(v -> {
+                mPresenter.sendOrderRequest();
             });
 
             mTicketLinearLayout.addView(view);

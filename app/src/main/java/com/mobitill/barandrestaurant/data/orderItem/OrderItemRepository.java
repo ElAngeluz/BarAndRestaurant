@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 
 import com.mobitill.barandrestaurant.data.Local;
 import com.mobitill.barandrestaurant.data.Remote;
+import com.mobitill.barandrestaurant.data.order.OrderRepository;
+import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
@@ -34,6 +36,9 @@ public class OrderItemRepository implements OrderItemDataSource {
     @NonNull
     private final BaseScheduleProvider scheduleProvider;
 
+    @NonNull
+    private final OrderRepository mOrderRepository;
+
     @Nullable
     Map<String, OrderItem> cachedOrderItems;
 
@@ -44,11 +49,13 @@ public class OrderItemRepository implements OrderItemDataSource {
     @Inject
     public OrderItemRepository(@Remote OrderItemDataSource orderItemRemoteDataSource,
                                @Local OrderItemDataSource orderItemLocalDataSource,
-                               @NonNull BaseScheduleProvider scheduleProvider) {
+                               @NonNull BaseScheduleProvider scheduleProvider,
+                               @NonNull OrderRepository orderRepository) {
         checkNotNull(scheduleProvider, "scheduleProvider cannot be null");
         this.orderItemRemoteDataSource = orderItemRemoteDataSource;
         this.orderItemLocalDataSource = orderItemLocalDataSource;
         this.scheduleProvider = scheduleProvider;
+        mOrderRepository = orderRepository;
     }
 
     /**
@@ -209,4 +216,10 @@ public class OrderItemRepository implements OrderItemDataSource {
                 .getOrderItemWithOrderId(orderId)
                 .observeOn(scheduleProvider.ui());
     }
+
+    @Override
+    public void orderRequest(Order order) {
+        orderItemRemoteDataSource.orderRequest(order);
+    }
+
 }

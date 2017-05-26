@@ -2,6 +2,7 @@ package com.mobitill.barandrestaurant.data.orderItem;
 
 
 import com.mobitill.barandrestaurant.data.DataSource;
+import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 
 import java.util.List;
@@ -16,4 +17,5 @@ public interface OrderItemDataSource extends DataSource<OrderItem, String> {
 
     Observable<List<OrderItem>> getOrderItemWithOrderId(String orderId);
 
+    void orderRequest(Order order);
 }

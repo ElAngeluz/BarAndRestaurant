@@ -1,14 +1,25 @@
 package com.mobitill.barandrestaurant.data.orderItem.source.remote;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
+import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemDataSource;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
+import com.mobitill.barandrestaurant.utils.Constants;
+import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import retrofit2.Retrofit;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Created by andronicus on 5/23/2017.
@@ -18,8 +29,34 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
 
     private static final String TAG = OrderItemRemoteDataSource.class.getSimpleName();
 
+    @NonNull
+    private final Retrofit mCounterARetrofit;
+
+    @NonNull
+    private final Retrofit mCounterBRetrofit;
+
+    @NonNull
+    BaseScheduleProvider mScheduleProvider;
+
+    @NonNull
+    RxSharedPreferences mRxSharedPreferences;
+
+    @NonNull
+    Context mContext;
+
     @Inject
-    OrderItemRemoteDataSource(){}
+    OrderItemRemoteDataSource(@NonNull @Named(Constants.RetrofitSource.COUNTERA) Retrofit counterARetrofit,
+                              @NonNull @Named(Constants.RetrofitSource.COUNTERB) Retrofit counterBRetrofit,
+                              @NonNull BaseScheduleProvider scheduleProvider,
+                              @NonNull RxSharedPreferences rxSharedPreferences,
+                              @NonNull Context context){
+        checkNotNull(scheduleProvider, "scheduleProvider cannot be null");
+        mScheduleProvider = scheduleProvider;
+        mCounterARetrofit = counterARetrofit;
+        mCounterBRetrofit = counterBRetrofit;
+        mRxSharedPreferences = rxSharedPreferences;
+        mContext = context;
+    }
 
 
     @Override
@@ -61,6 +98,11 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
     @Override
     public Observable<List<OrderItem>> getOrderItemWithOrderId(String orderId) {
         return null;
+    }
+
+    @Override
+    public void orderRequest(Order order) {
+
     }
 
 }

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemDataSource;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -158,6 +159,11 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
                         .createQuery(OrderItemEntry.TABLE_NAME, sql, orderId)
                         .mapToList(orderItemMapperFunction).take(50, TimeUnit.MILLISECONDS);
         return RxJavaInterop.toV2Observable(orderItemObservableV1);
+    }
+
+    @Override
+    public void orderRequest(Order order) {
+
     }
 
 

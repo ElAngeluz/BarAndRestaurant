@@ -128,7 +128,7 @@ public class WaitersRepository implements WaitersDataSource {
                         .toObservable());
 
         return Observable.concat(localWaiter, remoteWaiter)
-                .first(null)
+                .firstOrError()
                 .map(waiter -> {
                     if(waiter == null){
                         throw new NoSuchElementException("No waiter found with Id " + id);

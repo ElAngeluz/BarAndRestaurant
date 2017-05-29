@@ -26,6 +26,6 @@ public class ReceiptsActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return null;
+        return ReceiptsFragment.newInstance();
     }
 }

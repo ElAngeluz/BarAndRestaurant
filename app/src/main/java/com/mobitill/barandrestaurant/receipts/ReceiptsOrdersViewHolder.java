@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
-import com.mobitill.barandrestaurant.data.product.models.Product;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,7 +15,7 @@ import butterknife.ButterKnife;
  * Created by andronicus on 5/22/2017.
  */
 
-public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder {
+public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     @BindView(R.id.tv_order)
     TextView textViewOrder;
@@ -28,10 +27,16 @@ public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         ButterKnife.bind(this,itemView);
         itemView.setClickable(true);
+        itemView.setOnClickListener(this);
     }
     /*Subject to Change*/
 
     public void bindView(Order order){
-        textViewOrder.setText("Orders");
+        textViewOrder.setText(order.getName());
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

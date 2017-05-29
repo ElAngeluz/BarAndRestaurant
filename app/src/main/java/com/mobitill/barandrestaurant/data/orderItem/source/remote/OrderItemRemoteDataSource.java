@@ -4,9 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
-import com.mobitill.barandrestaurant.data.order.model.Order;
+import com.mobitill.barandrestaurant.data.ApiEndpointInterface;
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemDataSource;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
+import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
 import com.mobitill.barandrestaurant.utils.Constants;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
@@ -101,8 +102,30 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
     }
 
     @Override
-    public void orderRequest(Order order) {
+    public Observable<Boolean> orderRequest(OrderRemoteRequest order, String counter) {
+         return mApiEndpointInterface(counter)
+                .orderRequest(order)
+                 .subscribeOn(mScheduleProvider.io())
+                .map(orderRemoteResponse -> {
+                    if (orderRemoteResponse.getMessage().equals("ok")){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+    }
 
+    private ApiEndpointInterface mApiEndpointInterface(String counter){
+
+        switch (counter){
+            case Constants.RetrofitSource.COUNTERA:
+                ApiEndpointInterface counterAEndpointInterface = mCounterARetrofit.create(ApiEndpointInterface.class);
+                return counterAEndpointInterface;
+            case Constants.RetrofitSource.COUNTERB:
+                ApiEndpointInterface counterBEndpointInterface = mCounterBRetrofit.create(ApiEndpointInterface.class);
+                return counterBEndpointInterface;
+            default:return null;
+        }
     }
 
 }

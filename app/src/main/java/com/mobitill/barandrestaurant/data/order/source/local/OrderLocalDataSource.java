@@ -107,7 +107,7 @@ public class OrderLocalDataSource implements OrderDataSource {
     @Override
     public Order getLastCreated(){
         String selectQuery = "SELECT * FROM " + OrderEntry.TABLE_NAME + " sqlite_sequence";
-        Cursor cursor = mDatabaseHelper.query(selectQuery, null);
+        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
         cursor.moveToLast();
         return getOrder(cursor);
     }
@@ -143,8 +143,30 @@ public class OrderLocalDataSource implements OrderDataSource {
         checkNotNull(rowId);
          String sql = String.format("SELECT * FROM %s WHERE ROWID = %d LIMIT 1",
                  OrderEntry.TABLE_NAME, rowId);
-        Cursor cursor = mDatabaseHelper.query(sql, null);
+        Cursor cursor = mDatabaseHelper.query(sql, (String[]) null);
         return getOrder(cursor);
+    }
+
+    @Override
+    public Observable<List<Order>> getOrdersWithSynced(Integer isSynced) {
+        String[] projection = {
+                OrderEntry.COLUMN_NAME_ENTRY_ID,
+                OrderEntry.COLUMN_NAME_NAME,
+                OrderEntry.COLUMN_NAME_WAITER_ID,
+                OrderEntry.COLUMN_NAME_SYNCED,
+                OrderEntry.COLUMN_NAME_CHECKED_OUT,
+                OrderEntry.COLUMN_NAME_TIME_STAMP
+        };
+        String sql = String.format("SELECT %s FROM %s WHERE %s = %d", TextUtils.join(",", projection),
+                OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_SYNCED, isSynced);
+        rx.Observable<List<Order>> observableV1 =
+                mDatabaseHelper
+                        .createQuery(OrderEntry.TABLE_NAME, sql)
+                        .mapToList(mOrderMapperFunction)
+                        .take(100, TimeUnit.MILLISECONDS);
+        // convert observable from rxjava1 observable to rxjava2 observable
+        Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
+        return observableV2;
     }
 }
 

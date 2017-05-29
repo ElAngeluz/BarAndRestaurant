@@ -1,8 +1,6 @@
-package com.mobitill.barandrestaurant;
+package com.mobitill.barandrestaurant.jobs;
 
-import android.content.Context;
-
-import com.f2prateek.rx.preferences2.RxSharedPreferences;
+import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
 import com.mobitill.barandrestaurant.data.order.OrderRepositoryModule;
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemRepository;
@@ -11,29 +9,28 @@ import com.mobitill.barandrestaurant.data.product.ProductRepository;
 import com.mobitill.barandrestaurant.data.product.ProductRepositoryModule;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepositoryModule;
-import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
 
 /**
- * Created by james on 5/24/2017.
+ * Created by james on 5/26/2017.
  */
 @Singleton
 @Component(modules = {
         OrderRepositoryModule.class,
-        ProductRepositoryModule.class,
-        WaitersRepositoryModule.class,
         OrderItemRepositoryModule.class,
+        WaitersRepositoryModule.class,
+        ProductRepositoryModule.class,
         ApplicationModule.class,
+        JobsModule.class
 })
-public interface BaseComponent {
-    WaitersRepository waitersRepository();
-    OrderRepository orderRepository();
+public interface JobsComponent {
+    OrderRepository mOrderRepository();
     OrderItemRepository orderItemRepository();
+    WaitersRepository waitersRepository();
     ProductRepository productRepository();
-    BaseScheduleProvider baseScheduleProvider();
-    RxSharedPreferences rxSharedPreferences();
-    Context context();
+    void inject(OrderRequestEngine orderRequestEngine);
+    void inject(OrderRequestCheckOutHandler orderRequestCheckOutHandler);
 }

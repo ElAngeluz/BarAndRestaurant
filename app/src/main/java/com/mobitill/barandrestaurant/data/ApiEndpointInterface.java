@@ -3,6 +3,8 @@ package com.mobitill.barandrestaurant.data;
 import com.mobitill.barandrestaurant.data.product.models.pos.payload.POSRequest;
 import com.mobitill.barandrestaurant.data.product.models.pos.response.POSResponse;
 import com.mobitill.barandrestaurant.data.request.Request;
+import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
+import com.mobitill.barandrestaurant.data.request.remotemodels.response.OrderRemoteResponse;
 import com.mobitill.barandrestaurant.data.waiter.waitermodels.response.WaiterResponse;
 
 import io.reactivex.Observable;
@@ -20,4 +22,7 @@ public interface ApiEndpointInterface {
 
     @POST("pagremote")
     Observable<POSResponse> getProducts(@Body POSRequest request);
+
+    @POST("pagremote")
+    Observable<OrderRemoteResponse> orderRequest(@Body OrderRemoteRequest orderRemoteRequest);
 }

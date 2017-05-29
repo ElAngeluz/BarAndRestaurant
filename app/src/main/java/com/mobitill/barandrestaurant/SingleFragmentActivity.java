@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.mobitill.barandrestaurant.jobs.OrderRequestJob;
 import com.mobitill.barandrestaurant.receipts.ReceiptsFragment;
 import com.mobitill.barandrestaurant.register.RegisterFragment;
 
@@ -62,6 +63,7 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
                     .add(R.id.contentFrame, fragment)
                     .commit();
         }
+
 
     }
 

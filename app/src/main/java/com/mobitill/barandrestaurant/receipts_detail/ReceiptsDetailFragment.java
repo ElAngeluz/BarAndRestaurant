@@ -7,10 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
+import com.mobitill.barandrestaurant.checkout.CheckOutActivity;
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 
@@ -20,6 +22,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -39,6 +42,7 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
 
     @BindView(R.id.et_receipts_detail_receiptNumber)
     EditText mEditTextReceiptDetailReceiptNumber;
+
 
     @Inject
     ReceiptsDetailPresenter receiptsDetailPresenter;
@@ -78,6 +82,11 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
         View view = inflater.inflate(R.layout.receipts_detail_fragment, container, false);
         ButterKnife.bind(this,view);
         return view;
+    }
+
+    @OnClick(R.id.btn_receipts_detail_checkOut)
+    public void receiptDetailCheckOutClick(){
+       startActivity(CheckOutActivity.newIntent(getActivity(),mOrderId));
     }
 
     @Override

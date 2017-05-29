@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.mobitill.barandrestaurant.checkout.CheckOutFragment">
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <CheckBox
+            android:id="@+id/chkbx_checked_out_cash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash"
+            android:padding="@dimen/dp16"
+            android:textSize="@dimen/sp30"/>
+        <EditText
+            android:id="@+id/et_checked_out_cash"
+            android:padding="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+
+
+    <CheckBox
+        android:id="@+id/chkbx_checked_out_mpesa"
+        android:layout_marginTop="@dimen/dp10"
+        android:layout_marginLeft="@dimen/dp16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mpesa"
+        android:padding="@dimen/dp10"
+        android:textSize="@dimen/sp30"/>
+
+   <RelativeLayout
+       android:layout_marginTop="@dimen/dp10"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+       <Button
+           android:id="@+id/btn_checked_out_ok"
+           android:layout_alignParentRight="true"
+           android:layout_marginRight="@dimen/dp16"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="OK"
+           android:textSize="@dimen/sp20"/>
+
+   </RelativeLayout>
+
+
+</LinearLayout>

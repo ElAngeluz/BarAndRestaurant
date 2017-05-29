@@ -22,10 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".register.RegisterActivity"></activity>
-        <activity android:name=".receipts_detail.ReceiptsDetailActivity"
-            android:parentActivityName=".receipts.ReceiptsActivity"></activity>
-        <activity android:name=".receipts.ReceiptsActivity"></activity>
+        <activity android:name=".register.RegisterActivity" />
+        <activity
+            android:name=".receipts_detail.ReceiptsDetailActivity"
+            android:parentActivityName=".receipts.ReceiptsActivity" />
+        <activity android:name=".receipts.ReceiptsActivity" />
+        <activity android:name=".checkout.CheckOutActivity"></activity>
     </application>
 
 </manifest>

@@ -55,4 +55,9 @@ public class ReceiptsDetailActivity extends SingleFragmentActivity {
     protected Fragment createFragment() {
         return ReceiptsDetailFragment.newInstance(getIntent().getStringExtra(EXTRA_ORDER_ID));
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }

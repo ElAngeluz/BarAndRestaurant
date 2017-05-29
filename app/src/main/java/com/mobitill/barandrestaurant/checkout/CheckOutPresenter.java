@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
+import com.mobitill.barandrestaurant.jobs.checkoutjobs.CheckOutJob;
 
 import javax.inject.Inject;
 
@@ -61,6 +62,7 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
                        int updated = mOrderRepository.update(order);
                        if(updated > -1){
                            Log.i(TAG, "checkout: order: " + order.getEntryId());
+                           CheckOutJob.scheduleJob();
                        }
                     });
         }

@@ -26,7 +26,8 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
 
     public static final String TAG = OrderRequestCheckOutHandler.class.getSimpleName();
     private boolean mHasQuit = false;
-    private static final int MESSAGE_DOWNLOAD = 0;
+    private static final int ORDER_REQUEST = 0;
+    private static final int CHECK_REQUEST = 1;
     private Handler mRequestHandler;
     private Handler mResponseHandler;
 
@@ -68,10 +69,18 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
         mRequestHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
-                if(msg.what == MESSAGE_DOWNLOAD){
-                    OrderRemoteRequest orderRemoteRequest =(OrderRemoteRequest) msg.obj;
-                    handleRequest(orderRemoteRequest);
+                switch (msg.what){
+                    case ORDER_REQUEST:
+                        OrderRemoteRequest orderRemoteRequest =(OrderRemoteRequest) msg.obj;
+                        handleRequest(orderRemoteRequest);
+                        break;
+                    case CHECK_REQUEST:
+                         OrderRemoteRequest orderRemoteRequest1 =(OrderRemoteRequest) msg.obj;
+                         handleCheckout(orderRemoteRequest1);
+                         break;
+
                 }
+
             }
         };
     }
@@ -84,14 +93,22 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
     public void queueRequest(OrderRemoteRequest orderRemoteRequest){
             if(orderRemoteRequest != null){
                     mRequestHandler
-                            .obtainMessage(MESSAGE_DOWNLOAD, orderRemoteRequest)
+                            .obtainMessage(ORDER_REQUEST, orderRemoteRequest)
                             .sendToTarget();
             }
     }
 
+    public void queueCheckout(OrderRemoteRequest orderRemoteRequest){
+        if(orderRemoteRequest != null){
+            mRequestHandler
+                    .obtainMessage(CHECK_REQUEST, orderRemoteRequest)
+                    .sendToTarget();
+        }
+    }
+
     public void clearQueue(){
         if(mResponseHandler != null){
-            mRequestHandler.removeMessages(MESSAGE_DOWNLOAD);
+            mRequestHandler.removeMessages(ORDER_REQUEST);
         }
     }
 
@@ -112,6 +129,36 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                     mOrderRepository.getOne(String.valueOf(orderRemoteResponse.getOrderId()))
                                             .subscribe(order -> {
                                                 order.setSynced(1);
+                                                Log.i(TAG, "handleRequest: ");
+                                                int updated = mOrderRepository.update(order);
+                                                if (updated > -1) {
+                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + " is checked out");
+                                                } else {
+                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + " checkout failed out");
+                                                }
+                                            });
+                                });
+                    }
+                });
+    }
+
+    private void handleCheckout(final OrderRemoteRequest orderRemoteRequest){
+        mOrderItemRepository
+                .orderRequest(orderRemoteRequest,
+                        Constants.RetrofitSource.COUNTERA)
+                .subscribeOn(mScheduleProvider.computation())
+                .subscribe(orderRemoteResponse -> {
+                    if(orderRemoteResponse.getMessage().equals("ok")) {
+                        mOrderItemRepository
+                                .getOrderItemWithOrderId(String.valueOf(orderRemoteRequest.getOrderId()))
+                                .subscribe(orderItems -> {
+                                    for(OrderItem orderItem: orderItems) {
+                                        orderItem.setCheckedOut(1);
+                                        mOrderItemRepository.update(orderItem);
+                                    }
+                                    mOrderRepository.getOne(String.valueOf(orderRemoteResponse.getOrderId()))
+                                            .subscribe(order -> {
+                                                order.setCheckedOut(1);
                                                 Log.i(TAG, "handleRequest: ");
                                                 int updated = mOrderRepository.update(order);
                                                 if (updated > -1) {

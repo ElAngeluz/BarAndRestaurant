@@ -31,10 +31,6 @@ public class OrderRequestJob extends Job {
         PersistableBundleCompat extras = params.getExtras();
         String name = extras.getString(PARAM_ORDER_REQUEST, "");
 
-//        if(orderRequest()){
-//            return Result.SUCCESS;
-//        }
-
         orderRequest();
 
         return Result.SUCCESS;
@@ -52,13 +48,11 @@ public class OrderRequestJob extends Job {
     }
 
     public static void scheduleJob(){
-        PersistableBundleCompat extras = new PersistableBundleCompat();
-        extras.putString(PARAM_ORDER_REQUEST, "name");
+
         new JobRequest.Builder(OrderRequestJob.TAG)
                 .setExecutionWindow(1000L, 5000L)
                 .setBackoffCriteria(TimeUnit.MINUTES.toMillis(5), JobRequest.BackoffPolicy.LINEAR )
                 .setRequiredNetworkType( JobRequest.NetworkType.ANY )
-                .setExtras( extras )
                 .setUpdateCurrent(false)
                 .setRequirementsEnforced( true )
                 .setPersisted( true )

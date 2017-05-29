@@ -9,6 +9,7 @@ import com.mobitill.barandrestaurant.data.product.ProductRepository;
 import com.mobitill.barandrestaurant.data.product.ProductRepositoryModule;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepositoryModule;
+import com.mobitill.barandrestaurant.jobs.checkoutjobs.CheckoutJobEngine;
 
 import javax.inject.Singleton;
 
@@ -33,4 +34,5 @@ public interface JobsComponent {
     ProductRepository productRepository();
     void inject(OrderRequestEngine orderRequestEngine);
     void inject(OrderRequestCheckOutHandler orderRequestCheckOutHandler);
+    void inject(CheckoutJobEngine checkoutJobEngine);
 }

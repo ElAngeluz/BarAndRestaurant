@@ -1,4 +1,4 @@
-package com.mobitill.barandrestaurant.jobs;
+package com.mobitill.barandrestaurant.jobs.checkoutjobs;
 
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
@@ -12,26 +12,24 @@ import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemo
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequestbody;
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteWaiter;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
+import com.mobitill.barandrestaurant.jobs.DaggerJobsComponent;
+import com.mobitill.barandrestaurant.jobs.OrderRequestCheckOutHandler;
+import com.mobitill.barandrestaurant.jobs.OrderRequestEngine;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Stack;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.inject.Inject;
 
-import io.reactivex.functions.Function;
-
 /**
- * Created by james on 5/26/2017.
+ * Created by dataintegrated on 5/29/2017.
  */
 
-public class OrderRequestEngine  {
-
+public class CheckoutJobEngine {
     private static final String TAG = OrderRequestEngine.class.getSimpleName();
 
     @Inject
@@ -47,35 +45,33 @@ public class OrderRequestEngine  {
 
     private OrderRequestCheckOutHandler mOrderRequestCheckOutHandler;
 
-    public OrderRequestEngine() {
+    public CheckoutJobEngine() {
         DaggerJobsComponent.builder()
                 .applicationModule(new ApplicationModule(MainApplication.getAppContext()))
                 .build()
                 .inject(this);
+
         mOrderRequestCheckOutHandler = new OrderRequestCheckOutHandler();
         mOrderRequestCheckOutHandler.start();
         mOrderRequestCheckOutHandler.getLooper();
     }
 
-    public void orderRequest() {
-        Queue<OrderRemoteRequest> orderRemoteRequestQueue = new LinkedBlockingQueue<>();
-        mOrderRepository.getOrdersWithSynced(0)
-                .observeOn(mScheduleProvider.io())
-                .map(new Function<List<Order>, Queue<OrderRemoteRequest>>() {
-                    @Override
-                    public Queue<OrderRemoteRequest> apply(List<Order> orders) throws Exception {
-                        for (Order order : orders) {
-                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
-                        }
-                        return orderRemoteRequestQueue;
+    public void checkout(){
+        List<OrderRemoteRequest> orderRemoteRequestList = new ArrayList<>();
+        mOrderRepository.getOrdersForCheckout(0, 1)
+                .observeOn(mScheduleProvider.computation())
+                .map(orders -> {
+                    for (Order order: orders) {
+                        orderRemoteRequestList.add(getOrderOrderRemoteRequestItem(order));
                     }
-                })
-                .subscribe(orderRemoteRequests -> {
-                    for (OrderRemoteRequest orderRemoteRequest : orderRemoteRequests) {
-                        mOrderRequestCheckOutHandler.queueRequest(orderRemoteRequest);
-                    }
-                });
+                    return orderRemoteRequestList;
+                }).subscribe(orderRemoteRequests -> {
+                for(OrderRemoteRequest orderRemoteRequest: orderRemoteRequests){
+                    mOrderRequestCheckOutHandler.queueRequest(orderRemoteRequest);
+                }
+        });
     }
+
 
     private OrderRemoteRequest getOrderOrderRemoteRequestItem(Order order) {
         OrderRemoteRequest orderRemoteRequest = new OrderRemoteRequest();
@@ -130,9 +126,7 @@ public class OrderRequestEngine  {
         orderRemoteRequest.setProductsVersion(0);
         orderRemoteRequest.setRequestbody(orderRemoteRequestbody);
         orderRemoteRequest.setRequestId("181");
-        orderRemoteRequest.setRequestname("orderrequest");
+        orderRemoteRequest.setRequestname("ordercheckout");
         return orderRemoteRequest;
     }
-
-
 }

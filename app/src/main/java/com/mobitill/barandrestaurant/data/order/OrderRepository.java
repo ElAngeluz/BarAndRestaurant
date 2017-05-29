@@ -85,4 +85,10 @@ public class OrderRepository implements OrderDataSource {
     public Order getOrderFromRowId(Long rowId) {
         return null;
     }
+
+    @Override
+    public Observable<List<Order>> getOrdersWithSynced(Integer isSynced) {
+        return mOrderLocalDataSource
+                .getOrdersWithSynced(isSynced);
+    }
 }

@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import com.mobitill.barandrestaurant.data.Local;
 import com.mobitill.barandrestaurant.data.Remote;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
-import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
+import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
 import java.util.LinkedHashMap;
@@ -218,8 +218,9 @@ public class OrderItemRepository implements OrderItemDataSource {
     }
 
     @Override
-    public void orderRequest(Order order) {
-        orderItemRemoteDataSource.orderRequest(order);
+    public Observable<Boolean> orderRequest(OrderRemoteRequest orderRemoteRequest, String counter) {
+        return orderItemRemoteDataSource
+                .orderRequest(orderRemoteRequest, counter);
     }
 
 }

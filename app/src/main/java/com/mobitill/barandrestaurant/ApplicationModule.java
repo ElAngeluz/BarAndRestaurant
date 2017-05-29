@@ -34,7 +34,7 @@ public class ApplicationModule {
 
     private final Context mContext;
 
-    ApplicationModule(Context context){
+    public ApplicationModule(Context context){
         mContext = context;
     }
 

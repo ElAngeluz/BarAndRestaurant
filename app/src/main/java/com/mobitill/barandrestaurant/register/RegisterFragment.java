@@ -26,6 +26,7 @@ import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.product.models.Product;
+import com.mobitill.barandrestaurant.jobs.OrderRequestJob;
 import com.mobitill.barandrestaurant.register.adapter.AdapterCallback;
 import com.mobitill.barandrestaurant.register.adapter.RegisterAdapter;
 
@@ -98,6 +99,9 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
                 .baseComponent(((MainApplication) getActivity().getApplication()).mBaseComponent())
                 .build()
                 .inject(this);
+
+        OrderRequestJob.scheduleJob();
+
     }
 
     @OnClick(R.id.button_request)
@@ -217,8 +221,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
         }
     }
 
-
-
     @Override
     public void showOrderItemCreated(Order order) {
         if(order != null){
@@ -252,8 +254,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
 
             ImageButton removeButton = (ImageButton) view.findViewById(R.id.button_remove);
             removeButton.setOnClickListener(v -> mPresenter.removeOrderItem(entry.getValue().pop()));
-
-
 
             mTicketLinearLayout.addView(view);
 

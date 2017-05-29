@@ -83,6 +83,7 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile group: 'commons-codec', name: 'commons-codec', version: '1.9'
+    compile 'com.evernote:android-job:1.1.10'
 
 }
 repositories {

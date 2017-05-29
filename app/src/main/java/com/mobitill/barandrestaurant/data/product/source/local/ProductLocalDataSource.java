@@ -128,7 +128,7 @@ public class ProductLocalDataSource implements ProductDataSource {
     @Override
     public Product getLastCreated() {
         String selectQuery = "SELECT * FROM " + ProductEntry.TABLE_NAME + " sqlite_sequence";
-        Cursor cursor = mDatabaseHelper.query(selectQuery, null);
+        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
         cursor.moveToLast();
         return getProduct(cursor);
     }

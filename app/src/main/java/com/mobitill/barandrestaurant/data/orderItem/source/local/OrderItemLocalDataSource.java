@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemDataSource;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
+import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import java.util.List;
@@ -110,7 +110,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         checkNotNull(rowId);
         String sql = String.format("SELECT * FROM %s WHERE ROWID = %d LIMIT 1",
                 OrderItemEntry.TABLE_NAME, rowId);
-        Cursor cursor = databaseHelper.query(sql, null);
+        Cursor cursor = databaseHelper.query(sql, (String[]) null);
         cursor.moveToLast();
         return getOrderItem(cursor);
     }
@@ -144,7 +144,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
     @Override
     public OrderItem getLastCreated() {
         String selectQuery = "SELECT * FROM " + OrderItemEntry.TABLE_NAME + " sqlite_sequence";
-        Cursor cursor = databaseHelper.query(selectQuery, null);
+        Cursor cursor = databaseHelper.query(selectQuery, (String[]) null);
         cursor.moveToLast();
         return getOrderItem(cursor);
     }
@@ -162,8 +162,8 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
     }
 
     @Override
-    public void orderRequest(Order order) {
-
+    public Observable<Boolean> orderRequest(OrderRemoteRequest order, String counter) {
+        return null;
     }
 
 

@@ -94,17 +94,8 @@ public class WaitersLocalDataSource implements WaitersDataSource {
         contentValues.put(WaitersEntry.COLUMN_NAME_NAME, item.getName());
         contentValues.put(WaitersEntry.COLUMN_NAME_PIN, item.getPin());
         long rowId = mDatabaseHelper.insert(WaitersEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-        return getWaiterUsingRowId(rowId);
+        return getLastCreated();
     }
-
-    private Waiter getWaiterUsingRowId(Long rowId){
-        checkNotNull(rowId);
-        String selectQuery = "SELECT * FROM " + WaitersEntry.TABLE_NAME + " sqlite_sequence";
-        Cursor cursor = mDatabaseHelper.query(selectQuery, null);
-        cursor.moveToLast();
-        return getWaiter(cursor);
-    }
-
 
     @Override
     public int delete(String id) {
@@ -130,7 +121,10 @@ public class WaitersLocalDataSource implements WaitersDataSource {
 
     @Override
     public Waiter getLastCreated() {
-        return null;
+        String selectQuery = "SELECT * FROM " + WaitersEntry.TABLE_NAME + " sqlite_sequence";
+        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        cursor.moveToLast();
+        return getWaiter(cursor);
     }
 
     @Override
@@ -148,4 +142,5 @@ public class WaitersLocalDataSource implements WaitersDataSource {
         Observable<Waiter> waiterObservableV2 = RxJavaInterop.toV2Observable(waiterObservableV1);
         return waiterObservableV2;
     }
+
 }

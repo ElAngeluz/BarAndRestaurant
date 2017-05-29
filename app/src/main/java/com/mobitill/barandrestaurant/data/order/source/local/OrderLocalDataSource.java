@@ -39,26 +39,29 @@ public class OrderLocalDataSource implements OrderDataSource {
         mOrderMapperFunction = this::getOrder;
     }
 
+    String[] projection = {
+            OrderEntry.COLUMN_NAME_ENTRY_ID,
+            OrderEntry.COLUMN_NAME_DISPLAY_ID,
+            OrderEntry.COLUMN_NAME_NAME,
+            OrderEntry.COLUMN_NAME_WAITER_ID,
+            OrderEntry.COLUMN_NAME_SYNCED,
+            OrderEntry.COLUMN_NAME_CHECKED_OUT,
+            OrderEntry.COLUMN_NAME_TIME_STAMP
+    };
+
     private Order getOrder(@NonNull Cursor c) {
         String entryId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_ENTRY_ID));
+        String displayId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_DISPLAY_ID));
         String name = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_NAME));
         String waiterId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_WAITER_ID));
         Integer synced = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_SYNCED));
         Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_CHECKED_OUT));
         Long timestamp = c.getLong(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_TIME_STAMP));
-        return new Order(entryId, name, waiterId, synced, checkedOut, timestamp);
+        return new Order(entryId, displayId, name, waiterId, synced, checkedOut, timestamp);
     }
 
     @Override
     public Observable<List<Order>> getAll() {
-        String[] projection = {
-                OrderEntry.COLUMN_NAME_ENTRY_ID,
-                OrderEntry.COLUMN_NAME_NAME,
-                OrderEntry.COLUMN_NAME_WAITER_ID,
-                OrderEntry.COLUMN_NAME_SYNCED,
-                OrderEntry.COLUMN_NAME_CHECKED_OUT,
-                OrderEntry.COLUMN_NAME_TIME_STAMP
-        };
 
         String sql = String.format("SELECT %s FROM %s", TextUtils.join(",", projection), OrderEntry.TABLE_NAME);
         rx.Observable<List<Order>> observableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME, sql)
@@ -71,14 +74,6 @@ public class OrderLocalDataSource implements OrderDataSource {
     @Override
     public Observable<Order> getOne(String id) {
         checkNotNull(id);
-        String[] projection = {
-                OrderEntry.COLUMN_NAME_ENTRY_ID,
-                OrderEntry.COLUMN_NAME_NAME,
-                OrderEntry.COLUMN_NAME_WAITER_ID,
-                OrderEntry.COLUMN_NAME_SYNCED,
-                OrderEntry.COLUMN_NAME_CHECKED_OUT,
-                OrderEntry.COLUMN_NAME_TIME_STAMP
-        };
 
         String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
                 TextUtils.join(",", projection), OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_ENTRY_ID);
@@ -123,6 +118,7 @@ public class OrderLocalDataSource implements OrderDataSource {
     public int update(Order item) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(OrderEntry.COLUMN_NAME_ENTRY_ID, item.getEntryId());
+        contentValues.put(OrderEntry.COLUMN_NAME_DISPLAY_ID,item.getDisplayId());
         contentValues.put(OrderEntry.COLUMN_NAME_NAME, item.getName());
         contentValues.put(OrderEntry.COLUMN_NAME_WAITER_ID, item.getWaiterId());
         contentValues.put(OrderEntry.COLUMN_NAME_SYNCED, item.getSynced());

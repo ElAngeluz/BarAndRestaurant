@@ -17,6 +17,7 @@ public final class OrderPersistenceContract{
     public static abstract class OrderEntry implements BaseColumns {
         public static final String TABLE_NAME = "order_table";
         public static final String COLUMN_NAME_ENTRY_ID = "entry_id";
+        public static final String COLUMN_NAME_DISPLAY_ID = "display_id";
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_WAITER_ID = "waiter_id";
         public static final String COLUMN_NAME_SYNCED = "synced";

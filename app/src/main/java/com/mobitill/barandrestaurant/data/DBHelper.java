@@ -45,8 +45,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_ORDER_ENTRIES =
             "CREATE TABLE " + OrderEntry.TABLE_NAME + " (" +
-                    OrderEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     OrderEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + " UNIQUE," +
+                    OrderEntry.COLUMN_NAME_DISPLAY_ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
                     OrderEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_WAITER_ID + TEXT_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +

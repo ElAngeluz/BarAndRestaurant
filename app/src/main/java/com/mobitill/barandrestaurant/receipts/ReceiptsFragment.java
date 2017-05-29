@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
-import com.mobitill.barandrestaurant.data.product.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +63,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
 
         DaggerReceiptsComponent.builder()
-                .receiptsPresenterModule(new ReceiptsPresenterModule(this, getActivity()))
+                .receiptsPresenterModule(new ReceiptsPresenterModule(this))
                 .baseComponent(((MainApplication) getActivity().getApplication()).mBaseComponent())
                 .build()
                 .inject(this);
@@ -81,6 +80,8 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
         receiptsRecyclerView.setLayoutManager(manager);
         return view;
     }
+
+
 
     @Override
     public void onDestroyView() {

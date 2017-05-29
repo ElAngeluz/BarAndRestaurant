@@ -1,7 +1,5 @@
 package com.mobitill.barandrestaurant.jobs;
 
-import android.os.Handler;
-
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
@@ -52,16 +50,13 @@ public class OrderRequestEngine  {
                 .applicationModule(new ApplicationModule(MainApplication.getAppContext()))
                 .build()
                 .inject(this);
-        Handler responseHandler = new Handler();
-        mOrderRequestCheckOutHandler = new OrderRequestCheckOutHandler(responseHandler);
+        mOrderRequestCheckOutHandler = new OrderRequestCheckOutHandler();
         mOrderRequestCheckOutHandler.start();
         mOrderRequestCheckOutHandler.getLooper();
     }
 
     public void orderRequest() {
-
         Queue<OrderRemoteRequest> orderRemoteRequestQueue = new LinkedBlockingQueue<>();
-
         mOrderRepository.getOrdersWithSynced(0)
                 .observeOn(mScheduleProvider.io())
                 .map(orders -> {
@@ -85,40 +80,39 @@ public class OrderRequestEngine  {
 
         // prepare OrderRemoteWaiter
         orderRemoteWaiter.setId(order.getWaiterId());
-        mWaitersRepository
-                .getOne(order.getWaiterId())
-                .subscribe(waiter -> {
-                    orderRemoteWaiter.setId(waiter.getId());
-                });
+        mWaitersRepository.getOne(order.getWaiterId())
+                .blockingSubscribe(waiter -> orderRemoteWaiter.setName(waiter.getName()));
 
         // prepare OrderRemoteItem
         mOrderItemRepository
                 .getOrderItemWithOrderId(order.getEntryId())
-                .subscribe(orderItems -> {
+                .blockingSubscribe(orderItems -> {
                     if (!orderItems.isEmpty()) {
+
                         Map<String, Stack<OrderItem>> orderItemMap = new HashMap<>();
+
                         for (OrderItem orderItem : orderItems) {
                             if (!orderItemMap.containsKey(orderItem.getProductId())) {
                                 Stack<OrderItem> orderItemList = new Stack<>();
                                 orderItemList.push(orderItem);
                                 orderItemMap.put(orderItem.getProductId(), orderItemList);
                             } else {
-                                orderItemMap.get(orderItem.getProductId()).add(orderItem);
+                                orderItemMap.get(orderItem.getProductId()).push(orderItem);
                             }
                         }
 
-
                         for (Map.Entry<String, Stack<OrderItem>> entry : orderItemMap.entrySet()) {
                             final OrderRemoteItem orderRemoteItem = new OrderRemoteItem();
-                            orderRemoteItem.setQuantity(entry.getValue().size());
-                            orderRemoteItem.setName(entry.getValue().peek().getProductName());
-                            orderRemoteItem.setId(entry.getValue().peek().getProductId());
                             mProductRepository.getOne(entry.getKey())
                                     .subscribe(product -> {
                                         orderRemoteItem.setSubtotal(entry.getValue().size() * Double.valueOf(product.getPrice()).intValue());
+                                        orderRemoteItem.setQuantity(entry.getValue().size());
+                                        orderRemoteItem.setName(entry.getValue().peek().getProductName());
+                                        orderRemoteItem.setId(entry.getValue().peek().getProductId());
+                                        orderRemoteItems.add(orderRemoteItem);
                                     });
-                            orderRemoteItems.add(orderRemoteItem);
                         }
+
                     }
                 });
 
@@ -134,5 +128,6 @@ public class OrderRequestEngine  {
         orderRemoteRequest.setRequestname("orderrequest");
         return orderRemoteRequest;
     }
+
 
 }

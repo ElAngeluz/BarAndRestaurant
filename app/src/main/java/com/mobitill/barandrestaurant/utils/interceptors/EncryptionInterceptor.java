@@ -24,10 +24,8 @@ public class EncryptionInterceptor implements Interceptor {
     private static int keySize = 256;
     private byte[] ivBytes;
 
-
     @Override
     public Response intercept(Chain chain) throws IOException {
-
         Request request = chain.request();
         RequestBody oldBody = request.body();
         Buffer buffer = new Buffer();

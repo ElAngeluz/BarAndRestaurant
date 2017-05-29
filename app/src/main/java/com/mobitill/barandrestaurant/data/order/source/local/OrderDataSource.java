@@ -14,4 +14,5 @@ import io.reactivex.Observable;
 public interface OrderDataSource extends DataSource<Order, String> {
     Order getOrderFromRowId(Long rowId);
     Observable<List<Order>> getOrdersWithSynced(Integer isSynced);
+    Observable<List<Order>>  getOrdersForCheckout(Integer checkout, Integer checkoutFlagged);
 }

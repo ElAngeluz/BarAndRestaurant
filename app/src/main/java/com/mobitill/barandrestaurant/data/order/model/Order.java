@@ -40,24 +40,31 @@ public class Order {
 
     private Long timeStamp;
 
+    private Integer checkoutFlagged;
+
+
 
     public Order() {
         this.entryId = String.valueOf(generateUniqueId());
         this.name = "Order " + this.entryId;
         this.timeStamp = new Date().getTime();
+        this.synced = 0;
+        this.checkedOut = 0;
+        this.checkoutFlagged = 0;
     }
 
-    public Order(String waiterId, Integer synced, Integer checkedOut) {
+    public Order(String waiterId) {
         this.entryId = String.valueOf(generateUniqueId());
         this.name = "Order " + this.entryId;
         this.timeStamp = new Date().getTime();
         this.waiterId = waiterId;
-        this.synced = synced;
-        this.checkedOut = checkedOut;
+        this.synced = 0;
+        this.checkedOut = 0;
+        this.checkoutFlagged = 0;
     }
 
 
-    public Order(String entryId,String displayId, String name, String waiterId, Integer synced, Integer checkedOut, Long timeStamp) {
+    public Order(String entryId,String displayId, String name, String waiterId, Integer synced, Integer checkedOut, Long timeStamp, Integer checkoutFlagged) {
         this.entryId = entryId;
         this.displayId = displayId;
         this.name = name;
@@ -65,6 +72,7 @@ public class Order {
         this.synced = synced;
         this.checkedOut = checkedOut;
         this.timeStamp = timeStamp;
+        this.checkoutFlagged = checkoutFlagged;
     }
 
     public String getEntryId() {
@@ -121,6 +129,14 @@ public class Order {
 
     public void setTimeStamp(Long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public Integer getCheckoutFlagged() {
+        return checkoutFlagged;
+    }
+
+    public void setCheckoutFlagged(Integer checkoutFlagged) {
+        this.checkoutFlagged = checkoutFlagged;
     }
 
     /**

@@ -78,7 +78,8 @@ public class ProductLocalDataSource implements ProductDataSource {
                 TextUtils.join(",", projection), ProductEntry.TABLE_NAME, ProductEntry.COLUMN_NAME_ID);
         rx.Observable<Product> productObservableV1 =
                 mDatabaseHelper.createQuery(ProductEntry.TABLE_NAME, sql, id)
-                .mapToOneOrDefault(mProductMapperFunction, null);
+                .mapToOneOrDefault(mProductMapperFunction, null)
+                .take(1);
         return RxJavaInterop.toV2Observable(productObservableV1);
     }
 

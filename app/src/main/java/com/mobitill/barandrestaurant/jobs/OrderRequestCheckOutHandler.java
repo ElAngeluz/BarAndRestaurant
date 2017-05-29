@@ -3,6 +3,7 @@ package com.mobitill.barandrestaurant.jobs;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
@@ -15,8 +16,6 @@ import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
 import com.mobitill.barandrestaurant.utils.Constants;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
-import java.util.Iterator;
-
 import javax.inject.Inject;
 
 /**
@@ -28,7 +27,6 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
     public static final String TAG = OrderRequestCheckOutHandler.class.getSimpleName();
     private boolean mHasQuit = false;
     private static final int MESSAGE_DOWNLOAD = 0;
-    private Handler mHandler;
     private Handler mRequestHandler;
     private Handler mResponseHandler;
 
@@ -55,9 +53,8 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
 
 
 
-    public OrderRequestCheckOutHandler(Handler responseHandler) {
+    public OrderRequestCheckOutHandler() {
         super(TAG);
-        mRequestHandler = responseHandler;
         DaggerJobsComponent.builder()
                 .applicationModule(new ApplicationModule(MainApplication.getAppContext()))
                 .build()
@@ -68,7 +65,7 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
 
     @Override
     protected void onLooperPrepared() {
-        mHandler = new Handler(){
+        mRequestHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 if(msg.what == MESSAGE_DOWNLOAD){
@@ -93,39 +90,34 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
     }
 
     public void clearQueue(){
-        mRequestHandler.removeMessages(MESSAGE_DOWNLOAD);
+        if(mResponseHandler != null){
+            mRequestHandler.removeMessages(MESSAGE_DOWNLOAD);
+        }
     }
 
     private void handleRequest(final OrderRemoteRequest orderRemoteRequest){
-
         mOrderItemRepository
                 .orderRequest(orderRemoteRequest,
                         Constants.RetrofitSource.COUNTERA)
                 .subscribeOn(mScheduleProvider.computation())
-                .subscribe(aBoolean -> {
-                    if (aBoolean) {
+                .subscribe(orderRemoteResponse -> {
+                    if(orderRemoteResponse.getMessage().equals("ok")) {
                         mOrderItemRepository
                                 .getOrderItemWithOrderId(String.valueOf(orderRemoteRequest.getOrderId()))
                                 .subscribe(orderItems -> {
-                                    Iterator<OrderItem> iterator = orderItems.iterator();
-                                    while (orderItems.iterator().hasNext()) {
-                                        OrderItem orderItem = iterator.next();
+                                    for(OrderItem orderItem: orderItems) {
                                         orderItem.setSynced(1);
-                                        if (mOrderItemRepository.update(orderItem) > -1) {
-                                            iterator.remove();
-                                        }
+                                        mOrderItemRepository.update(orderItem);
                                     }
-                                    mOrderRepository.getOne(String.valueOf(orderRemoteRequest.getOrderId()))
+                                    mOrderRepository.getOne(String.valueOf(orderRemoteResponse.getOrderId()))
                                             .subscribe(order -> {
                                                 order.setSynced(1);
-                                                if (mOrderRepository.update(order) > -1) {
-                                                    mResponseHandler.post(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            mOrderCheckOutListener.onOrderCheckedOut();
-                                                        }
-                                                    });
-                                                    //orderRemoteRequests.remove();
+                                                Log.i(TAG, "handleRequest: ");
+                                                int updated = mOrderRepository.update(order);
+                                                if (updated > -1) {
+                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + " is checked out");
+                                                } else {
+                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + " checkout failed out");
                                                 }
                                             });
                                 });

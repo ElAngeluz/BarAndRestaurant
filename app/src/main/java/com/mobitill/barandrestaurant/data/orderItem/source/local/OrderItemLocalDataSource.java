@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemDataSource;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
+import com.mobitill.barandrestaurant.data.request.remotemodels.response.OrderRemoteResponse;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import java.util.List;
@@ -84,7 +85,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 //                TextUtils.join(",", projection), OrderItemEntry.TABLE_NAME, OrderItemEntry.COLUMN_NAME_ID);
 //        rx.Observable<OrderItem> orderItemObservableV1 =
 //                databaseHelper.createQuery(OrderItemEntry.TABLE_NAME, sql, id)
-//                        .mapToOneOrDefault(orderItemMapperFunction, null);
+//                        .mapToOneOrDefault(orderItemMapperFunction, null).take(1);
 //
 //        return RxJavaInterop.toV2Observable(orderItemObservableV1);
         return null;
@@ -157,12 +158,12 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         rx.Observable<List<OrderItem>> orderItemObservableV1 =
                 databaseHelper
                         .createQuery(OrderItemEntry.TABLE_NAME, sql, orderId)
-                        .mapToList(orderItemMapperFunction).take(50, TimeUnit.MILLISECONDS);
+                        .mapToList(orderItemMapperFunction).take(2000, TimeUnit.MILLISECONDS);
         return RxJavaInterop.toV2Observable(orderItemObservableV1);
     }
 
     @Override
-    public Observable<Boolean> orderRequest(OrderRemoteRequest order, String counter) {
+    public Observable<OrderRemoteResponse> orderRequest(OrderRemoteRequest order, String counter) {
         return null;
     }
 

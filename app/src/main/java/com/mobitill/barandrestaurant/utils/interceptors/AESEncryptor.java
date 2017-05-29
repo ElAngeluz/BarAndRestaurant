@@ -2,11 +2,16 @@ package com.mobitill.barandrestaurant.utils.interceptors;
 
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -26,8 +31,10 @@ public class AESEncryptor {
     private static int keySize = 256;
     private byte[] ivBytes;
 
-
-    public static String encrypt(String plainText) throws Exception{
+    public static String encrypt(String plainText) throws NoSuchAlgorithmException,
+            InvalidKeySpecException, NoSuchPaddingException,
+            InvalidKeyException, UnsupportedEncodingException,
+            BadPaddingException, IllegalBlockSizeException {
         salt =  "38939jndnid00wjjdjdooiso00e3jedmnmnso00";
         byte[] saltBytes = salt.getBytes();
 
@@ -40,11 +47,8 @@ public class AESEncryptor {
                 keySize
         );
 
-
         SecretKey secretKey = factory.generateSecret(spec);
         SecretKeySpec secret = new SecretKeySpec(secretKey.getEncoded(), "AES");
-        Log.i(TAG, "encrypt: " + bytesToHex(secret.getEncoded()) + " size "
-                + bytesToHex(secret.getEncoded()).length());
         //Encrypt the message
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, secret);
@@ -72,7 +76,10 @@ public class AESEncryptor {
         return data;
     }
 
-    public static String decrypt(String encryptedText) throws Exception {
+    public static String decrypt(String encryptedText) throws UnsupportedEncodingException,
+            NoSuchAlgorithmException, InvalidKeySpecException,
+            NoSuchPaddingException, InvalidKeyException,
+            BadPaddingException, IllegalBlockSizeException {
 
         salt =  "38939jndnid00wjjdjdooiso00e3jedmnmnso00";
         byte[] saltBytes = salt.getBytes("UTF-8");
@@ -89,6 +96,7 @@ public class AESEncryptor {
 
         SecretKey secretKey = factory.generateSecret(spec);
         SecretKeySpec secret = new SecretKeySpec(secretKey.getEncoded(), "AES");
+        Log.i(TAG, "decrypt: KEY" + bytesToHex(secret.getEncoded()));
 
         // Decrypt the message
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -114,8 +122,6 @@ public class AESEncryptor {
                 //e.printStackTrace();
             }
         }
-
-
         return new String(decryptedTextBytes);
     }
 

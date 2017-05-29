@@ -80,8 +80,10 @@ public class WaitersLocalDataSource implements WaitersDataSource {
 
         String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
                 TextUtils.join(",", projection), WaitersEntry.TABLE_NAME, WaitersEntry.COLUMN_NAME_ID);
-        rx.Observable<Waiter> waiterObservableV1 = mDatabaseHelper.createQuery(WaitersEntry.TABLE_NAME,
-                sql, id).mapToOneOrDefault(mWaiterMapperFunction, null);
+        rx.Observable<Waiter> waiterObservableV1 = mDatabaseHelper
+                .createQuery(WaitersEntry.TABLE_NAME, sql, id)
+                .mapToOneOrDefault(mWaiterMapperFunction, null)
+                .take(1);
         Observable<Waiter> waiterObservableV2 = RxJavaInterop.toV2Observable(waiterObservableV1);
         return waiterObservableV2;
     }

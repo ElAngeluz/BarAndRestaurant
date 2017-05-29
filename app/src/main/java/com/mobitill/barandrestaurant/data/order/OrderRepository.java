@@ -1,6 +1,7 @@
 package com.mobitill.barandrestaurant.data.order;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.Local;
 import com.mobitill.barandrestaurant.data.Remote;
@@ -50,6 +51,7 @@ public class OrderRepository implements OrderDataSource {
 
     @Override
     public Observable<Order> getOne(String id) {
+        Log.i(TAG, "getOne: ");
         return mOrderLocalDataSource
                 .getOne(id)
                 .observeOn(mSchedulerProvider.ui());
@@ -90,5 +92,10 @@ public class OrderRepository implements OrderDataSource {
     public Observable<List<Order>> getOrdersWithSynced(Integer isSynced) {
         return mOrderLocalDataSource
                 .getOrdersWithSynced(isSynced);
+    }
+
+    @Override
+    public Observable<List<Order>> getOrdersForCheckout(Integer checkout, Integer checkoutFlagged) {
+        return mOrderLocalDataSource.getOrdersForCheckout(checkout, checkoutFlagged);
     }
 }

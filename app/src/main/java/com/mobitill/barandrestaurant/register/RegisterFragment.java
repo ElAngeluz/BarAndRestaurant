@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
@@ -106,6 +107,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
 
     @OnClick(R.id.button_request)
     public void completeOrderRequest(View view){
+        Toast.makeText(getContext(), "Order Request", Toast.LENGTH_SHORT).show();
         mPresenter.completeOrderRequest();
     }
 

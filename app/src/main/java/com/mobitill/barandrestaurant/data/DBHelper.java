@@ -51,6 +51,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     OrderEntry.COLUMN_NAME_WAITER_ID + TEXT_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT + BOOLEAN_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_TIME_STAMP + INTEGER_TYPE + " )";
 
     private static final String SQL_CREATE_ORDER_ITEM_ENTRIES =

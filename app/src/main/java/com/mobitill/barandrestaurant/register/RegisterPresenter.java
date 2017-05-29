@@ -14,6 +14,7 @@ import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.product.ProductRepository;
 import com.mobitill.barandrestaurant.data.product.models.Product;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
+import com.mobitill.barandrestaurant.jobs.OrderRequestJob;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
 import java.util.HashMap;
@@ -212,6 +213,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
         if(mOrder!=null){
             mOrder = null;
             mView.showOrderRequestComplete();
+            OrderRequestJob.scheduleJob();
         }
     }
 

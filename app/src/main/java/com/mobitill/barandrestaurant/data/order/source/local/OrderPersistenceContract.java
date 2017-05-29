@@ -23,6 +23,7 @@ public final class OrderPersistenceContract{
         public static final String COLUMN_NAME_SYNCED = "synced";
         public static final String COLUMN_NAME_CHECKED_OUT = "checked_out";
         public static final String COLUMN_NAME_TIME_STAMP = "timestamp";
+        public static final String COLUMN_NAME_FLAGGED_FOR_CHECKOUT = "checkout_flagged";
     }
 
 }

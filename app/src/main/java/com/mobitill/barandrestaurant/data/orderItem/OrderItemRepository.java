@@ -8,6 +8,7 @@ import com.mobitill.barandrestaurant.data.Remote;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
+import com.mobitill.barandrestaurant.data.request.remotemodels.response.OrderRemoteResponse;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
 import java.util.LinkedHashMap;
@@ -218,7 +219,7 @@ public class OrderItemRepository implements OrderItemDataSource {
     }
 
     @Override
-    public Observable<Boolean> orderRequest(OrderRemoteRequest orderRemoteRequest, String counter) {
+    public Observable<OrderRemoteResponse> orderRequest(OrderRemoteRequest orderRemoteRequest, String counter) {
         return orderItemRemoteDataSource
                 .orderRequest(orderRemoteRequest, counter);
     }

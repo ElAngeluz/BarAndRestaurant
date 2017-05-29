@@ -63,4 +63,9 @@ public class OrderRemoteDataSource implements OrderDataSource {
     public Observable<List<Order>> getOrdersWithSynced(Integer isSynced) {
         return null;
     }
+
+    @Override
+    public Observable<List<Order>> getOrdersForCheckout(Integer checkout, Integer checkoutFlagged) {
+        return null;
+    }
 }

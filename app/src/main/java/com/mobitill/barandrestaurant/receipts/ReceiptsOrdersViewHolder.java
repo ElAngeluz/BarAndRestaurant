@@ -5,10 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.R;
-import com.mobitill.barandrestaurant.data.order.model.Order;import com.mobitill.barandrestaurant.data.product.models.Product;
+import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.receipts_detail.ReceiptsDetailActivity;
 
 import butterknife.BindView;
@@ -38,6 +37,7 @@ public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder implements
     }
 
     public void bindView(Order order){
+        mOrder = order;
         textViewOrder.setText(order.getName());
     }
 

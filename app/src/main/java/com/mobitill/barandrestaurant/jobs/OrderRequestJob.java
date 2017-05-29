@@ -59,7 +59,7 @@ public class OrderRequestJob extends Job {
                 .setBackoffCriteria(TimeUnit.MINUTES.toMillis(5), JobRequest.BackoffPolicy.LINEAR )
                 .setRequiredNetworkType( JobRequest.NetworkType.ANY )
                 .setExtras( extras )
-                .setUpdateCurrent(true)
+                .setUpdateCurrent(false)
                 .setRequirementsEnforced( true )
                 .setPersisted( true )
                 .build()

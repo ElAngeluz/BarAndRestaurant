@@ -16,6 +16,8 @@ import com.mobitill.barandrestaurant.utils.schedulers.V1SchedulersProvider;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Named;
 
 import dagger.Module;
@@ -76,6 +78,7 @@ public class ApplicationModule {
                                      EncryptionInterceptor encryptionInterceptor,
                                         EncryptionResponseInterceptor encryptionResponseInterceptor){
         OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(120, TimeUnit.SECONDS)
                 .addInterceptor(encryptionInterceptor)
                 .addInterceptor(encryptionResponseInterceptor)
                 .addInterceptor(httpLoggingInterceptor)

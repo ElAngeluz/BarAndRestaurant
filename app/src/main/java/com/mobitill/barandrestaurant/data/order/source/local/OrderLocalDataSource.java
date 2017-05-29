@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -46,7 +47,8 @@ public class OrderLocalDataSource implements OrderDataSource {
             OrderEntry.COLUMN_NAME_WAITER_ID,
             OrderEntry.COLUMN_NAME_SYNCED,
             OrderEntry.COLUMN_NAME_CHECKED_OUT,
-            OrderEntry.COLUMN_NAME_TIME_STAMP
+            OrderEntry.COLUMN_NAME_TIME_STAMP,
+            OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT
     };
 
     private Order getOrder(@NonNull Cursor c) {
@@ -56,8 +58,9 @@ public class OrderLocalDataSource implements OrderDataSource {
         String waiterId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_WAITER_ID));
         Integer synced = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_SYNCED));
         Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_CHECKED_OUT));
+        Integer checkOutFlagged = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT));
         Long timestamp = c.getLong(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_TIME_STAMP));
-        return new Order(entryId, displayId, name, waiterId, synced, checkedOut, timestamp);
+        return new Order(entryId, displayId, name, waiterId, synced, checkedOut, timestamp, checkOutFlagged);
     }
 
     @Override
@@ -65,7 +68,7 @@ public class OrderLocalDataSource implements OrderDataSource {
 
         String sql = String.format("SELECT %s FROM %s", TextUtils.join(",", projection), OrderEntry.TABLE_NAME);
         rx.Observable<List<Order>> observableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME, sql)
-                .mapToList(mOrderMapperFunction).take(50, TimeUnit.MILLISECONDS);
+                .mapToList(mOrderMapperFunction).take(2000, TimeUnit.MILLISECONDS);
         // convert observable from rxjava1 observable to rxjava2 observable
         Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
         return observableV2;
@@ -74,11 +77,11 @@ public class OrderLocalDataSource implements OrderDataSource {
     @Override
     public Observable<Order> getOne(String id) {
         checkNotNull(id);
-
+        Log.i(TAG, "getOne: ");
         String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
                 TextUtils.join(",", projection), OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_ENTRY_ID);
         rx.Observable<Order> orderObservableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME,
-                sql, id).mapToOneOrDefault(mOrderMapperFunction, null);
+                sql, id).mapToOneOrDefault(mOrderMapperFunction, null).take(1);
         Observable<Order> orderObservableV2 = RxJavaInterop.toV2Observable(orderObservableV1);
         return orderObservableV2;
     }
@@ -95,6 +98,7 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_SYNCED, item.getSynced());
         contentValues.put(OrderEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
         contentValues.put(OrderEntry.COLUMN_NAME_TIME_STAMP, item.getTimeStamp());
+        contentValues.put(OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT, item.getCheckoutFlagged());
         long rowId = mDatabaseHelper.insert(OrderEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }
@@ -124,6 +128,7 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_SYNCED, item.getSynced());
         contentValues.put(OrderEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
         contentValues.put(OrderEntry.COLUMN_NAME_TIME_STAMP, item.getTimeStamp());
+        contentValues.put(OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT, item.getCheckoutFlagged());
         String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE?";
         String[] selectionArgs = {item.getEntryId()};
         return mDatabaseHelper.update(OrderEntry.TABLE_NAME, contentValues, selection, selectionArgs);
@@ -145,21 +150,30 @@ public class OrderLocalDataSource implements OrderDataSource {
 
     @Override
     public Observable<List<Order>> getOrdersWithSynced(Integer isSynced) {
-        String[] projection = {
-                OrderEntry.COLUMN_NAME_ENTRY_ID,
-                OrderEntry.COLUMN_NAME_NAME,
-                OrderEntry.COLUMN_NAME_WAITER_ID,
-                OrderEntry.COLUMN_NAME_SYNCED,
-                OrderEntry.COLUMN_NAME_CHECKED_OUT,
-                OrderEntry.COLUMN_NAME_TIME_STAMP
-        };
         String sql = String.format("SELECT %s FROM %s WHERE %s = %d", TextUtils.join(",", projection),
                 OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_SYNCED, isSynced);
         rx.Observable<List<Order>> observableV1 =
                 mDatabaseHelper
                         .createQuery(OrderEntry.TABLE_NAME, sql)
                         .mapToList(mOrderMapperFunction)
-                        .take(100, TimeUnit.MILLISECONDS);
+                        .take(1000, TimeUnit.MILLISECONDS);
+        // convert observable from rxjava1 observable to rxjava2 observable
+        Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
+        return observableV2;
+    }
+
+    @Override
+    public Observable<List<Order>> getOrdersForCheckout(Integer checkout, Integer checkoutFlagged) {
+        String sql = String.format("SELECT %s FROM %s WHERE %s = %d AND %s = %d"
+                , TextUtils.join(",", projection),
+                OrderEntry.TABLE_NAME,
+                OrderEntry.COLUMN_NAME_CHECKED_OUT, checkout,
+                OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT, checkoutFlagged);
+        rx.Observable<List<Order>> observableV1 =
+                mDatabaseHelper
+                        .createQuery(OrderEntry.TABLE_NAME, sql)
+                        .mapToList(mOrderMapperFunction)
+                        .take(1000, TimeUnit.MILLISECONDS);
         // convert observable from rxjava1 observable to rxjava2 observable
         Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
         return observableV2;

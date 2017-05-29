@@ -4,6 +4,7 @@ package com.mobitill.barandrestaurant.data.orderItem;
 import com.mobitill.barandrestaurant.data.DataSource;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
+import com.mobitill.barandrestaurant.data.request.remotemodels.response.OrderRemoteResponse;
 
 import java.util.List;
 
@@ -17,5 +18,5 @@ public interface OrderItemDataSource extends DataSource<OrderItem, String> {
 
     Observable<List<OrderItem>> getOrderItemWithOrderId(String orderId);
 
-    Observable<Boolean> orderRequest(OrderRemoteRequest order, String counter);
+    Observable<OrderRemoteResponse> orderRequest(OrderRemoteRequest order, String counter);
 }

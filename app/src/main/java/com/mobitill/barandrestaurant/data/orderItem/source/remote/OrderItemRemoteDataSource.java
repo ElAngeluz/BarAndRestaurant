@@ -8,6 +8,7 @@ import com.mobitill.barandrestaurant.data.ApiEndpointInterface;
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemDataSource;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
+import com.mobitill.barandrestaurant.data.request.remotemodels.response.OrderRemoteResponse;
 import com.mobitill.barandrestaurant.utils.Constants;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
@@ -102,17 +103,11 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
     }
 
     @Override
-    public Observable<Boolean> orderRequest(OrderRemoteRequest order, String counter) {
+    public Observable<OrderRemoteResponse> orderRequest(OrderRemoteRequest order, String counter) {
          return mApiEndpointInterface(counter)
                 .orderRequest(order)
                  .subscribeOn(mScheduleProvider.io())
-                .map(orderRemoteResponse -> {
-                    if (orderRemoteResponse.getMessage().equals("ok")){
-                        return true;
-                    } else {
-                        return false;
-                    }
-                });
+                 .onErrorResumeNext(Observable.empty());
     }
 
     private ApiEndpointInterface mApiEndpointInterface(String counter){

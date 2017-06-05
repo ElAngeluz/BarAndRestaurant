@@ -8,26 +8,32 @@
        android:layout_height="match_parent"
        android:orientation="horizontal">
     <TextView
-        android:id="@+id/tv_receipts_detail_product"
+        android:id="@+id/tv_receipts_detail_product_name"
         android:layout_width="0dp"
         android:layout_weight="1"
+        android:layout_marginLeft="@dimen/dp16"
         android:layout_height="wrap_content"
         android:text="Product"
-        android:textSize="@dimen/sp25"/>
-    <TextView
-        android:id="@+id/tv_receipts_detail_product_number"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:text="Number"
-        android:textSize="@dimen/sp25"/>
+        android:textSize="@dimen/sp20"
+        android:padding="@dimen/sp10"/>
     <TextView
         android:id="@+id/tv_receipts_detail_product_amount"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="Amount"
-        android:textSize="@dimen/sp25"/>
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/sp20"
+        android:padding="@dimen/sp10"/>
+    <TextView
+        android:id="@+id/tv_receipts_detail_product_total"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:textSize="@dimen/sp15"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/sp10"/>
    </LinearLayout>
 
 

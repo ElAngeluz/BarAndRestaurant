@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
+import com.mobitill.barandrestaurant.receipts.ReceiptsActivity;
 
 import javax.inject.Inject;
 
@@ -66,6 +67,7 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     public void OkButtonClick(){
         //startActivity(ReceiptsDetailActivity.newIntent(getActivity(),orderId));
         mPresenter.checkout(orderId);
+        startActivity(ReceiptsActivity.newIntent(getActivity()));
         getActivity().finish();
     }
 

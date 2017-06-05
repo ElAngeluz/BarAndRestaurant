@@ -9,6 +9,7 @@ import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.product.models.Product;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,10 +19,10 @@ import java.util.List;
 public class ReceiptsDetailAdapter extends RecyclerView.Adapter<ReceiptsDetailViewHolder> {
 
     private LayoutInflater inflater;
-    private List<Product> products;
+    private List<Product> mProducts= new ArrayList<>();
 
     public ReceiptsDetailAdapter(List<Product> products) {
-        this.products = products;
+        mProducts = products;
     }
 
     @Override
@@ -35,8 +36,8 @@ public class ReceiptsDetailAdapter extends RecyclerView.Adapter<ReceiptsDetailVi
     @Override
     public void onBindViewHolder(ReceiptsDetailViewHolder holder, int position) {
 
-        Product product = products.get(position);
-        holder.bindView();
+        Product product = mProducts.get(position);
+        holder.bindView(product);
 
     }
 

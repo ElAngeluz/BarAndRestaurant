@@ -126,12 +126,6 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
                 receiptsRecyclerView.setAdapter(receiptsOrdersAdapter);
             }else {
-
-                /*
-                * Not yet complete
-                * */
-//                receiptsOrdersAdapter.addOrders();
-//                receiptsOrdersAdapter.notifyItemChanged(orders.getOrderId);
             }
         }
 

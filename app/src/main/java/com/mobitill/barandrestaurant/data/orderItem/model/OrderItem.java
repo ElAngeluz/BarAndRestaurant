@@ -39,17 +39,20 @@ public class OrderItem {
 
     private String productName;
 
+//    Refactored
+    private String productPrice;
+
     private Long timeStamp;
 
     public OrderItem() {
         this.id = UUID.randomUUID().toString();
     }
 
-    public OrderItem(String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName) {
-        this(UUID.randomUUID().toString(), productId, orderId, counter, synced, checkedOut, productName, new Date().getTime());
+    public OrderItem(String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName, String productPrice) {
+        this(UUID.randomUUID().toString(), productId, orderId, counter, synced, checkedOut, productName,productPrice, new Date().getTime());
     }
 
-    public OrderItem(String id, String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName, Long timeStamp) {
+    public OrderItem(String id, String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName,String productPrice, Long timeStamp) {
         this.id = id;
         this.productId = productId;
         this.orderId = orderId;
@@ -57,6 +60,7 @@ public class OrderItem {
         this.synced = synced;
         this.checkedOut = checkedOut;
         this.productName = productName;
+        this.productPrice = productPrice;
         this.timeStamp = timeStamp;
     }
 
@@ -116,6 +120,14 @@ public class OrderItem {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(String productPrice) {
+        this.productPrice = productPrice;
     }
 
     public Long getTimeStamp() {

@@ -75,7 +75,7 @@ public class ApplicationModule {
     @Provides
     @Named(Constants.RetrofitSource.POS)
     OkHttpClient providePosOkHttpClient(HttpLoggingInterceptor httpLoggingInterceptor,
-                                     EncryptionInterceptor encryptionInterceptor,
+                                        EncryptionInterceptor encryptionInterceptor,
                                         EncryptionResponseInterceptor encryptionResponseInterceptor){
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(120, TimeUnit.SECONDS)
@@ -152,7 +152,9 @@ public class ApplicationModule {
     }
 
     @Provides
-    BriteDatabase provideBriteDatabaseHelper(SqlBrite sqlBrite, DBHelper dbHelper, V1BaseSchedulerProvider schedulerProvider){
+    BriteDatabase provideBriteDatabaseHelper(SqlBrite sqlBrite,
+                                             DBHelper dbHelper,
+                                             V1BaseSchedulerProvider schedulerProvider){
         return sqlBrite.wrapDatabaseHelper(dbHelper, schedulerProvider.computation());
     }
 }

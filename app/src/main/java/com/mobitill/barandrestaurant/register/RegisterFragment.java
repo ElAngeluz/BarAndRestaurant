@@ -31,6 +31,8 @@ import com.mobitill.barandrestaurant.jobs.OrderRequestJob;
 import com.mobitill.barandrestaurant.register.adapter.AdapterCallback;
 import com.mobitill.barandrestaurant.register.adapter.RegisterAdapter;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -63,9 +65,14 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
     private RegisterContract.Presenter mPresenter;
     private Unbinder mUnbinder;
 
-    @BindView(R.id.productsRecyclerView) public RecyclerView recyclerView;
-    @BindView(R.id.ticketLinearLayout) public LinearLayout mTicketLinearLayout;
-    @BindView(R.id.button_request) public Button mButtonRequest;
+    @BindView(R.id.productsRecyclerView)
+    public RecyclerView recyclerView;
+
+    @BindView(R.id.ticketLinearLayout)
+    public LinearLayout mTicketLinearLayout;
+
+    @BindView(R.id.button_request)
+    public Button mButtonRequest;
 
 
     private RegisterAdapter mRegisterAdapter;
@@ -110,7 +117,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
         Toast.makeText(getContext(), "Order Request", Toast.LENGTH_SHORT).show();
         mPresenter.completeOrderRequest();
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

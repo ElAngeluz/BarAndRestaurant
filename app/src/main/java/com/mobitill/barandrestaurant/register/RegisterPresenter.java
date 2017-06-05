@@ -134,7 +134,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
 
     @Override
     public void createOrder(Product product) {
-        OrderItem orderItem;
+        OrderItem orderItem = null;
         if (mOrder == null) {
             Preference<String> waiterIdPreference = mRxSharedPreferences.getString(mContext.getString(R.string.key_waiter_id));
             String waiterId = waiterIdPreference.get();
@@ -143,9 +143,10 @@ public class RegisterPresenter implements RegisterContract.Presenter {
             mOrder.setCheckedOut(0);
             mOrder.setSynced(0);
             mOrderRepository.save(mOrder);
-            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0, product.getName());
+            //TODO add field price to constructor
+            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0, product.getName(),product.getPrice());
         } else {
-            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0, product.getName());
+            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0, product.getName(),product.getPrice());
         }
 
         if (mOrderItemRepository.save(orderItem) != null) {
@@ -172,9 +173,8 @@ public class RegisterPresenter implements RegisterContract.Presenter {
 
         Map<String, Stack<OrderItem>> orderItemMap = new HashMap<>();
         // aggregate items into a stack
-        for(OrderItem orderItem: orderItems){
-
-            if(orderItemMap.containsKey(orderItem.getProductId())){
+        for(OrderItem orderItem: orderItems)
+            if (orderItemMap.containsKey(orderItem.getProductId())) {
                 orderItemMap.get(orderItem.getProductId()).push(orderItem);
             } else {
                 Stack<OrderItem> orderItemStack = new Stack<>();
@@ -182,14 +182,12 @@ public class RegisterPresenter implements RegisterContract.Presenter {
                 orderItemMap.put(orderItem.getProductId(), orderItemStack);
             }
 
-        }
-
         return orderItemMap;
     }
 
     @Override
     public void addOrderItem(OrderItem orderItem) {
-        OrderItem orderItemToSave = new OrderItem(orderItem.getProductId(), orderItem.getOrderId(), orderItem.getCounter(), 0, 0, orderItem.getProductName());
+        OrderItem orderItemToSave = new OrderItem(orderItem.getProductId(), orderItem.getOrderId(), orderItem.getCounter(), 0, 0, orderItem.getProductName(),orderItem.getProductPrice());
         if (mOrderItemRepository.save(orderItemToSave) != null) {
             mView.showOrderItemCreated(mOrder);
         }

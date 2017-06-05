@@ -56,7 +56,7 @@ public class CheckoutJobEngine {
         mOrderRequestCheckOutHandler.getLooper();
     }
 
-    public void checkout(){
+    public void  checkout(){
         List<OrderRemoteRequest> orderRemoteRequestList = new ArrayList<>();
         mOrderRepository.getOrdersForCheckout(0, 1)
                 .observeOn(mScheduleProvider.computation())

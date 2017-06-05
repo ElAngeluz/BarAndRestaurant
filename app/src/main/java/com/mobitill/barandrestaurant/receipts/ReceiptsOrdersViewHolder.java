@@ -38,6 +38,10 @@ public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder implements
 
     public void bindView(Order order){
         mOrder = order;
+
+
+
+//        Refactored
         textViewOrder.setText(order.getName());
     }
 

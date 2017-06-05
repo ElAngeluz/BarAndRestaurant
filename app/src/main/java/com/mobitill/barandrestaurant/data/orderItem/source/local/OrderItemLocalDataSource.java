@@ -47,6 +47,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
             OrderItemEntry.COLUMN_NAME_SYNCED,
             OrderItemEntry.COLUMN_NAME_CHECKED_OUT,
             OrderItemEntry.COLUMN_NAME_PRODUCT_NAME,
+            OrderItemEntry.COLUMN_NAME_PRODUCT_PRICE,
             OrderItemEntry.COLUMN_NAME_TIME_STAMP
     };
 
@@ -64,8 +65,9 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         Integer synced = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_SYNCED));
         Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_CHECKED_OUT));
         String productName = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_PRODUCT_NAME));
+        String productPrice = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_PRODUCT_PRICE));
         Long timestamp = c.getLong(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_TIME_STAMP));
-        return new OrderItem(entryId,productId, orderId, counter, synced, checkedOut, productName, timestamp);
+        return new OrderItem(entryId,productId, orderId, counter, synced, checkedOut, productName,productPrice, timestamp);
     }
 
 
@@ -102,7 +104,9 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         contentValues.put(OrderItemEntry.COLUMN_NAME_SYNCED, item.getSynced());
         contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
         contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_NAME, item.getProductName());
+        contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_PRICE, item.getProductPrice());
         contentValues.put(OrderItemEntry.COLUMN_NAME_TIME_STAMP, item.getTimeStamp());
+
         long rowId = databaseHelper.insert(OrderItemEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }

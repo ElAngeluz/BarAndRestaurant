@@ -58,12 +58,15 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
         if(orderId != null){
             mOrderRepository.getOne(orderId)
                     .subscribe(order -> {
-                       order.setCheckoutFlagged(1);
-                       int updated = mOrderRepository.update(order);
-                       if(updated > -1){
-                           Log.i(TAG, "checkout: order: " + order.getEntryId());
-                           CheckOutJob.scheduleJob();
-                       }
+                        order.setCheckoutFlagged(1);
+                        order.setPaymentMethod(mView.setPaymentMethod());
+                        order.setAmount(mView.setAmount());
+                        order.setTransactionId(mView.setTransactionsId());
+                        int updated = mOrderRepository.update(order);
+                        if (updated > -1) {
+                            Log.i(TAG, "checkout: order: " + order.getEntryId());
+                            CheckOutJob.scheduleJob();
+                        }
                     });
         }
     }

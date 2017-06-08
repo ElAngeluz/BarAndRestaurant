@@ -19,14 +19,21 @@
             android:clickable="true"
             android:padding="@dimen/dp16"
             android:textSize="@dimen/sp30"/>
+
+<android.support.design.widget.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
         <EditText
             android:id="@+id/editText_checked_out_cash"
             android:padding="@dimen/dp10"
+            android:enabled="true"
+            android:focusable="true"
             android:layout_marginRight="@dimen/dp16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Amount"
             />
+</android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
 
@@ -46,14 +53,20 @@
             android:padding="@dimen/dp10"
             android:textSize="@dimen/sp30"/>
 
+<android.support.design.widget.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
         <EditText
             android:id="@+id/editText_checked_out_mpesa"
             android:padding="@dimen/dp10"
+            android:enabled="true"
+            android:focusable="true"
             android:layout_marginRight="@dimen/dp16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Transaction ID"
             />
+</android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
    <RelativeLayout

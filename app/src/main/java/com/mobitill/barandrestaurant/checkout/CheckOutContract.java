@@ -10,6 +10,10 @@ import com.mobitill.barandrestaurant.BaseView;
 public interface CheckOutContract {
     interface View extends BaseView<Presenter>{
 
+        String setPaymentMethod();
+        String setAmount();
+        String setTransactionsId();
+
     }
     interface Presenter extends BasePresenter{
 

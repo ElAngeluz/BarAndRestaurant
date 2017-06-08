@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
@@ -35,11 +36,18 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     @Inject CheckOutPresenter mCheckOutPresenter;
     public CheckOutContract.Presenter mPresenter;
 
+
     @BindView(R.id.chkbx_checked_out_cash)
     CheckBox mCheckBoxCash;
 
     @BindView(R.id.chkbx_checked_out_mpesa)
     CheckBox mCheckBoxMpesa;
+
+    @BindView(R.id.editText_checked_out_cash)
+    EditText mEditTextCash;
+
+    @BindView(R.id.editText_checked_out_mpesa)
+    EditText mEditTextMpesa;
 
 
     private String orderId;
@@ -95,6 +103,48 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     }
 
     @Override
+    public String setPaymentMethod() {
+
+        String paymentMethod;
+        if(mCheckBoxCash.isChecked()){
+            mEditTextMpesa.setClickable(false);
+            mEditTextMpesa.setEnabled(false);
+            mEditTextMpesa.setOnClickListener(null);
+            mEditTextMpesa.setCursorVisible(false);
+            mEditTextMpesa.setFocusableInTouchMode(false);
+            mEditTextMpesa.setInputType(InputType.TYPE_NULL);
+            mEditTextMpesa.setFocusableInTouchMode(false);
+            mEditTextMpesa.setFocusable(false);
+            paymentMethod = mCheckBoxCash.getText().toString();
+
+        }else if (mCheckBoxMpesa.isChecked()){
+            mEditTextCash.setClickable(false);
+            mEditTextCash.setEnabled(false);
+            mEditTextCash.setFocusable(false);
+            mEditTextCash.setOnClickListener(null);
+            mEditTextCash.setCursorVisible(false);
+            mEditTextCash.setFocusableInTouchMode(false);
+            mEditTextCash.setInputType(InputType.TYPE_NULL);
+            mEditTextCash.setFocusableInTouchMode(false);
+            paymentMethod = mCheckBoxMpesa.getText().toString();
+        }else {
+            paymentMethod = "";
+        }
+        return paymentMethod;
+    }
+
+    public String setAmount(){
+        String amount = mEditTextCash.getText().toString();
+        return amount;
+    }
+
+    @Override
+    public String setTransactionsId() {
+        String transactionsId = mEditTextMpesa.getText().toString();
+        return transactionsId;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         mPresenter.subscribe();
@@ -115,12 +165,8 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
         return fragment;
     }
 
-
-
     @Override
     public void setPresenter(@NonNull CheckOutContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
     }
-
-
 }

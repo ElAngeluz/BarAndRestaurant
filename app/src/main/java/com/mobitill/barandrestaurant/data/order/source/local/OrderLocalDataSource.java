@@ -195,6 +195,7 @@ public class OrderLocalDataSource implements OrderDataSource {
                         .createQuery(OrderEntry.TABLE_NAME, sql)
                         .mapToList(mOrderMapperFunction)
                         .take(1000, TimeUnit.MILLISECONDS);
+
         // convert observable from rxjava1 observable to rxjava2 observable
         Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
         return observableV2;
@@ -202,8 +203,10 @@ public class OrderLocalDataSource implements OrderDataSource {
 
     public void updateProcessState(String entryId,int state){
         String selectQuery = " UPDATE " + OrderEntry.TABLE_NAME + " set  " + OrderEntry.COLUMN_NAME_PROCESS_STATE + " = "+state+" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
-        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
-        cursor.close();
+//        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        mDatabaseHelper.execute(selectQuery);
+//        cursor.close();
+
     }
     public int getProcessState(String entryId){
         String selectQuery = " SELECT "+OrderEntry.COLUMN_NAME_PROCESS_STATE +" FROM "+ OrderEntry.TABLE_NAME +" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;

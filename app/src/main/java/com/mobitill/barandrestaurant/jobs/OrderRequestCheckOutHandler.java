@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
@@ -13,16 +12,11 @@ import com.mobitill.barandrestaurant.data.orderItem.OrderItemRepository;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.product.ProductRepository;
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
-import com.mobitill.barandrestaurant.data.request.remotemodels.response.OrderRemoteResponse;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
 import com.mobitill.barandrestaurant.utils.Constants;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
-import org.reactivestreams.Subscriber;
-
 import javax.inject.Inject;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by james on 5/27/2017.
@@ -101,6 +95,7 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                     mRequestHandler
                             .obtainMessage(ORDER_REQUEST, orderRemoteRequest)
                             .sendToTarget();
+
             }
     }
 

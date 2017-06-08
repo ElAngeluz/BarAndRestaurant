@@ -59,7 +59,12 @@ public class CheckoutJobEngine {
     public void  checkout(){
         List<OrderRemoteRequest> orderRemoteRequestList = new ArrayList<>();
         mOrderRepository.getOrdersForCheckout(0, 1)
-                .observeOn(mScheduleProvider.computation())
+
+//                refactored
+                .observeOn(mScheduleProvider.io())
+//                .observeOn(mScheduleProvider.computation())
+//                .subscribeOn(mScheduleProvider.computation())
+//                .observeOn(mScheduleProvider.ui())
                 .map(orders -> {
                     for (Order order: orders) {
                         orderRemoteRequestList.add(getOrderOrderRemoteRequestItem(order));
@@ -67,7 +72,7 @@ public class CheckoutJobEngine {
                     return orderRemoteRequestList;
                 }).subscribe(orderRemoteRequests -> {
                 for(OrderRemoteRequest orderRemoteRequest: orderRemoteRequests){
-                    mOrderRequestCheckOutHandler.queueRequest(orderRemoteRequest);
+                    mOrderRequestCheckOutHandler.queueCheckout(orderRemoteRequest);
                 }
         });
     }

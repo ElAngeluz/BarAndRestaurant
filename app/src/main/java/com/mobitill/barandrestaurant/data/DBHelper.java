@@ -54,6 +54,10 @@ public class DBHelper extends SQLiteOpenHelper {
                     OrderEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT + BOOLEAN_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_PAYMENT_METHOD + TEXT_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_AMOUNT + TEXT_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_TRANSACTION_ID + TEXT_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_PROCESS_STATE+INTEGER_TYPE+COMMA_SEP +
                     OrderEntry.COLUMN_NAME_TIME_STAMP + INTEGER_TYPE + " )";
 
     //OrderItems Table

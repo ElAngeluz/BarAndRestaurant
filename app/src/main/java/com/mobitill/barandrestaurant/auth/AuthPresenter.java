@@ -17,6 +17,7 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -84,7 +85,7 @@ public class AuthPresenter implements AuthContract.Presenter {
                         throwable -> {
                             Log.e(TAG, "login: ", throwable);
                             mView.showLoadingWaitersError();
-                            },
+                        },
 
                         //onCompleted
                         () -> mView.showLoadingIndicator(false));

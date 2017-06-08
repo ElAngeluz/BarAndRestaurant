@@ -1,9 +1,12 @@
 package com.mobitill.barandrestaurant.jobs;
 
+import android.util.Log;
+
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
 import com.mobitill.barandrestaurant.data.order.model.Order;
+import com.mobitill.barandrestaurant.data.order.source.local.OrderLocalDataSource;
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemRepository;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.product.ProductRepository;
@@ -44,6 +47,8 @@ public class OrderRequestEngine  {
     public ProductRepository mProductRepository;
     @Inject
     public BaseScheduleProvider mScheduleProvider;
+    @Inject
+    OrderLocalDataSource mOrderLocalDataSource;
 
     private OrderRequestCheckOutHandler mOrderRequestCheckOutHandler;
 
@@ -61,14 +66,28 @@ public class OrderRequestEngine  {
         Queue<OrderRemoteRequest> orderRemoteRequestQueue = new LinkedBlockingQueue<>();
         mOrderRepository.getOrdersWithSynced(0)
                 .observeOn(mScheduleProvider.io())
-                .map(new Function<List<Order>, Queue<OrderRemoteRequest>>() {
-                    @Override
-                    public Queue<OrderRemoteRequest> apply(List<Order> orders) throws Exception {
-                        for (Order order : orders) {
-                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
+                .map(orders -> {
+//                        for (Order order : orders) {
+//                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
+//                        }
+//                        Refactor to retrieve only one order
+                    if (orders != null){
+                        if (orders.size() > 0){
+                            for(Order order: orders){
+                                //if(order.getProcessState() == 0){
+                                if(mOrderLocalDataSource.getProcessState(order.getEntryId()) == 0){
+                                    order.setProcessState(1);
+                                    //mOrderRepository.;
+                                    mOrderLocalDataSource.updateProcessState(order.getEntryId(),1);
+                                    Log.d(TAG, "order prep for sending");
+                                    orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
+                                    break;
+                                }
+                            }
+//                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(orders.get(0)));
                         }
-                        return orderRemoteRequestQueue;
                     }
+                    return orderRemoteRequestQueue;
                 })
                 .subscribe(orderRemoteRequests -> {
                     for (OrderRemoteRequest orderRemoteRequest : orderRemoteRequests) {

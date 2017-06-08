@@ -152,6 +152,7 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
             String productName = entry.getValue().peek().getProductName();
             String quantity = String.valueOf(entry.getValue().size());
             String productPrice = entry.getValue().peek().getProductPrice();
+            String total = String.valueOf(Double.parseDouble(productPrice) * Double.parseDouble(quantity));
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             View view = inflater.inflate(R.layout.receipts_detail_products,itemsLinearLayout, false);
@@ -163,8 +164,8 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
             TextView tvProductAmount = (TextView) view.findViewById(R.id.tv_receipts_detail_product_amount);
             tvProductAmount.setText(quantity);
 
-            TextView tvProductPrice = (TextView) view.findViewById(R.id.tv_receipts_detail_product_total);
-            tvProductPrice.setText(productPrice);
+            TextView tvProductPriceTotal = (TextView) view.findViewById(R.id.tv_receipts_detail_product_total);
+            tvProductPriceTotal.setText(total);
 
 
             itemsLinearLayout.addView(view);

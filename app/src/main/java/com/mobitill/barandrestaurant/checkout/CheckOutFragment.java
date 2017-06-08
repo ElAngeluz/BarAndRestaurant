@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
@@ -34,11 +35,15 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     @Inject CheckOutPresenter mCheckOutPresenter;
     public CheckOutContract.Presenter mPresenter;
 
+    @BindView(R.id.chkbx_checked_out_cash)
+    CheckBox mCheckBoxCash;
+
+    @BindView(R.id.chkbx_checked_out_mpesa)
+    CheckBox mCheckBoxMpesa;
+
+
     private String orderId;
     private Unbinder mUnbinder;
-
-    @BindView(R.id.btn_checked_out_ok)
-    Button OK;
 
     public CheckOutFragment() {
         // Required empty public constructor
@@ -63,6 +68,24 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
        mUnbinder = ButterKnife.bind(this,view);
         return view;
     }
+
+    public void clearCheckbox(){
+        mCheckBoxCash.setChecked(false);
+        mCheckBoxMpesa.setChecked(false);
+    }
+
+    @OnClick(R.id.chkbx_checked_out_cash)
+    public void cashCheckboxClicked(){
+        clearCheckbox();
+        mCheckBoxCash.setChecked(true);
+    }
+
+    @OnClick(R.id.chkbx_checked_out_mpesa)
+    public void mpesaCheckboxClicked(){
+        clearCheckbox();
+        mCheckBoxMpesa.setChecked(true);
+    }
+
     @OnClick(R.id.btn_checked_out_ok)
     public void OkButtonClick(){
         //startActivity(ReceiptsDetailActivity.newIntent(getActivity(),orderId));

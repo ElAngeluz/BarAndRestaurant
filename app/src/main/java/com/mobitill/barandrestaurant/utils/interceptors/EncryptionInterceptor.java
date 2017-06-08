@@ -1,7 +1,17 @@
 package com.mobitill.barandrestaurant.utils.interceptors;
 
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.mobitill.barandrestaurant.data.order.model.Order;
+import com.mobitill.barandrestaurant.data.order.source.local.OrderLocalDataSource;
+import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
+
 import java.io.IOException;
+
+import javax.inject.Inject;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -16,11 +26,14 @@ import okio.Buffer;
 
 public class EncryptionInterceptor implements Interceptor {
 
+    @Inject
+    OrderLocalDataSource mOrderLocalDataSource;
+
     public static final String TAG = EncryptionInterceptor.class.getSimpleName();
 
     private static final String password = "tfdsfsafedfsdfsfsd";
     private static String salt;
-    private static int pswdIterations = 65536  ;
+    private static int pswdIterations = 65536;
     private static int keySize = 256;
     private byte[] ivBytes;
 
@@ -41,7 +54,18 @@ public class EncryptionInterceptor implements Interceptor {
                     .method(request.method(), body).build();
             return chain.proceed(request);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("NetworkThrows Exception", " Failed to connect ");
+            Log.d("Intercept Old body", strOldBody);
+            try {
+//                Gson gson = new GsonBuilder().create();
+//                OrderRemoteRequest orderRemoteRequest = gson.fromJson(strOldBody, OrderRemoteRequest.class);
+//                mOrderLocalDataSource.updateProcessState(String.valueOf(orderRemoteRequest.getOrderId()),0);
+            } catch (Exception ex) {
+
+            }
+
+            //mOrder.getEntryId();
+//            e.printStackTrace();
         }
         return null;
     }

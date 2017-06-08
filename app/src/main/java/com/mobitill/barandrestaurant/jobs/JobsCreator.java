@@ -8,9 +8,9 @@ import com.mobitill.barandrestaurant.jobs.checkoutjobs.CheckOutJob;
  * Created by james on 5/26/2017.
  */
 
-public class OrdersJobCreator implements JobCreator {
+public class JobsCreator implements JobCreator {
 
-    public static final String TAG = OrdersJobCreator.class.getSimpleName();
+    public static final String TAG = JobsCreator.class.getSimpleName();
 
 
     @Override

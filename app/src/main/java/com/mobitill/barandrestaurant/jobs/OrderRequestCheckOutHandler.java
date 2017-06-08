@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
@@ -12,11 +13,16 @@ import com.mobitill.barandrestaurant.data.orderItem.OrderItemRepository;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.product.ProductRepository;
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
+import com.mobitill.barandrestaurant.data.request.remotemodels.response.OrderRemoteResponse;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
 import com.mobitill.barandrestaurant.utils.Constants;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
+import org.reactivestreams.Subscriber;
+
 import javax.inject.Inject;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by james on 5/27/2017.
@@ -118,11 +124,11 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                         Constants.RetrofitSource.COUNTERA)
                 .subscribeOn(mScheduleProvider.computation())
                 .subscribe(orderRemoteResponse -> {
-                    if(orderRemoteResponse.getMessage().equals("ok")) {
+                    if (orderRemoteResponse.getMessage().equals("ok")) {
                         mOrderItemRepository
                                 .getOrderItemWithOrderId(String.valueOf(orderRemoteRequest.getOrderId()))
                                 .subscribe(orderItems -> {
-                                    for(OrderItem orderItem: orderItems) {
+                                    for (OrderItem orderItem : orderItems) {
                                         orderItem.setSynced(1);
                                         mOrderItemRepository.update(orderItem);
                                     }
@@ -132,14 +138,19 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                                 Log.i(TAG, "handleRequest: ");
                                                 int updated = mOrderRepository.update(order);
                                                 if (updated > -1) {
-                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + " is checked out");
+//                                                    force the next order not synced to be processed
+                                                    OrderRequestJob.scheduleJob();
+                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sent Successfully ");
                                                 } else {
-                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + " checkout failed out");
+                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sending failed");
                                                 }
                                             });
                                 });
+                    } else {
+                        Log.d(" Order Remote Request", "catch exceptions");
                     }
                 });
+
     }
 
     private void handleCheckout(final OrderRemoteRequest orderRemoteRequest){
@@ -169,6 +180,7 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                             });
                                 });
                     }
+
                 });
     }
 

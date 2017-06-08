@@ -48,7 +48,11 @@ public class OrderLocalDataSource implements OrderDataSource {
             OrderEntry.COLUMN_NAME_SYNCED,
             OrderEntry.COLUMN_NAME_CHECKED_OUT,
             OrderEntry.COLUMN_NAME_TIME_STAMP,
-            OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT
+            OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT,
+            OrderEntry.COLUMN_NAME_PAYMENT_METHOD,
+            OrderEntry.COLUMN_NAME_AMOUNT,
+            OrderEntry.COLUMN_NAME_TRANSACTION_ID,
+            OrderEntry.COLUMN_NAME_PROCESS_STATE
     };
 
     private Order getOrder(@NonNull Cursor c) {
@@ -60,7 +64,13 @@ public class OrderLocalDataSource implements OrderDataSource {
         Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_CHECKED_OUT));
         Integer checkOutFlagged = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT));
         Long timestamp = c.getLong(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_TIME_STAMP));
-        return new Order(entryId, displayId, name, waiterId, synced, checkedOut, timestamp, checkOutFlagged);
+        String paymentMethod = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_PAYMENT_METHOD));
+        String amount = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_AMOUNT));
+        String transactionId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_TRANSACTION_ID));
+        Integer processState = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_PROCESS_STATE));
+        return new Order(entryId, displayId, name, waiterId, synced, checkedOut, timestamp,
+                checkOutFlagged,paymentMethod,amount,transactionId,processState);
+
     }
 
     @Override
@@ -99,6 +109,10 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
         contentValues.put(OrderEntry.COLUMN_NAME_TIME_STAMP, item.getTimeStamp());
         contentValues.put(OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT, item.getCheckoutFlagged());
+        contentValues.put(OrderEntry.COLUMN_NAME_PAYMENT_METHOD, item.getPaymentMethod());
+        contentValues.put(OrderEntry.COLUMN_NAME_AMOUNT, item.getAmount());
+        contentValues.put(OrderEntry.COLUMN_NAME_TRANSACTION_ID, item.getTransactionId());
+        contentValues.put(OrderEntry.COLUMN_NAME_PROCESS_STATE, item.getProcessState());
         long rowId = mDatabaseHelper.insert(OrderEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }
@@ -108,7 +122,8 @@ public class OrderLocalDataSource implements OrderDataSource {
         String selectQuery = "SELECT * FROM " + OrderEntry.TABLE_NAME + " sqlite_sequence";
         Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
         cursor.moveToLast();
-        return getOrder(cursor);
+        Order orderCursor = getOrder(cursor);
+        return orderCursor;
     }
 
     @Override
@@ -129,6 +144,10 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
         contentValues.put(OrderEntry.COLUMN_NAME_TIME_STAMP, item.getTimeStamp());
         contentValues.put(OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT, item.getCheckoutFlagged());
+        contentValues.put(OrderEntry.COLUMN_NAME_PAYMENT_METHOD, item.getPaymentMethod());
+        contentValues.put(OrderEntry.COLUMN_NAME_AMOUNT, item.getAmount());
+        contentValues.put(OrderEntry.COLUMN_NAME_TRANSACTION_ID, item.getTransactionId());
+        contentValues.put(OrderEntry.COLUMN_NAME_PROCESS_STATE, item.getProcessState());
         String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE?";
         String[] selectionArgs = {item.getEntryId()};
         return mDatabaseHelper.update(OrderEntry.TABLE_NAME, contentValues, selection, selectionArgs);
@@ -145,7 +164,9 @@ public class OrderLocalDataSource implements OrderDataSource {
          String sql = String.format("SELECT * FROM %s WHERE ROWID = %d LIMIT 1",
                  OrderEntry.TABLE_NAME, rowId);
         Cursor cursor = mDatabaseHelper.query(sql, (String[]) null);
-        return getOrder(cursor);
+        Order order = getOrder(cursor);
+        cursor.close();
+        return order;
     }
 
     @Override
@@ -177,6 +198,25 @@ public class OrderLocalDataSource implements OrderDataSource {
         // convert observable from rxjava1 observable to rxjava2 observable
         Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
         return observableV2;
+    }
+
+    public void updateProcessState(String entryId,int state){
+        String selectQuery = " UPDATE " + OrderEntry.TABLE_NAME + " set  " + OrderEntry.COLUMN_NAME_PROCESS_STATE + " = "+state+" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
+        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        cursor.close();
+    }
+    public int getProcessState(String entryId){
+        String selectQuery = " SELECT "+OrderEntry.COLUMN_NAME_PROCESS_STATE +" FROM "+ OrderEntry.TABLE_NAME +" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
+        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        Log.d("orderlocaldatasource", "getProcessState: "+cursor.getColumnCount());
+        if(cursor.moveToNext()) {
+            int state = cursor.getInt(0);
+            return state;
+        }else{
+            cursor.close();
+            return 0;
+
+        }
     }
 }
 

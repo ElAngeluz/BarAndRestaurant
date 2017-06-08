@@ -138,6 +138,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+
     }
 
     @Override

@@ -16,29 +16,45 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cash"
+            android:clickable="true"
             android:padding="@dimen/dp16"
             android:textSize="@dimen/sp30"/>
         <EditText
-            android:id="@+id/et_checked_out_cash"
+            android:id="@+id/editText_checked_out_cash"
             android:padding="@dimen/dp10"
             android:layout_marginRight="@dimen/dp16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Amount"
             />
-
     </LinearLayout>
 
 
-
-    <CheckBox
-        android:id="@+id/chkbx_checked_out_mpesa"
-        android:layout_marginTop="@dimen/dp10"
+    <LinearLayout
+        android:layout_marginTop="@dimen/dp16"
         android:layout_marginLeft="@dimen/dp16"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mpesa"
-        android:padding="@dimen/dp10"
-        android:textSize="@dimen/sp30"/>
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/chkbx_checked_out_mpesa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="Mpesa"
+            android:padding="@dimen/dp10"
+            android:textSize="@dimen/sp30"/>
+
+        <EditText
+            android:id="@+id/editText_checked_out_mpesa"
+            android:padding="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Transaction ID"
+            />
+    </LinearLayout>
 
    <RelativeLayout
        android:layout_marginTop="@dimen/dp10"

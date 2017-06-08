@@ -35,6 +35,8 @@ public class AESEncryptor {
             InvalidKeySpecException, NoSuchPaddingException,
             InvalidKeyException, UnsupportedEncodingException,
             BadPaddingException, IllegalBlockSizeException {
+        Log.d("Plain text encrypt:", plainText);
+
         salt =  "38939jndnid00wjjdjdooiso00e3jedmnmnso00";
         byte[] saltBytes = salt.getBytes();
 
@@ -54,6 +56,8 @@ public class AESEncryptor {
         cipher.init(Cipher.ENCRYPT_MODE, secret);
         byte[] encryptedTextBytes = cipher.doFinal(plainText.getBytes("UTF-8"));
         return bytesToHex(encryptedTextBytes);
+
+//        return plainText;
 
     }
 
@@ -116,13 +120,17 @@ public class AESEncryptor {
                 cipher = Cipher.getInstance("AES/ECB/NoPadding");
                 cipher.init(Cipher.DECRYPT_MODE, secret);
                 decryptedTextBytes = cipher.doFinal(encryptedTextBytes);
-                //encryptedText.concat("10101010101010101010101010101010");
+                encryptedText.concat("10101010101010101010101010101010");
                 Log.i(TAG, "decrypt: " + "continue on BadPaddingException");
                 continue;
                 //e.printStackTrace();
             }
         }
+        Log.d("Plain text decrypt:", new String(decryptedTextBytes));
+
         return new String(decryptedTextBytes);
+
+//        return encryptedText;
     }
 
     public String generateSalt() {

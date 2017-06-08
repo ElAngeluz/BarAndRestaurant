@@ -2,11 +2,13 @@ package com.mobitill.barandrestaurant.data.orderItem;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.Local;
 import com.mobitill.barandrestaurant.data.Remote;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
+import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteItem;
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
 import com.mobitill.barandrestaurant.data.request.remotemodels.response.OrderRemoteResponse;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
@@ -29,6 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class OrderItemRepository implements OrderItemDataSource {
 
     private static final String TAG = OrderItemRepository.class.getSimpleName();
+
 
     private final OrderItemDataSource orderItemRemoteDataSource;
     private final OrderItemDataSource orderItemLocalDataSource;
@@ -220,6 +223,17 @@ public class OrderItemRepository implements OrderItemDataSource {
 
     @Override
     public Observable<OrderRemoteResponse> orderRequest(OrderRemoteRequest orderRemoteRequest, String counter) {
+        Log.d("Order request Contents", orderRemoteRequest.getRequestbody().toString());
+
+
+
+        Log.d("order remote request L",orderRemoteRequest.getRequestbody().getOrder().toString());
+
+        for (OrderRemoteItem item :orderRemoteRequest.getRequestbody().getOrder()) {
+            Log.d("order remote request L",String.format("name [%s] quantity [%d] subtotal [%d]",item.getName(),item.getQuantity(),item.getSubtotal()));
+        }
+        Log.d("order remote request W",orderRemoteRequest.getRequestbody().getWaiter().getName());
+        Log.d("order remote request ID",orderRemoteRequest.getOrderId().toString());
         return orderItemRemoteDataSource
                 .orderRequest(orderRemoteRequest, counter);
     }

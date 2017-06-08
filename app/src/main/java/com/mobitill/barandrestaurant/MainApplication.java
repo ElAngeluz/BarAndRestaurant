@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.evernote.android.job.JobManager;
-import com.mobitill.barandrestaurant.jobs.OrdersJobCreator;
+import com.mobitill.barandrestaurant.jobs.JobsCreator;
 
 
 /**
@@ -25,7 +25,7 @@ public class MainApplication extends Application {
                 .applicationModule(new ApplicationModule(getApplicationContext()))
                 .build();
 
-        JobManager.create(this).addJobCreator(new OrdersJobCreator());
+        JobManager.create(this).addJobCreator(new JobsCreator());
 
         MainApplication.sContext = getApplicationContext();
     }

@@ -24,6 +24,10 @@ public final class OrderPersistenceContract{
         public static final String COLUMN_NAME_CHECKED_OUT = "checked_out";
         public static final String COLUMN_NAME_TIME_STAMP = "timestamp";
         public static final String COLUMN_NAME_FLAGGED_FOR_CHECKOUT = "checkout_flagged";
+        public static final String COLUMN_NAME_PAYMENT_METHOD = "payment_method";
+        public static final String COLUMN_NAME_AMOUNT = "amount";
+        public static final String COLUMN_NAME_TRANSACTION_ID = "transaction_id";
+        public static final String COLUMN_NAME_PROCESS_STATE = "process_state";
     }
 
 }

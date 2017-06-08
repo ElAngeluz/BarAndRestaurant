@@ -4,25 +4,38 @@ package com.mobitill.barandrestaurant.receipts_detail;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.checkout.CheckOutActivity;
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
+import com.mobitill.barandrestaurant.data.product.models.Product;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import io.reactivex.Observable;
+import java.util.Stack;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -36,6 +49,7 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
 
     String mOrderId = "";
 
+    Product mProduct;
 
     @BindView(R.id.et_receipts_detail_orderNumber)
     EditText mEditTextReceiptDetailOrderNumber;
@@ -43,11 +57,15 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
     @BindView(R.id.et_receipts_detail_receiptNumber)
     EditText mEditTextReceiptDetailReceiptNumber;
 
+    @BindView(R.id.linearLayout_items)
+    public LinearLayout itemsLinearLayout;
+
 
     @Inject
     ReceiptsDetailPresenter receiptsDetailPresenter;
 
     private ReceiptsDetailContract.Presenter mPresenter;
+    private Unbinder mUnbinder;
 
     public ReceiptsDetailFragment() {
         // Required empty public constructor
@@ -68,7 +86,7 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
 
         DaggerReceiptsDetailComponent.builder()
                 .receiptsDetailPresenterModule(new ReceiptsDetailPresenterModule(this, getActivity()))
-                .baseComponent(((MainApplication)getActivity().getApplication()).mBaseComponent())
+                .baseComponent(((MainApplication) getActivity().getApplication()).mBaseComponent())
                 .build()
                 .inject(this);
 
@@ -80,13 +98,13 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.receipts_detail_fragment, container, false);
-        ButterKnife.bind(this,view);
+        mUnbinder = ButterKnife.bind(this, view);
         return view;
     }
 
     @OnClick(R.id.btn_receipts_detail_checkOut)
-    public void receiptDetailCheckOutClick(){
-       startActivity(CheckOutActivity.newIntent(getActivity(),mOrderId));
+    public void receiptDetailCheckOutClick() {
+        startActivity(CheckOutActivity.newIntent(getActivity(), mOrderId));
     }
 
     @Override
@@ -94,6 +112,10 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
         super.onResume();
         mPresenter.subscribe();
         mPresenter.getOrder(mOrderId);
+
+//        refactored
+        mPresenter.getOrderItems(mOrderId);
+
     }
 
     @Override
@@ -112,10 +134,48 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
     public void showOrder(Order order) {
         mEditTextReceiptDetailOrderNumber.setText(order.getDisplayId());
         mEditTextReceiptDetailReceiptNumber.setText(order.getEntryId());
+
     }
+
 
     @Override
     public void showOrderItems(List<OrderItem> orderItems) {
+//        refactored
+
+        itemsLinearLayout.removeAllViews();
+        Map<String, Stack<OrderItem>> orderItemMap = mPresenter.aggregateOrderItems(orderItems);
+
+        /* display the products */
+
+        for(HashMap.Entry<String, Stack<OrderItem>> entry : orderItemMap.entrySet()){
+
+            String productName = entry.getValue().peek().getProductName();
+            String quantity = String.valueOf(entry.getValue().size());
+            String productPrice = entry.getValue().peek().getProductPrice();
+            String total = String.valueOf(Double.parseDouble(productPrice) * Double.parseDouble(quantity));
+
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View view = inflater.inflate(R.layout.receipts_detail_products,itemsLinearLayout, false);
+
+
+            TextView tvProductName = (TextView) view.findViewById(R.id.tv_receipts_detail_product_name);
+            tvProductName.setText(productName);
+
+            TextView tvProductAmount = (TextView) view.findViewById(R.id.tv_receipts_detail_product_amount);
+            tvProductAmount.setText(quantity);
+
+            TextView tvProductPriceTotal = (TextView) view.findViewById(R.id.tv_receipts_detail_product_total);
+            tvProductPriceTotal.setText(total);
+
+
+            itemsLinearLayout.addView(view);
+
+        }
+
+    }
+
+    @Override
+    public void showProducts(List<Product> products) {
 
     }
 }

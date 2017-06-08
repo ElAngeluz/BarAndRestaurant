@@ -1,10 +1,13 @@
 package com.mobitill.barandrestaurant.receipts_detail;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.R;
+import com.mobitill.barandrestaurant.data.product.models.Product;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,14 +18,18 @@ import butterknife.ButterKnife;
 
 public class ReceiptsDetailViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.tv_receipts_detail_product)
+    private Context mContext;
+
+    @BindView(R.id.tv_receipts_detail_product_name)
     TextView receiptsDetailProduct;
 
-    @BindView(R.id.tv_receipts_detail_product_number)
-    TextView receiptsDetailProductNumber;
-
     @BindView(R.id.tv_receipts_detail_product_amount)
-    TextView receiptsDetailProductAmount;
+    TextView tvreceiptsDetailProductAmount;
+
+    @BindView(R.id.tv_receipts_detail_product_total)
+    TextView tvreceiptsDetailProductTotal;
+
+    private Product mProduct;
 
     public ReceiptsDetailViewHolder(View itemView) {
         super(itemView);
@@ -30,6 +37,11 @@ public class ReceiptsDetailViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void bindView() {
+    public void bindView(Product product) {
+
+        mProduct = product;
+        receiptsDetailProduct.setText(product.getName());
+//        receiptsDetailProductNumber.setText(product.toString().length());
+//        receiptsDetailProductAmount.setText("e.g 200/= ");
     }
 }

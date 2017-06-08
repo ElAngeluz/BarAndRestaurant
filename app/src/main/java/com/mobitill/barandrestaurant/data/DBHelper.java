@@ -33,6 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     WaitersEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
                     WaitersEntry.COLUMN_NAME_PIN + TEXT_TYPE + " )";
 
+    //Product Table
     private static final String SQL_CREATE_PRODUCT_ENTRIES =
             "CREATE TABLE " + ProductEntry.TABLE_NAME + " (" +
                     ProductEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
@@ -43,6 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     ProductEntry.COLUMN_NAME_PRICE + TEXT_TYPE + COMMA_SEP +
                     ProductEntry.COLUMN_NAME_VAT + TEXT_TYPE + " )";
 
+    //Orders Table
     private static final String SQL_CREATE_ORDER_ENTRIES =
             "CREATE TABLE " + OrderEntry.TABLE_NAME + " (" +
                     OrderEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + " UNIQUE," +
@@ -52,8 +54,13 @@ public class DBHelper extends SQLiteOpenHelper {
                     OrderEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT + BOOLEAN_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_PAYMENT_METHOD + TEXT_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_AMOUNT + TEXT_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_TRANSACTION_ID + TEXT_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_PROCESS_STATE+INTEGER_TYPE+COMMA_SEP +
                     OrderEntry.COLUMN_NAME_TIME_STAMP + INTEGER_TYPE + " )";
 
+    //OrderItems Table
     private static final String SQL_CREATE_ORDER_ITEM_ENTRIES =
             "CREATE TABLE " + OrderItemEntry.TABLE_NAME + " (" +
                     OrderItemEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
@@ -64,6 +71,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     OrderItemEntry.COLUMN_NAME_SYNCED + BOOLEAN_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_CHECKED_OUT + BOOLEAN_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_PRODUCT_NAME + TEXT_TYPE + COMMA_SEP +
+                    OrderItemEntry.COLUMN_NAME_PRODUCT_PRICE + TEXT_TYPE + COMMA_SEP +
                     OrderItemEntry.COLUMN_NAME_TIME_STAMP + INTEGER_TYPE + " )";
 
 

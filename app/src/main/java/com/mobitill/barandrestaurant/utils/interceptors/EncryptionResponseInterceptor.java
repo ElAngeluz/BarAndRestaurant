@@ -23,6 +23,7 @@ public class EncryptionResponseInterceptor implements Interceptor {
         Response response = chain.proceed(request);
 
         ResponseBody oldBody = response.body();
+
         //Buffer buffer = new Buffer();
         String strOldBody = oldBody.string();
         MediaType mediaType = oldBody.contentType();

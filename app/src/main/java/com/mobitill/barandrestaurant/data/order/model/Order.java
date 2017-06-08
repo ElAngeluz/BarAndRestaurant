@@ -38,10 +38,17 @@ public class Order {
     @Expose
     private Integer checkedOut;
 
+    private Integer processState;
+
     private Long timeStamp;
 
     private Integer checkoutFlagged;
 
+    private String paymentMethod;
+
+    private String amount;
+
+    private String transactionId;
 
 
     public Order() {
@@ -51,6 +58,13 @@ public class Order {
         this.synced = 0;
         this.checkedOut = 0;
         this.checkoutFlagged = 0;
+
+//        refactored
+        this.paymentMethod = "";
+        this.amount = "";
+        this.transactionId = "";
+        this.processState = 0;
+
     }
 
     public Order(String waiterId) {
@@ -61,10 +75,28 @@ public class Order {
         this.synced = 0;
         this.checkedOut = 0;
         this.checkoutFlagged = 0;
+
+//        refactored
+        this.paymentMethod = "";
+        this.amount = "";
+        this.transactionId = "";
+        this.processState = 0;
     }
 
 
-    public Order(String entryId,String displayId, String name, String waiterId, Integer synced, Integer checkedOut, Long timeStamp, Integer checkoutFlagged) {
+    public Order(String entryId,
+                 String displayId,
+                 String name,
+                 String waiterId,
+                 Integer synced,
+                 Integer checkedOut,
+                 Long timeStamp,
+                 Integer checkoutFlagged,
+                 String paymentMethod,
+                 String amount,
+                 String transactionId,
+                 Integer processState) {
+
         this.entryId = entryId;
         this.displayId = displayId;
         this.name = name;
@@ -73,6 +105,10 @@ public class Order {
         this.checkedOut = checkedOut;
         this.timeStamp = timeStamp;
         this.checkoutFlagged = checkoutFlagged;
+        this.paymentMethod = paymentMethod;
+        this.amount = amount;
+        this.transactionId = transactionId;
+        this.processState = processState;
     }
 
     public String getEntryId() {
@@ -137,6 +173,38 @@ public class Order {
 
     public void setCheckoutFlagged(Integer checkoutFlagged) {
         this.checkoutFlagged = checkoutFlagged;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public Integer getProcessState() {
+        return processState;
+    }
+
+    public void setProcessState(Integer processState) {
+        this.processState = processState;
     }
 
     /**

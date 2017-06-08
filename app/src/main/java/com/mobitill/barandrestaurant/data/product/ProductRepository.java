@@ -83,16 +83,11 @@ public class ProductRepository implements ProductDataSource {
     private Observable<List<Product>> getAndCacheLocalProducts() {
         return mProductLocalDataSource.getAll()
                 .observeOn(mScheduleProvider.ui())
-                .flatMap(new Function<List<Product>, ObservableSource<? extends List<Product>>>() {
-                    @Override
-                    public ObservableSource<? extends List<Product>> apply(List<Product> products) throws Exception {
-                        return Observable
-                                .fromArray(products.toArray(new Product[products.size()]))
-                                .doOnNext(product -> mCachedProducts.put(product.getId(), product))
-                                .toList()
-                                .toObservable();
-                    }
-                });
+                .flatMap(products -> Observable
+                        .fromArray(products.toArray(new Product[products.size()]))
+                        .doOnNext(product -> mCachedProducts.put(product.getId(), product))
+                        .toList()
+                        .toObservable());
     }
 
     private Observable<List<Product>> getAndSaveRemoteProducts() {

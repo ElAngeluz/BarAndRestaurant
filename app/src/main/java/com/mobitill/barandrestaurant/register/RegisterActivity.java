@@ -2,6 +2,8 @@ package com.mobitill.barandrestaurant.register;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.StrictMode;
+import android.support.v4.BuildConfig;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
@@ -11,6 +13,7 @@ import com.mobitill.barandrestaurant.SingleFragmentActivity;
 import javax.inject.Inject;
 
 public class RegisterActivity extends SingleFragmentActivity {
+
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
 
@@ -27,5 +30,6 @@ public class RegisterActivity extends SingleFragmentActivity {
     protected Fragment createFragment() {
         return RegisterFragment.newInstance();
     }
+
 
 }

@@ -26,6 +26,7 @@ public class CheckOutActivity extends SingleFragmentActivity {
         setContentView(R.layout.check_out_activity);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public static Intent newIntent(Context context, String orderId){

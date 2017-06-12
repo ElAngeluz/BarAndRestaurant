@@ -4,18 +4,12 @@ package com.mobitill.barandrestaurant.receipts_detail;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
@@ -27,7 +21,6 @@ import com.mobitill.barandrestaurant.data.product.models.Product;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import io.reactivex.Observable;
 import java.util.Stack;
 
 import javax.inject.Inject;
@@ -51,14 +44,21 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
 
     Product mProduct;
 
+    private  Double total = 0.0;
+
+    private String Total;
+
     @BindView(R.id.et_receipts_detail_orderNumber)
     EditText mEditTextReceiptDetailOrderNumber;
 
-    @BindView(R.id.et_receipts_detail_receiptNumber)
-    EditText mEditTextReceiptDetailReceiptNumber;
+//    @BindView(R.id.et_receipts_detail_receiptNumber)
+//    EditText mEditTextReceiptDetailReceiptNumber;
 
     @BindView(R.id.linearLayout_items)
     public LinearLayout itemsLinearLayout;
+
+    @BindView(R.id.tv_sum_total)
+    TextView sumTotalDisplay;
 
 
     @Inject
@@ -99,6 +99,8 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.receipts_detail_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
+        mEditTextReceiptDetailOrderNumber.setEnabled(false);
+//        mEditTextReceiptDetailReceiptNumber.setEnabled(false);
         return view;
     }
 
@@ -112,8 +114,6 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
         super.onResume();
         mPresenter.subscribe();
         mPresenter.getOrder(mOrderId);
-
-//        refactored
         mPresenter.getOrderItems(mOrderId);
 
     }
@@ -133,7 +133,7 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
     @Override
     public void showOrder(Order order) {
         mEditTextReceiptDetailOrderNumber.setText(order.getDisplayId());
-        mEditTextReceiptDetailReceiptNumber.setText(order.getEntryId());
+//        mEditTextReceiptDetailReceiptNumber.setText(order.getEntryId());
 
     }
 
@@ -152,7 +152,11 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
             String productName = entry.getValue().peek().getProductName();
             String quantity = String.valueOf(entry.getValue().size());
             String productPrice = entry.getValue().peek().getProductPrice();
-            String total = String.valueOf(Double.parseDouble(productPrice) * Double.parseDouble(quantity));
+            String price = String.valueOf(Double.parseDouble(productPrice) * Double.parseDouble(quantity));
+
+            total = 0.0;
+            total = total + Double.parseDouble(price);
+            Total = String.valueOf(total);
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             View view = inflater.inflate(R.layout.receipts_detail_products,itemsLinearLayout, false);
@@ -165,10 +169,10 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
             tvProductAmount.setText(quantity);
 
             TextView tvProductPriceTotal = (TextView) view.findViewById(R.id.tv_receipts_detail_product_total);
-            tvProductPriceTotal.setText(total);
-
+            tvProductPriceTotal.setText(price);
 
             itemsLinearLayout.addView(view);
+            sumTotalDisplay.setText(Total);
 
         }
 

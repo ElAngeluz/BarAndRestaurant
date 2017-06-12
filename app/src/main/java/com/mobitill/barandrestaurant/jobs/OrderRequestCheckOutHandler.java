@@ -154,18 +154,19 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                         Constants.RetrofitSource.COUNTERA)
                 .subscribeOn(mScheduleProvider.computation())
                 .subscribe(orderRemoteResponse -> {
-                    if(orderRemoteResponse.getMessage().equals("ok")) {
+                    if (orderRemoteResponse.getMessage().equals("ok")) {
                         mOrderItemRepository
                                 .getOrderItemWithOrderId(String.valueOf(orderRemoteRequest.getOrderId()))
                                 .subscribe(orderItems -> {
-                                    for(OrderItem orderItem: orderItems) {
+                                    for (OrderItem orderItem : orderItems) {
                                         orderItem.setCheckedOut(1);
+                                        Log.d("Update orderItem", "set checkout to 1");
                                         mOrderItemRepository.update(orderItem);
+
                                     }
                                     mOrderRepository.getOne(String.valueOf(orderRemoteResponse.getOrderId()))
                                             .subscribe(order -> {
                                                 order.setCheckedOut(1);
-                                                Log.i(TAG, "handleRequest: ");
                                                 int updated = mOrderRepository.update(order);
                                                 if (updated > -1) {
                                                     Log.i(TAG, "handleRequest: " + order.getEntryId() + " is checked out");
@@ -174,6 +175,7 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                                 }
                                             });
                                 });
+
                     }
 
                 });

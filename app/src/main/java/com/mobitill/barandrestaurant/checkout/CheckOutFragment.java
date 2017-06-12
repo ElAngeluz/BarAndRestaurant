@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CheckOutFragment extends Fragment implements CheckOutContract.View {
+public class CheckOutFragment extends Fragment implements CheckOutContract.View{
 
     private static final String TAG = CheckOutFragment.class.getSimpleName();
     private static final String ID = "orderId";
@@ -74,6 +73,8 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
         // Inflate the layout for this fragment
        View view = inflater.inflate(R.layout.check_out_fragment, container, false);
        mUnbinder = ButterKnife.bind(this,view);
+       mCheckBoxCash.setChecked(true);
+       mEditTextMpesa.setEnabled(false);
         return view;
     }
 
@@ -86,17 +87,22 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     public void cashCheckboxClicked(){
         clearCheckbox();
         mCheckBoxCash.setChecked(true);
+        mEditTextMpesa.setEnabled(false);
+        mEditTextCash.setEnabled(true);
+        mEditTextCash.requestFocus();
     }
 
     @OnClick(R.id.chkbx_checked_out_mpesa)
     public void mpesaCheckboxClicked(){
         clearCheckbox();
         mCheckBoxMpesa.setChecked(true);
+        mEditTextCash.setEnabled(false);
+        mEditTextMpesa.setEnabled(true);
+        mEditTextMpesa.requestFocus();
     }
 
     @OnClick(R.id.btn_checked_out_ok)
     public void OkButtonClick(){
-        //startActivity(ReceiptsDetailActivity.newIntent(getActivity(),orderId));
         mPresenter.checkout(orderId);
         startActivity(ReceiptsActivity.newIntent(getActivity()));
         getActivity().finish();
@@ -107,25 +113,9 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
 
         String paymentMethod;
         if(mCheckBoxCash.isChecked()){
-            mEditTextMpesa.setClickable(false);
-            mEditTextMpesa.setEnabled(false);
-            mEditTextMpesa.setOnClickListener(null);
-            mEditTextMpesa.setCursorVisible(false);
-            mEditTextMpesa.setFocusableInTouchMode(false);
-            mEditTextMpesa.setInputType(InputType.TYPE_NULL);
-            mEditTextMpesa.setFocusableInTouchMode(false);
-            mEditTextMpesa.setFocusable(false);
             paymentMethod = mCheckBoxCash.getText().toString();
 
         }else if (mCheckBoxMpesa.isChecked()){
-            mEditTextCash.setClickable(false);
-            mEditTextCash.setEnabled(false);
-            mEditTextCash.setFocusable(false);
-            mEditTextCash.setOnClickListener(null);
-            mEditTextCash.setCursorVisible(false);
-            mEditTextCash.setFocusableInTouchMode(false);
-            mEditTextCash.setInputType(InputType.TYPE_NULL);
-            mEditTextCash.setFocusableInTouchMode(false);
             paymentMethod = mCheckBoxMpesa.getText().toString();
         }else {
             paymentMethod = "";

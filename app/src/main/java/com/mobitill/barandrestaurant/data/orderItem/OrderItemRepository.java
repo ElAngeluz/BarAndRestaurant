@@ -224,9 +224,6 @@ public class OrderItemRepository implements OrderItemDataSource {
     @Override
     public Observable<OrderRemoteResponse> orderRequest(OrderRemoteRequest orderRemoteRequest, String counter) {
         Log.d("Order request Contents", orderRemoteRequest.getRequestbody().toString());
-
-
-
         Log.d("order remote request L",orderRemoteRequest.getRequestbody().getOrder().toString());
 
         for (OrderRemoteItem item :orderRemoteRequest.getRequestbody().getOrder()) {

@@ -103,6 +103,7 @@ public class OrderLocalDataSource implements OrderDataSource {
         checkNotNull(item);
         ContentValues contentValues = new ContentValues();
         contentValues.put(OrderEntry.COLUMN_NAME_ENTRY_ID, item.getEntryId());
+        contentValues.put(OrderEntry.COLUMN_NAME_DISPLAY_ID,item.getDisplayId());
         contentValues.put(OrderEntry.COLUMN_NAME_NAME, item.getName());
         contentValues.put(OrderEntry.COLUMN_NAME_WAITER_ID, item.getWaiterId());
         contentValues.put(OrderEntry.COLUMN_NAME_SYNCED, item.getSynced());

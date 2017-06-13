@@ -147,6 +147,7 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
 
         /* display the products */
 
+                    total = 0.0;
         for(HashMap.Entry<String, Stack<OrderItem>> entry : orderItemMap.entrySet()){
 
             String productName = entry.getValue().peek().getProductName();
@@ -154,7 +155,6 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
             String productPrice = entry.getValue().peek().getProductPrice();
             String price = String.valueOf(Double.parseDouble(productPrice) * Double.parseDouble(quantity));
 
-            total = 0.0;
             total = total + Double.parseDouble(price);
             Total = String.valueOf(total);
 

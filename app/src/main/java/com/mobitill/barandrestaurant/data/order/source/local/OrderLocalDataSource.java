@@ -149,7 +149,7 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_AMOUNT, item.getAmount());
         contentValues.put(OrderEntry.COLUMN_NAME_TRANSACTION_ID, item.getTransactionId());
         contentValues.put(OrderEntry.COLUMN_NAME_PROCESS_STATE, item.getProcessState());
-        String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE?";
+        String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
         String[] selectionArgs = {item.getEntryId()};
         return mDatabaseHelper.update(OrderEntry.TABLE_NAME, contentValues, selection, selectionArgs);
     }
@@ -166,7 +166,6 @@ public class OrderLocalDataSource implements OrderDataSource {
                  OrderEntry.TABLE_NAME, rowId);
         Cursor cursor = mDatabaseHelper.query(sql, (String[]) null);
         Order order = getOrder(cursor);
-        cursor.close();
         return order;
     }
 
@@ -206,7 +205,6 @@ public class OrderLocalDataSource implements OrderDataSource {
         String selectQuery = " UPDATE " + OrderEntry.TABLE_NAME + " set  " + OrderEntry.COLUMN_NAME_PROCESS_STATE + " = "+state+" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
 //        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
         mDatabaseHelper.execute(selectQuery);
-//        cursor.close();
 
     }
     public int getProcessState(String entryId){
@@ -217,10 +215,16 @@ public class OrderLocalDataSource implements OrderDataSource {
             int state = cursor.getInt(0);
             return state;
         }else{
-            cursor.close();
             return 0;
 
         }
+    }
+
+    public void updateSycState(String entryId,int sync){
+        String selectQuery = " UPDATE " + OrderEntry.TABLE_NAME + " set  " + OrderEntry.COLUMN_NAME_SYNCED + " = "+sync+" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
+//        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        mDatabaseHelper.execute(selectQuery);
+
     }
 }
 

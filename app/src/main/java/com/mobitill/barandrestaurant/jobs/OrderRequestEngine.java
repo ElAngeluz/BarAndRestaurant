@@ -27,8 +27,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.inject.Inject;
 
-import io.reactivex.functions.Function;
-
 /**
  * Created by james on 5/26/2017.
  */
@@ -73,8 +71,10 @@ public class OrderRequestEngine  {
 //                        Refactor to retrieve only one order
                     if (orders != null){
                         if (orders.size() > 0){
+
+                            Log.d(TAG, "orders not synced: " + orders.size());
                             for(Order order: orders){
-                                //if(order.getProcessState() == 0){
+                                Log.d(TAG, "orders process state : " + order.getProcessState() + " sync state "+order.getSynced());
                                 if(mOrderLocalDataSource.getProcessState(order.getEntryId()) == 0){
                                     order.setProcessState(1);
                                     //mOrderRepository.;

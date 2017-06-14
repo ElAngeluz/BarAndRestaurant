@@ -4,12 +4,15 @@ package com.mobitill.barandrestaurant.receipts_detail;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
@@ -42,27 +45,30 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
 
     String mOrderId = "";
 
+    private Order mOrder;
+
     Product mProduct;
 
-    private  Double total = 0.0;
-
     private String Total;
+    private int checkout;
+
+    private Double total = 0.0;
 
     @BindView(R.id.et_receipts_detail_orderNumber)
     EditText mEditTextReceiptDetailOrderNumber;
-
-//    @BindView(R.id.et_receipts_detail_receiptNumber)
-//    EditText mEditTextReceiptDetailReceiptNumber;
 
     @BindView(R.id.linearLayout_items)
     public LinearLayout itemsLinearLayout;
 
     @BindView(R.id.tv_sum_total)
-    TextView sumTotalDisplay;
+    TextView mTextViewSumTotal;
 
+    @BindView(R.id.btn_receipts_detail_checkOut)
+    Button mButtonCheckOut;
 
     @Inject
     ReceiptsDetailPresenter receiptsDetailPresenter;
+
 
     private ReceiptsDetailContract.Presenter mPresenter;
     private Unbinder mUnbinder;
@@ -100,13 +106,7 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
         View view = inflater.inflate(R.layout.receipts_detail_fragment, container, false);
         mUnbinder = ButterKnife.bind(this, view);
         mEditTextReceiptDetailOrderNumber.setEnabled(false);
-//        mEditTextReceiptDetailReceiptNumber.setEnabled(false);
         return view;
-    }
-
-    @OnClick(R.id.btn_receipts_detail_checkOut)
-    public void receiptDetailCheckOutClick() {
-        startActivity(CheckOutActivity.newIntent(getActivity(), mOrderId));
     }
 
     @Override
@@ -114,6 +114,8 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
         super.onResume();
         mPresenter.subscribe();
         mPresenter.getOrder(mOrderId);
+
+//        refactored
         mPresenter.getOrderItems(mOrderId);
 
     }
@@ -133,8 +135,8 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
     @Override
     public void showOrder(Order order) {
         mEditTextReceiptDetailOrderNumber.setText(order.getDisplayId());
-//        mEditTextReceiptDetailReceiptNumber.setText(order.getEntryId());
-
+        checkout = order.getCheckedOut();
+        Log.d(TAG, "checkout = " + order.getCheckedOut());
     }
 
 
@@ -147,16 +149,15 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
 
         /* display the products */
 
-                    total = 0.0;
+        total = 0.0;
+
         for(HashMap.Entry<String, Stack<OrderItem>> entry : orderItemMap.entrySet()){
 
             String productName = entry.getValue().peek().getProductName();
             String quantity = String.valueOf(entry.getValue().size());
             String productPrice = entry.getValue().peek().getProductPrice();
             String price = String.valueOf(Double.parseDouble(productPrice) * Double.parseDouble(quantity));
-
             total = total + Double.parseDouble(price);
-            Total = String.valueOf(total);
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             View view = inflater.inflate(R.layout.receipts_detail_products,itemsLinearLayout, false);
@@ -172,11 +173,22 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
             tvProductPriceTotal.setText(price);
 
             itemsLinearLayout.addView(view);
-            sumTotalDisplay.setText(Total);
-
         }
+        Total = String.valueOf(total);
+        mTextViewSumTotal.setText(Total);
 
     }
+
+    @OnClick(R.id.btn_receipts_detail_checkOut)
+    public void receiptDetailCheckOutClick() {
+        if (checkout == 1){
+            Toast.makeText(getActivity(), "Order already CheckedOut", Toast.LENGTH_SHORT).show();
+            mButtonCheckOut.setEnabled(false);
+        }else {
+            startActivity(CheckOutActivity.newIntent(getActivity(), mOrderId));
+        }
+    }
+
 
     @Override
     public void showProducts(List<Product> products) {

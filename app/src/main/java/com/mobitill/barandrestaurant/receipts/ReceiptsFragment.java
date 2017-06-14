@@ -82,6 +82,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     }
 
 
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

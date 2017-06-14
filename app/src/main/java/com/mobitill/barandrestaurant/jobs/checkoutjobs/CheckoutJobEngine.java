@@ -60,7 +60,11 @@ public class CheckoutJobEngine {
         List<OrderRemoteRequest> orderRemoteRequestList = new ArrayList<>();
         mOrderRepository.getOrdersForCheckout(0, 1)
 
+//                refactored
                 .observeOn(mScheduleProvider.io())
+//                .observeOn(mScheduleProvider.computation())
+//                .subscribeOn(mScheduleProvider.computation())
+//                .observeOn(mScheduleProvider.ui())
                 .map(orders -> {
                     for (Order order: orders) {
                         orderRemoteRequestList.add(getOrderOrderRemoteRequestItem(order));

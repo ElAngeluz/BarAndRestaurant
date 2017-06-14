@@ -21,42 +21,34 @@ public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder implements
     @BindView(R.id.tv_order)
     TextView textViewOrder;
 
-    @BindView(R.id.tv_setcheckout)
-    TextView textViewSetCheckout;
+    @BindView(R.id.tv_set_checkout)
+    TextView mTextViewSetCheckout;
 
     private Order mOrder;
     private Context mContext;
-    private View mView;
 
     public ReceiptsOrdersViewHolder(View itemView, Context context) {
         super(itemView);
-        ButterKnife.bind(this, itemView);
-        mView=itemView;
+        ButterKnife.bind(this,itemView);
+        itemView.setClickable(true);
         itemView.setOnClickListener(this);
-
         mContext = context;
     }
 
-
-    public void bindView(Order order) {
+    public void bindView(Order order){
         mOrder = order;
 
         textViewOrder.setText("Order " + order.getDisplayId());
 
-        if (order.getCheckedOut() == 1) {
-
-            textViewSetCheckout.setText("CheckedOut");
-            mView.setEnabled(false);
-        } else {
-
-            textViewSetCheckout.setText("Not CheckedOut");
-            mView.setEnabled(true);
-
+        if (order.getCheckedOut() == 1){
+            mTextViewSetCheckout.setText("CheckedOut");
+        }else {
+            mTextViewSetCheckout.setText("NotCheckedOut");
         }
     }
 
     @Override
     public void onClick(View v) {
-        mContext.startActivity(ReceiptsDetailActivity.newIntent(mContext, mOrder.getEntryId().toString()));
+       mContext.startActivity(ReceiptsDetailActivity.newIntent(mContext, mOrder.getEntryId().toString()));
     }
 }

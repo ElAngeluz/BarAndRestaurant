@@ -202,7 +202,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
     @Override
     public void sendOrderRequest() {
         if(mOrder != null){
-            //mOrderItemRepository.orderRfequest(mOrder, );
+            //mOrderItemRepository.orderRequest(mOrder, );
         }
     }
 

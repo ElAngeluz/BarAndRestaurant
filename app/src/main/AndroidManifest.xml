@@ -27,9 +27,7 @@
             android:name=".receipts_detail.ReceiptsDetailActivity"
             android:parentActivityName=".receipts.ReceiptsActivity" />
         <activity android:name=".receipts.ReceiptsActivity" />
-        <activity
-            android:name=".checkout.CheckOutActivity"
-            android:parentActivityName=".receipts.ReceiptsActivity"></activity>
+        <activity android:name=".checkout.CheckOutActivity"></activity>
     </application>
 
 </manifest>

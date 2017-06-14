@@ -16,26 +16,13 @@
             android:layout_height="wrap_content"
             android:text="Order 1"
             android:textSize="20sp"/>
-
         <TextView
-            android:id="@+id/tv_setcheckout"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dp16"
+            android:id="@+id/tv_set_checkout"
             android:layout_width="wrap_content"
-            android:padding="@dimen/dp10"
+            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
-            android:text="NotCheckedOut"
-            android:textSize="20sp"/>
-
-        <!--<CheckBox-->
-            <!--android:id="@+id/chkbx_checked_out"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:padding="@dimen/dp10"-->
-            <!--android:layout_marginRight="@dimen/dp16"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="CheckedOut"-->
-            <!--android:textSize="15sp"-->
-            <!--/>-->
+            android:layout_marginRight="@dimen/dp16"
+            android:text="Set CheckOut"
+            android:textSize="@dimen/sp20"/>
     </RelativeLayout>
 </LinearLayout>

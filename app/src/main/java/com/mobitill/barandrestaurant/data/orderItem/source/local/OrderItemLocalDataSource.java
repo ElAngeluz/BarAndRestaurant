@@ -83,14 +83,14 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 
     @Override
     public Observable<OrderItem> getOne(String id) {
-        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
-                TextUtils.join(",", projection), OrderItemEntry.TABLE_NAME, OrderItemEntry.COLUMN_NAME_ORDER_ID);
-        rx.Observable<OrderItem> orderItemObservableV1 =
-                databaseHelper.createQuery(OrderItemEntry.TABLE_NAME, sql, id)
-                        .mapToOneOrDefault(orderItemMapperFunction, null).take(1);
-
-        return RxJavaInterop.toV2Observable(orderItemObservableV1);
-//        return null;
+//        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
+//                TextUtils.join(",", projection), OrderItemEntry.TABLE_NAME, OrderItemEntry.COLUMN_NAME_ID);
+//        rx.Observable<OrderItem> orderItemObservableV1 =
+//                databaseHelper.createQuery(OrderItemEntry.TABLE_NAME, sql, id)
+//                        .mapToOneOrDefault(orderItemMapperFunction, null).take(1);
+//
+//        return RxJavaInterop.toV2Observable(orderItemObservableV1);
+        return null;
     }
 
     @Override
@@ -129,23 +129,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 
     @Override
     public int update(OrderItem item) {
-
-//        Refactored
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(OrderItemEntry.COLUMN_NAME_ENTRY_ID, item.getId());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_ORDER_ID, item.getOrderId());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_ID, item.getProductId());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_COUNTER, item.getCounter());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_SYNCED, item.getSynced());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_NAME, item.getProductName());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_PRICE, item.getProductPrice());
-        contentValues.put(OrderItemEntry.COLUMN_NAME_TIME_STAMP, item.getTimeStamp());
-        String selection = OrderItemEntry.COLUMN_NAME_ORDER_ID + " LIKE ?";
-        String[] selectionArgs = {item.getOrderId()};
-        return databaseHelper.update(OrderItemEntry.TABLE_NAME, contentValues, selection, selectionArgs);
-
-        //        ContentValues contentValues = new ContentValues();
+//        ContentValues contentValues = new ContentValues();
 //        contentValues.put(OrderItemEntry.COLUMN_NAME_ORDER_ID, item.getOrderId());
 //        contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_ID, item.getProductId());
 //        contentValues.put(OrderItemEntry.COLUMN_NAME_COUNTER, item.getCounter());
@@ -154,7 +138,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 //        String selection = OrderItemEntry.COLUMN_NAME_ID + "LIKE ?";
 //        String[] selectionArgs = {item.getOrderId()};
 //        return databaseHelper.update(OrderItemEntry.TABLE_NAME, contentValues, selection, selectionArgs);
-//        return 0;
+        return 0;
     }
 
     @Override

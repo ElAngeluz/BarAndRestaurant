@@ -44,7 +44,7 @@ public class OrderRequestJob extends Job {
 //        }
 //        try {
 //            Log.d("start time", "start sleep");
-//            Thread.sleep(1000);
+//            Thread.sleep(5000);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
@@ -57,7 +57,7 @@ public class OrderRequestJob extends Job {
 
         new JobRequest.Builder(OrderRequestJob.TAG)
                 .setExecutionWindow(5000L, 5000L)
-                .setBackoffCriteria(TimeUnit.MINUTES.toMillis(5), JobRequest.BackoffPolicy.LINEAR)
+                .setBackoffCriteria(TimeUnit.MINUTES.toMillis(5), JobRequest.BackoffPolicy.LINEAR )
                 .setRequiredNetworkType( JobRequest.NetworkType.ANY )
                 .setRequiresDeviceIdle(false)
                 .setUpdateCurrent(false)

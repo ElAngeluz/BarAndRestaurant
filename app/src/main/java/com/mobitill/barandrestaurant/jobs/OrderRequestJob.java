@@ -1,7 +1,6 @@
 package com.mobitill.barandrestaurant.jobs;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
@@ -39,10 +38,10 @@ public class OrderRequestJob extends Job {
     private boolean orderRequest() {
         OrderRequestEngine orderRequestEngine = new OrderRequestEngine();
         orderRequestEngine.orderRequest();
-        for(int i = 0; i < 10000; i++){
-            Log.i(TAG, "orderRequest: " + i);
-            return true;
-        }
+//        for(int i = 0; i < 10000; i++){
+//            Log.i(TAG, "orderRequest: " + i);
+//            return true;
+//        }
 //        try {
 //            Log.d("start time", "start sleep");
 //            Thread.sleep(5000);
@@ -50,7 +49,7 @@ public class OrderRequestJob extends Job {
 //            e.printStackTrace();
 //        }
 //        Log.d("stoppage time", "stop thread");
-        Log.i(TAG, "orderRequest: ");
+//        Log.i(TAG, "orderRequest: ");
         return false;
     }
 

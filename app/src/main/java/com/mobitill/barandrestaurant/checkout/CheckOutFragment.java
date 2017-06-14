@@ -74,6 +74,8 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
         // Inflate the layout for this fragment
        View view = inflater.inflate(R.layout.check_out_fragment, container, false);
        mUnbinder = ButterKnife.bind(this,view);
+       mCheckBoxCash.setChecked(true);
+       mEditTextMpesa.setEnabled(false);
         return view;
     }
 
@@ -86,12 +88,16 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     public void cashCheckboxClicked(){
         clearCheckbox();
         mCheckBoxCash.setChecked(true);
+        mEditTextCash.setEnabled(true);
+        mEditTextMpesa.setEnabled(false);
     }
 
     @OnClick(R.id.chkbx_checked_out_mpesa)
     public void mpesaCheckboxClicked(){
         clearCheckbox();
         mCheckBoxMpesa.setChecked(true);
+        mEditTextMpesa.setEnabled(true);
+        mEditTextCash.setEnabled(false);
     }
 
     @OnClick(R.id.btn_checked_out_ok)

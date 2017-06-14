@@ -38,7 +38,7 @@ public class OrderRequestJob extends Job {
     private boolean orderRequest() {
         OrderRequestEngine orderRequestEngine = new OrderRequestEngine();
         orderRequestEngine.orderRequest();
-//        for(int i = 0; i < 10; i++){
+//        for(int i = 0; i < 10000; i++){
 //            Log.i(TAG, "orderRequest: " + i);
 //            return true;
 //        }
@@ -50,7 +50,7 @@ public class OrderRequestJob extends Job {
 //        }
 //        Log.d("stoppage time", "stop thread");
 //        Log.i(TAG, "orderRequest: ");
-        return true;
+        return false;
     }
 
     public static void scheduleJob(){

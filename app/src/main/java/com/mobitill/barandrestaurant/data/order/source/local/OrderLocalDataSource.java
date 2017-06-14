@@ -210,11 +210,13 @@ public class OrderLocalDataSource implements OrderDataSource {
     public int getProcessState(String entryId){
         String selectQuery = " SELECT "+OrderEntry.COLUMN_NAME_PROCESS_STATE +" FROM "+ OrderEntry.TABLE_NAME +" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
         Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
-        Log.d("orderlocaldatasource", "getProcessState: "+cursor.getColumnCount());
         if(cursor.moveToNext()) {
             int state = cursor.getInt(0);
+            Log.d("orderlocaldatasource", "getProcessState: "+state);
             return state;
         }else{
+            cursor.close();
+            Log.d("orderlocaldatasource", "getProcessState: 0");
             return 0;
 
         }

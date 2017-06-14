@@ -50,7 +50,6 @@ public class OrderRepository implements OrderDataSource {
 
     @Override
     public Observable<Order> getOne(String id) {
-//        Log.i(TAG, "getOne: ");
         return mOrderLocalDataSource
                 .getOne(id)
                 .observeOn(mSchedulerProvider.ui());

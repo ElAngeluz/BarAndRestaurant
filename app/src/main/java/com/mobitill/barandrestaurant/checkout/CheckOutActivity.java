@@ -16,6 +16,7 @@ public class CheckOutActivity extends SingleFragmentActivity {
 
     private static final String TAG = CheckOutActivity.class.getSimpleName();
     private static final String ID = "orderId";
+    private static final String TOTAL = "sumTotal";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -28,14 +29,15 @@ public class CheckOutActivity extends SingleFragmentActivity {
         setSupportActionBar(mToolbar);
     }
 
-    public static Intent newIntent(Context context, String orderId){
+    public static Intent newIntent(Context context, String orderId,String sumTotal){
         Intent intent = new Intent(context, CheckOutActivity.class);
         intent.putExtra(ID, orderId);
+        intent.putExtra(TOTAL,sumTotal);
         return intent;
     }
 
     @Override
     protected Fragment createFragment() {
-        return CheckOutFragment.newInstance(getIntent().getStringExtra(ID));
+        return CheckOutFragment.newInstance(getIntent().getStringExtra(ID),getIntent().getStringExtra(TOTAL));
     }
 }

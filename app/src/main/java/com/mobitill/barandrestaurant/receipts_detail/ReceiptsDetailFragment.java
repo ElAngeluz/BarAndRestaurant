@@ -49,7 +49,7 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
 
     Product mProduct;
 
-    private String Total;
+    private String mTotal;
     private int checkout;
 
     private Double total = 0.0;
@@ -139,7 +139,6 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
         Log.d(TAG, "checkout = " + order.getCheckedOut());
     }
 
-
     @Override
     public void showOrderItems(List<OrderItem> orderItems) {
 //        refactored
@@ -174,9 +173,15 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
 
             itemsLinearLayout.addView(view);
         }
-        Total = String.valueOf(total);
-        mTextViewSumTotal.setText(Total);
 
+//        mTotal = String.valueOf(total);
+        getTotal();
+        mTextViewSumTotal.setText(mTotal);
+    }
+
+    public String getTotal(){
+        mTotal = String.valueOf(total);
+        return mTotal;
     }
 
     @OnClick(R.id.btn_receipts_detail_checkOut)
@@ -185,7 +190,8 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
             Toast.makeText(getActivity(), "Order already CheckedOut", Toast.LENGTH_SHORT).show();
             mButtonCheckOut.setEnabled(false);
         }else {
-            startActivity(CheckOutActivity.newIntent(getActivity(), mOrderId));
+
+            startActivity(CheckOutActivity.newIntent(getActivity(), mOrderId,mTotal));
         }
     }
 

@@ -2,12 +2,9 @@ package com.mobitill.barandrestaurant.receipts_detail;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.PersistableBundle;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.mobitill.barandrestaurant.R;
@@ -18,7 +15,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReceiptsDetailActivity extends SingleFragmentActivity {
+public class ReceiptsDetailActivity extends SingleFragmentActivity{
 
     private static final String TAG = ReceiptsDetailActivity.class.getSimpleName();
     private static final String EXTRA_ORDER_ID = "extra_order_id";
@@ -28,7 +25,6 @@ public class ReceiptsDetailActivity extends SingleFragmentActivity {
 
     @Inject
     ReceiptsDetailPresenter receiptsDetailPresenter;
-
 
     public static Intent newIntent(Context context, String orderId){
         Intent intent = new Intent(context, ReceiptsDetailActivity.class);
@@ -60,4 +56,5 @@ public class ReceiptsDetailActivity extends SingleFragmentActivity {
     protected void onResume() {
         super.onResume();
     }
+
 }

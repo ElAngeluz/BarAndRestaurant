@@ -1,4 +1,4 @@
-package com.mobitill.barandrestaurant.data.request.remotemodels.mpesa.request;
+package com.mobitill.barandrestaurant.checkout.mpesa.request;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

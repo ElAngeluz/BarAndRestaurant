@@ -5,16 +5,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
-import com.mobitill.barandrestaurant.receipts.ReceiptsActivity;
 
 import javax.inject.Inject;
 
@@ -32,10 +32,10 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
 
     private static final String TAG = CheckOutFragment.class.getSimpleName();
     private static final String ID = "orderId";
+    private static final String ARG_TOAL = "sumTotal";
 
     @Inject CheckOutPresenter mCheckOutPresenter;
     public CheckOutContract.Presenter mPresenter;
-
 
     @BindView(R.id.chkbx_checked_out_cash)
     CheckBox mCheckBoxCash;
@@ -49,8 +49,12 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     @BindView(R.id.editText_checked_out_mpesa)
     EditText mEditTextMpesa;
 
+    @BindView(R.id.btn_checked_out_ok)
+    Button mButtonOk;
+
 
     private String orderId;
+    private String mTotal;
     private Unbinder mUnbinder;
 
     public CheckOutFragment() {
@@ -61,11 +65,15 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         orderId = getArguments().getString(ID);
+        mTotal = getArguments().getString(ARG_TOAL);
+        Log.d(TAG, "Total : " + mTotal);
         DaggerCheckOutComponent.builder()
                 .checkOutPresenterModule(new CheckOutPresenterModule(this))
                 .baseComponent(((MainApplication) getActivity().getApplication()).mBaseComponent())
                 .build()
                 .inject(this);
+
+
     }
 
     @Override
@@ -75,7 +83,12 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
        View view = inflater.inflate(R.layout.check_out_fragment, container, false);
        mUnbinder = ButterKnife.bind(this,view);
        mCheckBoxCash.setChecked(true);
+        mEditTextCash.setText(mTotal);
+        Log.d(TAG, "Total amount is : " + mTotal);
        mEditTextMpesa.setEnabled(false);
+//        ReceiptsDetailFragment fragment = new ReceiptsDetailFragment();
+//        String Total = fragment.getTotal();
+//        mEditTextCash.setText(Total);
         return view;
     }
 
@@ -103,9 +116,16 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     @OnClick(R.id.btn_checked_out_ok)
     public void OkButtonClick(){
         //startActivity(ReceiptsDetailActivity.newIntent(getActivity(),orderId));
-        mPresenter.checkout(orderId);
-        startActivity(ReceiptsActivity.newIntent(getActivity()));
-        getActivity().finish();
+            if (mCheckBoxMpesa.isChecked()){
+                mPresenter.makeCall();
+//                mPresenter.checkout(orderId);
+//                getActivity().finish();
+//            }else{
+//                    mPresenter.checkout(orderId);
+//                    getActivity().finish();
+            }
+//            startActivity(ReceiptsActivity.newIntent(getActivity()));
+//            getActivity().finish();
     }
 
     @Override
@@ -113,25 +133,9 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
 
         String paymentMethod;
         if(mCheckBoxCash.isChecked()){
-            mEditTextMpesa.setClickable(false);
-            mEditTextMpesa.setEnabled(false);
-            mEditTextMpesa.setOnClickListener(null);
-            mEditTextMpesa.setCursorVisible(false);
-            mEditTextMpesa.setFocusableInTouchMode(false);
-            mEditTextMpesa.setInputType(InputType.TYPE_NULL);
-            mEditTextMpesa.setFocusableInTouchMode(false);
-            mEditTextMpesa.setFocusable(false);
             paymentMethod = mCheckBoxCash.getText().toString();
 
         }else if (mCheckBoxMpesa.isChecked()){
-            mEditTextCash.setClickable(false);
-            mEditTextCash.setEnabled(false);
-            mEditTextCash.setFocusable(false);
-            mEditTextCash.setOnClickListener(null);
-            mEditTextCash.setCursorVisible(false);
-            mEditTextCash.setFocusableInTouchMode(false);
-            mEditTextCash.setInputType(InputType.TYPE_NULL);
-            mEditTextCash.setFocusableInTouchMode(false);
             paymentMethod = mCheckBoxMpesa.getText().toString();
         }else {
             paymentMethod = "";
@@ -141,7 +145,7 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
 
     public String setAmount(){
         String amount = mEditTextCash.getText().toString();
-        return amount;
+            return amount;
     }
 
     @Override
@@ -162,10 +166,11 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
         mPresenter.unsubscribe();
     }
 
-    public static CheckOutFragment newInstance(String orderId) {
+    public static CheckOutFragment newInstance(String orderId,String sumTotal) {
 
         Bundle args = new Bundle();
         args.putString(ID,orderId);
+        args.putString(ARG_TOAL,sumTotal);
         CheckOutFragment fragment = new CheckOutFragment();
         fragment.setArguments(args);
         return fragment;

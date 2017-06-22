@@ -1,14 +1,25 @@
 package com.mobitill.barandrestaurant.checkout;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.mobitill.barandrestaurant.checkout.mpesa.request.MpesaTranscodeRequest;
+import com.mobitill.barandrestaurant.checkout.mpesa.request.MpesaTranscodeRequestbody;
+import com.mobitill.barandrestaurant.checkout.mpesa.response.MpesaResponse;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
 import com.mobitill.barandrestaurant.jobs.checkoutjobs.CheckOutJob;
+import com.mobitill.barandrestaurant.utils.Constants;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.disposables.CompositeDisposable;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by dataintegrated on 5/29/2017.
@@ -26,11 +37,21 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
     @NonNull
     private CompositeDisposable compositeDisposable;
 
+    @NonNull
+    private final Retrofit mRetrofitCounterA;
+
+    @NonNull
+    Context mContext;
+
     @Inject
     CheckOutPresenter(@NonNull CheckOutContract.View view,
-                      @NonNull OrderRepository orderRepository){
+                      @NonNull OrderRepository orderRepository,
+                      @NonNull @Named(Constants.RetrofitSource.COUNTERA) Retrofit retrofitCounterA,
+                      @NonNull Context context){
         mView = view;
         mOrderRepository = orderRepository;
+        mRetrofitCounterA = retrofitCounterA;
+        mContext = context;
         compositeDisposable = new CompositeDisposable();
     }
 
@@ -69,6 +90,39 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
                         }
                     });
         }
+    }
+
+    public void makeCall(){
+
+        MpesaTranscodeRequest mpesaTranscodeRequest = new MpesaTranscodeRequest();
+        mpesaTranscodeRequest.setRequestname("mpesasearch");
+        mpesaTranscodeRequest.setRequestId("1");
+        mpesaTranscodeRequest.setProductsVersion(1);
+
+        mpesaTranscodeRequest.setRequestbody(new MpesaTranscodeRequestbody(""));
+
+        MpesaApiService mpesaApiService = mRetrofitCounterA.create(MpesaApiService.class);
+        Call<MpesaResponse> call = mpesaApiService.sendRequest(mpesaTranscodeRequest);
+        call.enqueue(new Callback<MpesaResponse>() {
+            @Override
+            public void onResponse(Call<MpesaResponse> call, Response<MpesaResponse> response) {
+                if (response.body().getMessage().equals("ok")){
+                    Log.d(TAG, "onResponse: " + response.body().getResponse().getMessage());
+                    Toast.makeText(mContext, "Successful", Toast.LENGTH_LONG).show();
+                }else {
+
+                    Log.d(TAG, "Error Message: " + response.body().getResponse().getMessage());
+                    Toast.makeText(mContext, "An Error Occured", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MpesaResponse> call, Throwable t) {
+
+//                Toast.makeText(mContext, , Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onFailure: " +  t.getMessage());
+            }
+        });
     }
 
 

@@ -12,4 +12,5 @@ import dagger.Component;
 @Component(modules = CheckOutPresenterModule.class, dependencies = BaseComponent.class)
 public interface CheckOutComponent {
     void inject(CheckOutFragment checkOutFragment);
+    void inject(CheckOutPresenter checkOutPresenter);
 }

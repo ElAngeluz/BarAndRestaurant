@@ -18,5 +18,6 @@ public interface CheckOutContract {
     interface Presenter extends BasePresenter{
 
         void checkout(String orderId);
+        void makeCall();
     }
 }

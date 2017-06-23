@@ -3,11 +3,7 @@ package com.mobitill.barandrestaurant.utils.interceptors;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.order.source.local.OrderLocalDataSource;
-import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
 
 import java.io.IOException;
 
@@ -40,6 +36,7 @@ public class EncryptionInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
+        Response response = chain.proceed(request);
         RequestBody oldBody = request.body();
         Buffer buffer = new Buffer();
         oldBody.writeTo(buffer);
@@ -62,12 +59,13 @@ public class EncryptionInterceptor implements Interceptor {
 //                mOrderLocalDataSource.updateProcessState(String.valueOf(orderRemoteRequest.getOrderId()),0);
             } catch (Exception ex) {
 
+                ex.printStackTrace();
             }
 
             //mOrder.getEntryId();
 //            e.printStackTrace();
         }
-        return null;
+        return response;
     }
 
 }

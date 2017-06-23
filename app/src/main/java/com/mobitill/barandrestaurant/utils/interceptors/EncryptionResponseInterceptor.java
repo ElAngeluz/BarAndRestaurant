@@ -35,7 +35,7 @@ public class EncryptionResponseInterceptor implements Interceptor {
             e.printStackTrace();
         }
 
-        return null;
+        return response;
 
     }
 }

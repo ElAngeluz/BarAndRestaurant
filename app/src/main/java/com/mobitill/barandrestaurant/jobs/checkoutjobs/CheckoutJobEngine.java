@@ -131,6 +131,8 @@ public class CheckoutJobEngine {
         orderRemoteRequest.setProductsVersion(0);
         orderRemoteRequest.setRequestbody(orderRemoteRequestbody);
         orderRemoteRequest.setRequestId("181");
+        orderRemoteRequest.setPaymentmode(order.getPaymentMethod());
+        orderRemoteRequest.setPaymentinfo(order.getTransactionId());
         orderRemoteRequest.setRequestname("ordercheckout");
         return orderRemoteRequest;
     }

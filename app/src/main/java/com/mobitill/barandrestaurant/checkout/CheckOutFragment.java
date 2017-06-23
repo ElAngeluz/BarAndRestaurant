@@ -1,6 +1,8 @@
 package com.mobitill.barandrestaurant.checkout;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,11 +30,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CheckOutFragment extends Fragment implements CheckOutContract.View {
+public class CheckOutFragment extends Fragment implements CheckOutContract.View, CheckOutPresenter.talkToFragment{
 
     private static final String TAG = CheckOutFragment.class.getSimpleName();
     private static final String ID = "orderId";
     private static final String ARG_TOAL = "sumTotal";
+
 
     @Inject CheckOutPresenter mCheckOutPresenter;
     public CheckOutContract.Presenter mPresenter;
@@ -56,6 +59,7 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     private String orderId;
     private String mTotal;
     private Unbinder mUnbinder;
+    private AlertDialog.Builder mAlertDialog;
 
     public CheckOutFragment() {
         // Required empty public constructor
@@ -81,6 +85,8 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
        View view = inflater.inflate(R.layout.check_out_fragment, container, false);
+
+        mAlertDialog = new AlertDialog.Builder(getActivity());
        mUnbinder = ButterKnife.bind(this,view);
        mCheckBoxCash.setChecked(true);
         mEditTextCash.setText(mTotal);
@@ -103,6 +109,7 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
         mCheckBoxCash.setChecked(true);
         mEditTextCash.setEnabled(true);
         mEditTextMpesa.setEnabled(false);
+        mEditTextMpesa.setText("");
     }
 
     @OnClick(R.id.chkbx_checked_out_mpesa)
@@ -111,13 +118,18 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
         mCheckBoxMpesa.setChecked(true);
         mEditTextMpesa.setEnabled(true);
         mEditTextCash.setEnabled(false);
+        mEditTextCash.setText("");
     }
 
     @OnClick(R.id.btn_checked_out_ok)
     public void OkButtonClick(){
         //startActivity(ReceiptsDetailActivity.newIntent(getActivity(),orderId));
-            if (mCheckBoxMpesa.isChecked()){
-                mPresenter.makeCall();
+            if (mCheckBoxMpesa.isChecked()) {
+                mPresenter.makeCall(orderId);
+            }else{
+                mPresenter.checkout(orderId);
+                getActivity().finish();
+            }
 //                mPresenter.checkout(orderId);
 //                getActivity().finish();
 //            }else{
@@ -126,7 +138,7 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
             }
 //            startActivity(ReceiptsActivity.newIntent(getActivity()));
 //            getActivity().finish();
-    }
+
 
     @Override
     public String setPaymentMethod() {
@@ -179,5 +191,66 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View 
     @Override
     public void setPresenter(@NonNull CheckOutContract.Presenter presenter) {
         mPresenter = checkNotNull(presenter);
+    }
+
+    @Override
+    public void showDialog1(String message) {
+        mAlertDialog.setTitle("Mpesa Request");
+        mAlertDialog.setMessage(message);
+        mAlertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mPresenter.checkout(orderId);
+                getActivity().finish();
+            }
+        });
+        mAlertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+       mAlertDialog.show();
+    }
+
+    @Override
+    public void showDialog2(String message) {
+
+        mAlertDialog.setTitle("Mpesa Request");
+        mAlertDialog.setMessage(message);
+        mAlertDialog.setPositiveButton("TRY AGAIN", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               dialog.dismiss();
+               mEditTextMpesa.setError("Enter Correct Code");
+            }
+        });
+        mAlertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        mAlertDialog.show();
+    }
+
+    @Override
+    public void showDialog3(String message) {
+
+        mAlertDialog.setTitle("Mpesa Request");
+        mAlertDialog.setMessage(message);
+        mAlertDialog.setPositiveButton("RETRY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mPresenter.makeCall(orderId);
+            }
+        });
+        mAlertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        mAlertDialog.show();
     }
 }

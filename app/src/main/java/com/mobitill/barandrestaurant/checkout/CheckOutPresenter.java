@@ -3,7 +3,6 @@ package com.mobitill.barandrestaurant.checkout;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.checkout.mpesa.request.MpesaTranscodeRequest;
 import com.mobitill.barandrestaurant.checkout.mpesa.request.MpesaTranscodeRequestbody;
@@ -29,6 +28,8 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
 
     private static final String TAG = CheckOutPresenter.class.getSimpleName();
 
+    private talkToFragment mTalkToFragment;
+
     @NonNull CheckOutContract.View mView;
 
     @NonNull
@@ -53,6 +54,7 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
         mRetrofitCounterA = retrofitCounterA;
         mContext = context;
         compositeDisposable = new CompositeDisposable();
+        mTalkToFragment = (talkToFragment)mView;
     }
 
     /**
@@ -92,14 +94,20 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
         }
     }
 
-    public void makeCall(){
+    public interface talkToFragment{
+        void showDialog1(String message);
+        void showDialog2(String message);
+        void showDialog3(String message);
+    }
+
+    public void makeCall(String orderId){
 
         MpesaTranscodeRequest mpesaTranscodeRequest = new MpesaTranscodeRequest();
         mpesaTranscodeRequest.setRequestname("mpesasearch");
         mpesaTranscodeRequest.setRequestId("1");
         mpesaTranscodeRequest.setProductsVersion(1);
 
-        mpesaTranscodeRequest.setRequestbody(new MpesaTranscodeRequestbody(""));
+        mpesaTranscodeRequest.setRequestbody(new MpesaTranscodeRequestbody(mView.setTransactionsId()));
 
         MpesaApiService mpesaApiService = mRetrofitCounterA.create(MpesaApiService.class);
         Call<MpesaResponse> call = mpesaApiService.sendRequest(mpesaTranscodeRequest);
@@ -108,22 +116,20 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
             public void onResponse(Call<MpesaResponse> call, Response<MpesaResponse> response) {
                 if (response.body().getMessage().equals("ok")){
                     Log.d(TAG, "onResponse: " + response.body().getResponse().getMessage());
-                    Toast.makeText(mContext, "Successful", Toast.LENGTH_LONG).show();
+                    mTalkToFragment.showDialog1(response.body().getResponse().getMessage());
                 }else {
 
                     Log.d(TAG, "Error Message: " + response.body().getResponse().getMessage());
-                    Toast.makeText(mContext, "An Error Occured", Toast.LENGTH_LONG).show();
+                    mTalkToFragment.showDialog2(response.body().getResponse().getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<MpesaResponse> call, Throwable t) {
 
-//                Toast.makeText(mContext, , Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onFailure: " +  t.getMessage());
+                mTalkToFragment.showDialog3(t.toString());
             }
         });
     }
-
 
 }

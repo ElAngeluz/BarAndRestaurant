@@ -17,9 +17,34 @@ public class OrderRemoteRequest {
     @SerializedName("requestbody")
     @Expose
     private OrderRemoteRequestbody requestbody;
+
+    @SerializedName("paymentmode")
+    @Expose
+    private String paymentmode;
+
+    @SerializedName("paymentinfo")
+    @Expose
+    private String paymentinfo;
+
     @SerializedName("orderId")
     @Expose
     private Integer orderId;
+
+    public String getPaymentmode() {
+        return paymentmode;
+    }
+
+    public void setPaymentmode(String paymentmode) {
+        this.paymentmode = paymentmode;
+    }
+
+    public String getPaymentinfo() {
+        return paymentinfo;
+    }
+
+    public void setPaymentinfo(String paymentinfo) {
+        this.paymentinfo = paymentinfo;
+    }
 
     public String getRequestId() {
         return requestId;

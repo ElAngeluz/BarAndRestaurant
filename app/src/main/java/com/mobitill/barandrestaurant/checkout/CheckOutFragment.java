@@ -2,6 +2,7 @@ package com.mobitill.barandrestaurant.checkout;
 
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -60,6 +61,7 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View,
     private String mTotal;
     private Unbinder mUnbinder;
     private AlertDialog.Builder mAlertDialog;
+    private ProgressDialog mProgressDialog;
 
     public CheckOutFragment() {
         // Required empty public constructor
@@ -252,5 +254,20 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View,
             }
         });
         mAlertDialog.show();
+    }
+
+    @Override
+    public void showProgressDialog() {
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("Loading. Please Wait...");
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        mProgressDialog.dismiss();
+
     }
 }

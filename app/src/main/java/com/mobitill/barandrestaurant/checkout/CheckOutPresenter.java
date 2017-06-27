@@ -98,10 +98,13 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
         void showDialog1(String message);
         void showDialog2(String message);
         void showDialog3(String message);
+        void showProgressDialog();
+        void hideProgressDialog();
     }
 
     public void makeCall(String orderId){
 
+       mTalkToFragment.showProgressDialog();
         MpesaTranscodeRequest mpesaTranscodeRequest = new MpesaTranscodeRequest();
         mpesaTranscodeRequest.setRequestname("mpesasearch");
         mpesaTranscodeRequest.setRequestId("1");
@@ -115,10 +118,13 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
             @Override
             public void onResponse(Call<MpesaResponse> call, Response<MpesaResponse> response) {
                 if (response.body().getMessage().equals("ok")){
+                    mTalkToFragment.hideProgressDialog();
+
                     Log.d(TAG, "onResponse: " + response.body().getResponse().getMessage());
                     mTalkToFragment.showDialog1(response.body().getResponse().getMessage());
                 }else {
 
+                    mTalkToFragment.hideProgressDialog();
                     Log.d(TAG, "Error Message: " + response.body().getResponse().getMessage());
                     mTalkToFragment.showDialog2(response.body().getResponse().getMessage());
                 }
@@ -127,7 +133,8 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
             @Override
             public void onFailure(Call<MpesaResponse> call, Throwable t) {
 
-                mTalkToFragment.showDialog3(t.toString());
+                mTalkToFragment.hideProgressDialog();
+                mTalkToFragment.showDialog3(t.getMessage());
             }
         });
     }

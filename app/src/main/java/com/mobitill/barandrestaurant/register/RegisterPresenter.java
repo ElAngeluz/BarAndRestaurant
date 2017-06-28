@@ -133,6 +133,8 @@ public class RegisterPresenter implements RegisterContract.Presenter {
 
     @Override
     public void createOrder(Product product) {
+
+        Log.d(TAG, "Category: " + product.getCategory());
         OrderItem orderItem = null;
         if (mOrder == null) {
             Preference<String> waiterIdPreference = mRxSharedPreferences.getString(mContext.getString(R.string.key_waiter_id));
@@ -141,11 +143,13 @@ public class RegisterPresenter implements RegisterContract.Presenter {
             mOrder.setWaiterId(waiterId);
             mOrder.setCheckedOut(0);
             mOrder.setSynced(0);
+//            mOrder.setCategory(product.getCategory());
             mOrderRepository.save(mOrder);
             //TODO add field price to constructor
-            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0, product.getName(),product.getPrice());
+            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0, product.getName(),product.getPrice(),product.getCategory());
+
         } else {
-            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0, product.getName(),product.getPrice());
+            orderItem = new OrderItem(product.getId(), mOrder.getEntryId(), "counter", 0, 0, product.getName(),product.getPrice(),product.getCategory());
         }
 
         if (mOrderItemRepository.save(orderItem) != null) {
@@ -186,7 +190,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
 
     @Override
     public void addOrderItem(OrderItem orderItem) {
-        OrderItem orderItemToSave = new OrderItem(orderItem.getProductId(), orderItem.getOrderId(), orderItem.getCounter(), 0, 0, orderItem.getProductName(),orderItem.getProductPrice());
+        OrderItem orderItemToSave = new OrderItem(orderItem.getProductId(), orderItem.getOrderId(), orderItem.getCounter(), 0, 0, orderItem.getProductName(),orderItem.getProductPrice(),orderItem.getCategory());
         if (mOrderItemRepository.save(orderItemToSave) != null) {
             mView.showOrderItemCreated(mOrder);
         }

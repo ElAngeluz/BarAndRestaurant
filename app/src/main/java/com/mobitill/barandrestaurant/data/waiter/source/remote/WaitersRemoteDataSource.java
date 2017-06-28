@@ -5,11 +5,13 @@ import android.support.annotation.NonNull;
 import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.mobitill.barandrestaurant.data.ApiEndpointInterface;
 import com.mobitill.barandrestaurant.data.DataUtils;
+import com.mobitill.barandrestaurant.data.updatedwaiter.response.Cashier;
 import com.mobitill.barandrestaurant.data.waiter.WaitersDataSource;
 import com.mobitill.barandrestaurant.data.waiter.waitermodels.response.Waiter;
 import com.mobitill.barandrestaurant.utils.Constants;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -47,12 +49,28 @@ public class WaitersRemoteDataSource implements WaitersDataSource{
     public Observable<List<Waiter>> getAll() {
         ApiEndpointInterface apiEndpointInterface  = mRetrofit.create(ApiEndpointInterface.class);
         return apiEndpointInterface
-                .getWaiters(DataUtils.getRequest())
+//                .getWaiters(DataUtils.getRequest())
+                .getWaiters(DataUtils.makeWaitersRequest())
                 .subscribeOn(mScheduleProvider.io())
                 .observeOn(mScheduleProvider.ui())
                 .flatMap(waiterResponse -> {
-                    List<Waiter> waiters = waiterResponse.getData();
-                    return Observable.fromArray(waiters.toArray(new Waiter[waiters.size()])).toList().toObservable();
+//                    List<Waiter> waiters = waiterResponse.getData();
+                    List<Cashier> cashiers = waiterResponse.getData().getOrganization().getCashiers();
+                    List<Waiter> ListOfwaiters = new ArrayList<>();
+                    for (Cashier cashier: cashiers) {
+                        if (cashier.getRoles() != null ? cashier.getRoles().contains("waiter"): false){
+                            Waiter waiter = new Waiter();
+                            waiter.setId(cashier.getId());
+                            waiter.setName(cashier.getName());
+                            waiter.setPin(cashier.getPassword());
+                            ListOfwaiters.add(waiter);
+                        }
+
+                    }
+
+//                    return Observable.fromArray(waiters.toArray(new Waiter[waiters.size()])).toList().toObservable();
+                    return Observable.fromArray(ListOfwaiters.toArray(new Waiter[ListOfwaiters.size()])).toList().toObservable();
+
                 });
     }
 

@@ -48,7 +48,9 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
             OrderItemEntry.COLUMN_NAME_CHECKED_OUT,
             OrderItemEntry.COLUMN_NAME_PRODUCT_NAME,
             OrderItemEntry.COLUMN_NAME_PRODUCT_PRICE,
-            OrderItemEntry.COLUMN_NAME_TIME_STAMP
+            OrderItemEntry.COLUMN_NAME_TIME_STAMP,
+            OrderItemEntry.COLUMN_NAME_CATEGORY
+
     };
 
     @Inject
@@ -66,8 +68,9 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         Integer checkedOut = c.getInt(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_CHECKED_OUT));
         String productName = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_PRODUCT_NAME));
         String productPrice = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_PRODUCT_PRICE));
+        String category = c.getString(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_CATEGORY));
         Long timestamp = c.getLong(c.getColumnIndexOrThrow(OrderItemEntry.COLUMN_NAME_TIME_STAMP));
-        return new OrderItem(entryId,productId, orderId, counter, synced, checkedOut, productName,productPrice, timestamp);
+        return new OrderItem(entryId,productId, orderId, counter, synced, checkedOut, productName,productPrice, timestamp,category);
     }
 
 
@@ -106,7 +109,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
         contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_NAME, item.getProductName());
         contentValues.put(OrderItemEntry.COLUMN_NAME_PRODUCT_PRICE, item.getProductPrice());
         contentValues.put(OrderItemEntry.COLUMN_NAME_TIME_STAMP, item.getTimeStamp());
-
+        contentValues.put(OrderItemEntry.COLUMN_NAME_CATEGORY, item.getCategory());
         long rowId = databaseHelper.insert(OrderItemEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }
@@ -135,6 +138,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 //        contentValues.put(OrderItemEntry.COLUMN_NAME_COUNTER, item.getCounter());
 //        contentValues.put(OrderItemEntry.COLUMN_NAME_SYNCED, item.getSynced());
 //        contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
+//        contentValues.put(OrderItemEntry.COLUMN_NAME_CATEGORY, item.getCategory());
 //        String selection = OrderItemEntry.COLUMN_NAME_ID + "LIKE ?";
 //        String[] selectionArgs = {item.getOrderId()};
 //        return databaseHelper.update(OrderItemEntry.TABLE_NAME, contentValues, selection, selectionArgs);

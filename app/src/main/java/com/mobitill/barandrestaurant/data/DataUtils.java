@@ -3,6 +3,8 @@ package com.mobitill.barandrestaurant.data;
 import com.mobitill.barandrestaurant.data.request.Fetch;
 import com.mobitill.barandrestaurant.data.request.Params;
 import com.mobitill.barandrestaurant.data.request.Request;
+import com.mobitill.barandrestaurant.data.updatedproducts.request.ProductsRequestModel;
+import com.mobitill.barandrestaurant.data.updatedwaiter.request.WaitersRequestModel;
 
 /**
  * Created by james on 5/12/2017.
@@ -20,5 +22,17 @@ public class DataUtils {
         return request;
     }
 
+    public static WaitersRequestModel makeWaitersRequest(){
 
+        WaitersRequestModel waitersRequestModel = new WaitersRequestModel();
+        waitersRequestModel.setQuery("query { organization (id:\"800199888779522\") {cashiers{id,name,phone,roles,password}} }");
+        return waitersRequestModel;
+    }
+
+    public static ProductsRequestModel makeProductsRequest(){
+
+        ProductsRequestModel productsRequestModel = new ProductsRequestModel();
+        productsRequestModel.setQuery("query { organization (id:\"800199888779522\") {products{id,sku,description,price,category}} }");
+        return productsRequestModel;
+    }
 }

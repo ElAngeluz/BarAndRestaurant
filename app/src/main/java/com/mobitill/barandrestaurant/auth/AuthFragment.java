@@ -102,72 +102,73 @@ public class AuthFragment extends Fragment implements AuthContract.View {
 
     @OnClick(R.id._0)
     public void onClick_0(Button button){
-        if(mPasswordEditText.getText().toString().length()!=3){
+//        if(mPasswordEditText.getText().toString().length()!=3){
             mPasswordEditText.setText(mPasswordEditText.getText().append(getString(R.string._0)));
-        }
+
+//        }
     }
 
     @OnClick(R.id._1)
     public void onClick_1(Button button){
-        if(mPasswordEditText.getText().toString().length()!=3){
+//        if(mPasswordEditText.getText().toString().length()!=3){
             mPasswordEditText.setText(mPasswordEditText.getText().append(getString(R.string._1)));
-        }
+//        }
     }
 
     @OnClick(R.id._2)
     public void onClick_2(Button button){
-        if(mPasswordEditText.getText().toString().length()!=3){
+//        if(mPasswordEditText.getText().toString().length()!=3){
             mPasswordEditText.setText(mPasswordEditText.getText().append(getString(R.string._2)));
-        }
+//        }
     }
 
     @OnClick(R.id._3)
     public void onClick_3(Button button){
-        if(mPasswordEditText.getText().toString().length()!=3){
+//        if(mPasswordEditText.getText().toString().length()!=3){
             mPasswordEditText.setText(mPasswordEditText.getText().append(getString(R.string._3)));
-        }
+//        }
     }
 
     @OnClick(R.id._4)
     public void onClick_4(Button button){
-        if(mPasswordEditText.getText().toString().length()!=3){
+//        if(mPasswordEditText.getText().toString().length()!=3){
             mPasswordEditText.setText(mPasswordEditText.getText().append(getString(R.string._4)));
-        }
+//        }
     }
 
     @OnClick(R.id._5)
     public void onClick_5(Button button){
-        if(mPasswordEditText.getText().toString().length()!=3){
+//        if(mPasswordEditText.getText().toString().length()!=3){
             mPasswordEditText.setText(mPasswordEditText.getText().append(getString(R.string._5)));
-        }
+//        }
     }
 
     @OnClick(R.id._6)
     public void onClick_6(Button button){
-        if(mPasswordEditText.getText().toString().length()!=3){
+//        if(mPasswordEditText.getText().toString().length()!=3){
             mPasswordEditText.setText(mPasswordEditText.getText().append(getString(R.string._6)));
-        }
+//        }
     }
 
     @OnClick(R.id._7)
     public void onClick_7(Button button){
-        if(mPasswordEditText.getText().toString().length()!=3){
+//        if(mPasswordEditText.getText().toString().length()!=3){
             mPasswordEditText.setText(mPasswordEditText.getText().append(getString(R.string._7)));
-        }
+//        }
     }
 
     @OnClick(R.id._8)
     public void onClick_8(Button button){
-        if(mPasswordEditText.getText().toString().length()!=3){
+//        if(mPasswordEditText.getText().toString().length()!=3){
             mPasswordEditText.setText(mPasswordEditText.getText().append(getString(R.string._8)));
-        }
+//        }
     }
 
     @OnClick(R.id._9)
     public void onClick_9(Button button){
-        if(mPasswordEditText.getText().toString().length()!=3){
+//        if(mPasswordEditText.getText().toString().length()!=3){
             mPasswordEditText.setText(mPasswordEditText.getText().append(getString(R.string._9)));
-        }
+//        }
     }
 
     @OnClick(R.id.submit)

@@ -14,7 +14,9 @@ public class Constants {
     }
 
     public static final class BaseUrl{
-        public static final String MOBITILL = "http://api.mobitill.com/v1/";
+//        public static final String MOBITILL = "http://api.mobitill.com/v1/";
+
+        public static final String MOBITILL = "http://foods.mobitill.com:9000/v1/";
         public static final String COUNTERA = "http://192.168.0.51:8080/";
         public static final String COUNTERB = "http://192.168.0.52:8080/";
     }

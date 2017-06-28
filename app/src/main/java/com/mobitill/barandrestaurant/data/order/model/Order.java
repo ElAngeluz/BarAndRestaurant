@@ -50,6 +50,15 @@ public class Order {
 
     private String transactionId;
 
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public Order() {
         this.entryId = String.valueOf(generateUniqueId());

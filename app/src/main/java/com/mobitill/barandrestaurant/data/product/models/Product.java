@@ -27,16 +27,27 @@ public class Product implements Parcelable {
     @Expose
     private String vat;
 
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public Product() {
     }
 
-    public Product(String id, String barcode,  String identifier, String name, String price, String vat) {
+    public Product(String id, String barcode,  String identifier, String name, String price, String vat,String category) {
         this.barcode = barcode;
         this.id = id;
         this.identifier = identifier;
         this.name = name;
         this.price = price;
         this.vat = vat;
+        this.category = category;
     }
 
     public String getBarcode() {

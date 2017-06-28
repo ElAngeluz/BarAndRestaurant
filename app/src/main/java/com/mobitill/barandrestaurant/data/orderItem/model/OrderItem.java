@@ -39,7 +39,17 @@ public class OrderItem {
 
     private String productName;
 
-//    Refactored
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    //    Refactored
     private String productPrice;
 
     private Long timeStamp;
@@ -48,11 +58,11 @@ public class OrderItem {
         this.id = UUID.randomUUID().toString();
     }
 
-    public OrderItem(String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName, String productPrice) {
-        this(UUID.randomUUID().toString(), productId, orderId, counter, synced, checkedOut, productName,productPrice, new Date().getTime());
+    public OrderItem(String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName, String productPrice,String category) {
+        this(UUID.randomUUID().toString(), productId, orderId, counter, synced, checkedOut, productName,productPrice, new Date().getTime(),category);
     }
 
-    public OrderItem(String id, String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName,String productPrice, Long timeStamp) {
+    public OrderItem(String id, String productId, String orderId, String counter, Integer synced, Integer checkedOut, String productName,String productPrice, Long timeStamp,String category) {
         this.id = id;
         this.productId = productId;
         this.orderId = orderId;
@@ -62,6 +72,7 @@ public class OrderItem {
         this.productName = productName;
         this.productPrice = productPrice;
         this.timeStamp = timeStamp;
+        this.category = category;
     }
 
     @NonNull

@@ -78,8 +78,8 @@ public class ApplicationModule {
                                         EncryptionInterceptor encryptionInterceptor,
                                         EncryptionResponseInterceptor encryptionResponseInterceptor){
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10,TimeUnit.SECONDS)
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(120,TimeUnit.SECONDS)
                 .addInterceptor(encryptionInterceptor)
                 .addInterceptor(encryptionResponseInterceptor)
                 .addInterceptor(httpLoggingInterceptor)

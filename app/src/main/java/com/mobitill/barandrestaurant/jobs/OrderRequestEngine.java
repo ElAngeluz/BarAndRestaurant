@@ -27,8 +27,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.inject.Inject;
 
-import io.reactivex.functions.Function;
-
 /**
  * Created by james on 5/26/2017.
  */
@@ -133,6 +131,7 @@ public class OrderRequestEngine  {
                                         orderRemoteItem.setQuantity(entry.getValue().size());
                                         orderRemoteItem.setName(entry.getValue().peek().getProductName());
                                         orderRemoteItem.setId(entry.getValue().peek().getProductId());
+                                        orderRemoteItem.setCategory(entry.getValue().peek().getCategory());
                                         orderRemoteItems.add(orderRemoteItem);
                                     });
                         }
@@ -150,6 +149,7 @@ public class OrderRequestEngine  {
         orderRemoteRequest.setRequestbody(orderRemoteRequestbody);
         orderRemoteRequest.setRequestId("181");
         orderRemoteRequest.setRequestname("orderrequest");
+//        orderRemoteRequest.setCategory();
         return orderRemoteRequest;
     }
 

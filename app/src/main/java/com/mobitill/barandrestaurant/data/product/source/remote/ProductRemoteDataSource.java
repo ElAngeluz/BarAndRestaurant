@@ -2,15 +2,19 @@ package com.mobitill.barandrestaurant.data.product.source.remote;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.mobitill.barandrestaurant.data.ApiEndpointInterface;
 import com.mobitill.barandrestaurant.data.DataUtils;
 import com.mobitill.barandrestaurant.data.product.ProductDataSource;
 import com.mobitill.barandrestaurant.data.product.models.Product;
+import com.mobitill.barandrestaurant.data.updatedproducts.response.NewProduct;
+import com.mobitill.barandrestaurant.data.updatedproducts.response.ProductsResponseModel;
 import com.mobitill.barandrestaurant.utils.Constants;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -68,15 +72,34 @@ public class ProductRemoteDataSource implements ProductDataSource {
     public Observable<List<Product>> getAll() {
         ApiEndpointInterface apiEndpointInterface = mMobitillRetrofit.create(ApiEndpointInterface.class);
         return apiEndpointInterface
-                .getProducts(DataUtils.getRequest())
+//                .getProducts(DataUtils.getRequest())
+                .getProducts(DataUtils.makeProductsRequest())
                 .subscribeOn(mScheduleProvider.io())
                 .observeOn(mScheduleProvider.ui())
 //                .doOnNext(response -> mRxSharedPreferences
 //                        .getInteger(mContext.getString(R.string.key_products_version))
 //                        .set(response.getProductsVersion()))
-                .flatMap(productResponse -> {
-                    List<Product> products = productResponse.getData();
-                    return Observable.fromArray(products.toArray(new Product[products.size()])).toList().toObservable();
+                .flatMap((ProductsResponseModel productResponse) -> {
+                    List<NewProduct> products = productResponse.getData().getOrganization().getProducts();
+                    List<Product> ListOfProducts = new ArrayList<>();
+                    for (NewProduct item: products) {
+                        Product p = new Product();
+                        p.setBarcode("");
+                        p.setId(item.getId());
+                        p.setIdentifier(String.valueOf(item.getSku()));
+                        p.setName(item.getDescription());
+                        p.setPrice(String.valueOf(item.getPrice()));
+                        p.setVat(" ");
+                        p.setCategory(item.getCategory());
+                        Log.d(TAG, "getAll: " + item.getCategory());
+
+                        /*TODO SET VAT & CATEGORY*/
+
+                        ListOfProducts.add(p);
+
+                    }
+//                    return Observable.fromArray(products.toArray(new Product[products.size()])).toList().toObservable();
+                    return Observable.fromArray(ListOfProducts.toArray(new Product[ListOfProducts.size()])).toList().toObservable();
                 });
     }
 

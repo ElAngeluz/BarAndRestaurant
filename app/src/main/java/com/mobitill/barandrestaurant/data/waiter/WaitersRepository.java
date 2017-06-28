@@ -196,7 +196,7 @@ public class WaitersRepository implements WaitersDataSource {
 
     @Override
     public Observable<Waiter> getWaiterFromPin(String pin) {
-        checkNotNull(pin);
+//        checkNotNull(pin);
 
         final Waiter cachedWaiter = getWaiterWithPin(pin);
 

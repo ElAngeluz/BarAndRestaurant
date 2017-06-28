@@ -43,7 +43,8 @@ public class ProductLocalDataSource implements ProductDataSource {
             ProductEntry.COLUMN_NAME_IDENTIFIER,
             ProductEntry.COLUMN_NAME_PRICE,
             ProductEntry.COLUMN_NAME_VAT,
-            ProductEntry.COLUMN_NAME_BARCODE
+            ProductEntry.COLUMN_NAME_BARCODE,
+            ProductEntry.COLUMN_NAME_CATEGORY
     };
 
     @Inject
@@ -59,7 +60,8 @@ public class ProductLocalDataSource implements ProductDataSource {
         String name = c.getString(c.getColumnIndexOrThrow(ProductEntry.COLUMN_NAME_PRODUCT_NAME));
         String price = c.getString(c.getColumnIndexOrThrow(ProductEntry.COLUMN_NAME_PRICE));
         String vat = c.getString(c.getColumnIndexOrThrow(ProductEntry.COLUMN_NAME_VAT));
-        return new Product(id, barcode, identifier, name, price, vat);
+        String category = c.getString(c.getColumnIndexOrThrow(ProductEntry.COLUMN_NAME_CATEGORY));
+        return new Product(id, barcode, identifier, name, price, vat,category);
     }
 
     @Override
@@ -93,6 +95,7 @@ public class ProductLocalDataSource implements ProductDataSource {
         contentValues.put(ProductEntry.COLUMN_NAME_PRICE, item.getPrice());
         contentValues.put(ProductEntry.COLUMN_NAME_VAT, item.getVat());
         contentValues.put(ProductEntry.COLUMN_NAME_PRODUCT_NAME, item.getName());
+        contentValues.put(ProductEntry.COLUMN_NAME_CATEGORY, item.getCategory());
         Long rowId = mDatabaseHelper.insert(ProductEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }
@@ -116,6 +119,7 @@ public class ProductLocalDataSource implements ProductDataSource {
         contentValues.put(ProductEntry.COLUMN_NAME_PRICE, item.getPrice());
         contentValues.put(ProductEntry.COLUMN_NAME_VAT, item.getVat());
         contentValues.put(ProductEntry.COLUMN_NAME_PRODUCT_NAME, item.getName());
+        contentValues.put(ProductEntry.COLUMN_NAME_CATEGORY, item.getCategory());
         String selection = ProductEntry.COLUMN_NAME_ID + "LIKE ?";
         String[] selectionArgs = {item.getId()};
         return mDatabaseHelper.update(ProductEntry.TABLE_NAME, contentValues, selection, selectionArgs);

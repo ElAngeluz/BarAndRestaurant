@@ -103,7 +103,7 @@ class RegisterAdapter(val activity: Activity,  val mComparator: Comparator<Produ
                 .filterNot { products.contains(it) }
                 .forEach { mSortedList.remove(it) }
 
-       // products.forEach { product:Product -> add(product) }
+       // products.forEach { product:NewProduct -> add(product) }
         products.forEach { product:Product -> Log.i(TAG, "replaceAll: " + product.name) }
         mSortedList.addAll(products)
         mSortedList.endBatchedUpdates()

@@ -42,16 +42,21 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
     private final Retrofit mRetrofitCounterA;
 
     @NonNull
+    private final Retrofit mRetrofitCounterB;
+
+    @NonNull
     Context mContext;
 
     @Inject
     CheckOutPresenter(@NonNull CheckOutContract.View view,
                       @NonNull OrderRepository orderRepository,
                       @NonNull @Named(Constants.RetrofitSource.COUNTERA) Retrofit retrofitCounterA,
+                      @NonNull @Named(Constants.RetrofitSource.COUNTERB) Retrofit retrofitCounterB,
                       @NonNull Context context){
         mView = view;
         mOrderRepository = orderRepository;
         mRetrofitCounterA = retrofitCounterA;
+        mRetrofitCounterB = retrofitCounterB;
         mContext = context;
         compositeDisposable = new CompositeDisposable();
         mTalkToFragment = (talkToFragment)mView;
@@ -134,9 +139,11 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
             public void onFailure(Call<MpesaResponse> call, Throwable t) {
 
                 mTalkToFragment.hideProgressDialog();
-                mTalkToFragment.showDialog3(t.getMessage());
+                mTalkToFragment.showDialog3("Connection Failed");
             }
         });
     }
+
+
 
 }

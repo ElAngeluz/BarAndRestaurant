@@ -17,7 +17,6 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -102,6 +101,7 @@ public class AuthPresenter implements AuthContract.Presenter {
                     if(waiter.getPin() != null && waiter.getPin().equals(s)){
                         Preference<String> waiterId = mRxSharedPreferences.getString(mContext.getString(R.string.key_waiter_id));
                         waiterId.set(waiter.getId());
+
                         mView.showPlaceOrderActivity();
                     } else {
                         mView.showLoginFailed();

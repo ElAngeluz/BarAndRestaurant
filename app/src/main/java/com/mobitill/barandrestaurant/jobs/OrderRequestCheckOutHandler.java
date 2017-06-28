@@ -73,6 +73,8 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                     case ORDER_REQUEST:
                         OrderRemoteRequest orderRemoteRequest =(OrderRemoteRequest) msg.obj;
                         handleRequest(orderRemoteRequest);
+                        //TODO handler request2
+                        handleRequest2(orderRemoteRequest);
                         break;
                     case CHECK_REQUEST:
                          OrderRemoteRequest orderRemoteRequest1 =(OrderRemoteRequest) msg.obj;
@@ -117,6 +119,41 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
         mOrderItemRepository
                 .orderRequest(orderRemoteRequest,
                         Constants.RetrofitSource.COUNTERA)
+                .subscribeOn(mScheduleProvider.computation())
+                .subscribe(orderRemoteResponse -> {
+                    if (orderRemoteResponse.getMessage().equals("ok")) {
+                        mOrderItemRepository
+                                .getOrderItemWithOrderId(String.valueOf(orderRemoteRequest.getOrderId()))
+                                .subscribe(orderItems -> {
+                                    for (OrderItem orderItem : orderItems) {
+                                        orderItem.setSynced(1);
+                                        mOrderItemRepository.update(orderItem);
+                                    }
+                                    mOrderRepository.getOne(String.valueOf(orderRemoteResponse.getOrderId()))
+                                            .subscribe(order -> {
+                                                order.setSynced(1);
+                                                Log.i(TAG, "handleRequest: ");
+                                                int updated = mOrderRepository.update(order);
+                                                if (updated > -1) {
+//                                                    force the next order not synced to be processed
+                                                    OrderRequestJob.scheduleJob();
+                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sent Successfully ");
+                                                } else {
+                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sending failed");
+                                                }
+                                            });
+                                });
+                    } else {
+                        Log.d(" Order Remote Request", "catch exceptions");
+                    }
+                });
+
+    }
+
+    private void handleRequest2(final OrderRemoteRequest orderRemoteRequest){
+        mOrderItemRepository
+                .orderRequest(orderRemoteRequest,
+                        Constants.RetrofitSource.COUNTERB)
                 .subscribeOn(mScheduleProvider.computation())
                 .subscribe(orderRemoteResponse -> {
                     if (orderRemoteResponse.getMessage().equals("ok")) {

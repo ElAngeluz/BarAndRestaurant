@@ -30,5 +30,6 @@ public final class OrderItemPersistenceContract {
         public static final String COLUMN_NAME_PRODUCT_NAME = "product_name";
         public static final String COLUMN_NAME_PRODUCT_PRICE = "product_price";
         public static final String COLUMN_NAME_TIME_STAMP = "time_stamp";
+        public static final String COLUMN_NAME_CATEGORY = "category";
     }
 }

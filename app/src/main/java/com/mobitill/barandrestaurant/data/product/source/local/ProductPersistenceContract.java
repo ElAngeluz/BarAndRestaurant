@@ -20,5 +20,6 @@ public final class ProductPersistenceContract {
         public static final String COLUMN_NAME_PRODUCT_NAME = "name";
         public static final String COLUMN_NAME_PRICE = "price";
         public static final String COLUMN_NAME_VAT = "vat";
+        public static final String COLUMN_NAME_CATEGORY = "category";
     }
 }

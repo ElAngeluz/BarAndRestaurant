@@ -36,7 +36,7 @@ public class EncryptionInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        Response response = chain.proceed(request);
+//        Response response = chain.proceed(request);
         RequestBody oldBody = request.body();
         Buffer buffer = new Buffer();
         oldBody.writeTo(buffer);
@@ -53,19 +53,22 @@ public class EncryptionInterceptor implements Interceptor {
         } catch (Exception e) {
             Log.d("NetworkThrows Exception", " Failed to connect ");
             Log.d("Intercept Old body", strOldBody);
-            try {
+            throw new  IOException(e.getMessage());
+//            try {
 //                Gson gson = new GsonBuilder().create();
 //                OrderRemoteRequest orderRemoteRequest = gson.fromJson(strOldBody, OrderRemoteRequest.class);
 //                mOrderLocalDataSource.updateProcessState(String.valueOf(orderRemoteRequest.getOrderId()),0);
-            } catch (Exception ex) {
-
-                ex.printStackTrace();
-            }
+//            } catch (Exception ex) {
+//                e.printStackTrace();
+//                Log.d("NetworkThrows Exception", e.getMessage());
+//                throw new  IOException(e.getMessage());
+//            }
 
             //mOrder.getEntryId();
 //            e.printStackTrace();
         }
-        return response;
+//        return response;
+//        return null;
     }
 
 }

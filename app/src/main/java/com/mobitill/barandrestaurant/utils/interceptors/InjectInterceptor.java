@@ -15,6 +15,7 @@ public class InjectInterceptor {
 
 
     public void getUpdatedState(String orderId){
+
         mOrderLocalDataSource.updateProcessState("empty",0);
     }
 }

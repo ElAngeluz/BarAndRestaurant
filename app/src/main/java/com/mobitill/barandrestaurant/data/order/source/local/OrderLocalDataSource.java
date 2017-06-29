@@ -209,6 +209,7 @@ public class OrderLocalDataSource implements OrderDataSource {
 //        cursor.close();
 
     }
+
     public int getProcessState(String entryId) {
         String selectQuery = " SELECT " + OrderEntry.COLUMN_NAME_PROCESS_STATE + " FROM " + OrderEntry.TABLE_NAME + " WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'", entryId);
         Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
@@ -242,6 +243,10 @@ public class OrderLocalDataSource implements OrderDataSource {
             return 0;
 
         }
+    }
+    public String testFunc(){
+
+        return "working";
     }
 }
 

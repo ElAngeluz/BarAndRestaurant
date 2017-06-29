@@ -121,7 +121,7 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
     }
 
     private void handleRequest(final OrderRemoteRequest orderRemoteRequest){
-        mOrderItemRepository
+         mOrderItemRepository
                 .orderRequest(orderRemoteRequest,
                         Constants.RetrofitSource.COUNTERA)
                 .subscribeOn(mScheduleProvider.computation())
@@ -179,7 +179,7 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
 //                                                    force the next order not synced to be processed
                                                     OrderRequestJob.scheduleJob();
                                                     Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sent Successfully ");
-                                                    Toast.makeText(mContext, "Order sent Successfully", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mContext, "Order " + orderRemoteRequest.getOrderId() + " sent Successfully", Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sending failed");
                                                     Toast.makeText(mContext, "Order not sent", Toast.LENGTH_SHORT).show();

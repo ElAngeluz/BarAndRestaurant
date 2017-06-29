@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -229,7 +230,13 @@ public class OrderItemRepository implements OrderItemDataSource {
         Log.d("order remote request W",orderRemoteRequest.getRequestbody().getWaiter().getName());
         Log.d("order remote request ID",orderRemoteRequest.getOrderId().toString());
         return orderItemRemoteDataSource
-                .orderRequest(orderRemoteRequest, counter);
+                .orderRequest(orderRemoteRequest, counter)
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.d(TAG, "Observable error: " + throwable.getMessage());
+                    }
+                });
     }
 
 }

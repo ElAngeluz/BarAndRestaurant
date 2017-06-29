@@ -2,9 +2,11 @@ package com.mobitill.barandrestaurant.data.orderItem.source.remote;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.mobitill.barandrestaurant.data.ApiEndpointInterface;
+import com.mobitill.barandrestaurant.data.order.source.local.OrderLocalDataSource;
 import com.mobitill.barandrestaurant.data.orderItem.OrderItemDataSource;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
@@ -19,6 +21,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 import retrofit2.Retrofit;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -42,6 +45,9 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
 
     @NonNull
     RxSharedPreferences mRxSharedPreferences;
+
+    @Inject
+    OrderLocalDataSource mOrderLocalDataSource;
 
     @NonNull
     Context mContext;
@@ -107,6 +113,14 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
          return mApiEndpointInterface(counter)
                 .orderRequest(order)
                  .subscribeOn(mScheduleProvider.io())
+                 .doOnError(new Consumer<Throwable>() {
+                     @Override
+                     public void accept(Throwable throwable) throws Exception {
+                         Log.d(TAG, "Observable error: " + throwable.getMessage());
+                         mOrderLocalDataSource.updateSyncState(order.getOrderId().toString(),0);
+                         mOrderLocalDataSource.updateProcessState(order.getOrderId().toString(),0);
+                     }
+                 })
                  .onErrorResumeNext(Observable.empty());
     }
 

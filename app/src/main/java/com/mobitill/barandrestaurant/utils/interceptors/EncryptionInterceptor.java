@@ -62,10 +62,11 @@ public class EncryptionInterceptor implements Interceptor {
                 OrderRemoteRequest orderRemoteRequest = gson.fromJson(strOldBody, OrderRemoteRequest.class);
                 InjectInterceptor injectInterceptor = new InjectInterceptor();
                 int OrderId = orderRemoteRequest.getOrderId();
-                Log.d(TAG, "process state is : " + orderRemoteRequest.getClass());
+//                Log.d(TAG, "process state is : " + orderRemoteRequest.getClass());
                 Log.d(TAG, String.valueOf("mOrderLocalDatasource is it null : " + mOrderLocalDataSource == null));
-                injectInterceptor.getUpdatedState(String.valueOf(OrderId));
-                mOrderLocalDataSource.updateSyncState(String.valueOf(OrderId),0);
+//                mOrderLocalDataSource.testFunc();
+//                injectInterceptor.getUpdatedState(String.valueOf(OrderId));
+//                mOrderLocalDataSource.updateSyncState(String.valueOf(OrderId),0);
 
             } catch (Exception ex) {
                 ex.printStackTrace();

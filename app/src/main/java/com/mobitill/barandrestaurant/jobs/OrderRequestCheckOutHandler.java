@@ -1,9 +1,11 @@
 package com.mobitill.barandrestaurant.jobs;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
@@ -41,6 +43,9 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
     public ProductRepository mProductRepository;
     @Inject
     public BaseScheduleProvider mScheduleProvider;
+//    context needed to show toast
+    @Inject
+    public Context mContext;
 
     public interface OrderCheckOutListener{
         void onOrderCheckedOut();
@@ -137,9 +142,10 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                                 if (updated > -1) {
 //                                                    force the next order not synced to be processed
                                                     OrderRequestJob.scheduleJob();
-                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sent Successfully ");
+                                                    Toast.makeText(mContext, "Order " + orderRemoteRequest.getOrderId() + " sent Successfully", Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sending failed");
+                                                    Toast.makeText(mContext, "Order not sent", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                 });
@@ -173,8 +179,10 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
 //                                                    force the next order not synced to be processed
                                                     OrderRequestJob.scheduleJob();
                                                     Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sent Successfully ");
+                                                    Toast.makeText(mContext, "Order sent Successfully", Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sending failed");
+                                                    Toast.makeText(mContext, "Order not sent", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                 });

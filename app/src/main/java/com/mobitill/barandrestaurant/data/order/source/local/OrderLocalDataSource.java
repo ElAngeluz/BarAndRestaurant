@@ -202,22 +202,43 @@ public class OrderLocalDataSource implements OrderDataSource {
     }
 
     public void updateProcessState(String entryId,int state){
+
         String selectQuery = " UPDATE " + OrderEntry.TABLE_NAME + " set  " + OrderEntry.COLUMN_NAME_PROCESS_STATE + " = "+state+" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
 //        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
         mDatabaseHelper.execute(selectQuery);
 //        cursor.close();
 
     }
-    public int getProcessState(String entryId){
-        String selectQuery = " SELECT "+OrderEntry.COLUMN_NAME_PROCESS_STATE +" FROM "+ OrderEntry.TABLE_NAME +" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
+    public int getProcessState(String entryId) {
+        String selectQuery = " SELECT " + OrderEntry.COLUMN_NAME_PROCESS_STATE + " FROM " + OrderEntry.TABLE_NAME + " WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'", entryId);
+        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        if (cursor.moveToNext()) {
+            int state = cursor.getInt(0);
+            Log.d("orderlocaldatasource", "getProcessState: " + state);
+            return state;
+        } else {
+            Log.d("orderlocaldatasource", "getProcessState: 0");
+            return 0;
+
+        }
+    }
+
+    public void updateSyncState(String entryId,int state){
+        String selectQuery = " UPDATE " + OrderEntry.TABLE_NAME + " set  " + OrderEntry.COLUMN_NAME_SYNCED + " = "+state+" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
+//        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        mDatabaseHelper.execute(selectQuery);
+//        cursor.close();
+
+    }
+    public int getSyncState(String entryId){
+        String selectQuery = " SELECT "+OrderEntry.COLUMN_NAME_SYNCED +" FROM "+ OrderEntry.TABLE_NAME +" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
         Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
         if(cursor.moveToNext()) {
             int state = cursor.getInt(0);
-            Log.d("orderlocaldatasource", "getProcessState: "+state);
+            Log.d("orderlocaldatasource", "getSyncState: "+state);
             return state;
         }else{
-            cursor.close();
-            Log.d("orderlocaldatasource", "getProcessState: 0");
+            Log.d("orderlocaldatasource", "getSyncState: 0");
             return 0;
 
         }

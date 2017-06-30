@@ -179,7 +179,7 @@ public class AuthFragment extends Fragment implements AuthContract.View {
         if (mPhoneNumber == null){
             mPhoneNumber.setError("Phone Number field is Empty");
         }if (mPhoneNumber!=null && mPasswordEditText!=null){
-        mPresenter.performLogin(mPasswordEditText.getText().toString(), mWaiters);
+        mPresenter.performLogin(mPhoneNumber.getText().toString(),mPasswordEditText.getText().toString(), mWaiters);
         mPasswordEditText.setText("");
         mPhoneNumber.setText("");
         }

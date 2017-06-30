@@ -48,8 +48,9 @@ public class WaitersLocalDataSource implements WaitersDataSource {
     private Waiter getWaiter(@NonNull Cursor c) {
         String waiterId = c.getString(c.getColumnIndexOrThrow(WaitersEntry.COLUMN_NAME_ID));
         String name = c.getString(c.getColumnIndexOrThrow(WaitersEntry.COLUMN_NAME_NAME));
-        String pin = c.getString(c.getColumnIndexOrThrow(WaitersEntry.COLUMN_NAME_PIN));
-        return new Waiter(waiterId, name, pin);
+        String phone = c.getString(c.getColumnIndexOrThrow(WaitersEntry.COLUMN_NAME_PHONE));
+        String password = c.getString(c.getColumnIndexOrThrow(WaitersEntry.COLUMN_NAME_PASSWORD));
+        return new Waiter(waiterId, name, phone,password);
     }
 
     @Override
@@ -58,7 +59,8 @@ public class WaitersLocalDataSource implements WaitersDataSource {
         String[] projection = {
                 WaitersEntry.COLUMN_NAME_ID,
                 WaitersEntry.COLUMN_NAME_NAME,
-                WaitersEntry.COLUMN_NAME_PIN
+                WaitersEntry.COLUMN_NAME_PHONE,
+                WaitersEntry.COLUMN_NAME_PASSWORD
         };
 
         String sql = String.format("SELECT %s FROM %s", TextUtils.join(",", projection), WaitersEntry.TABLE_NAME);
@@ -75,7 +77,8 @@ public class WaitersLocalDataSource implements WaitersDataSource {
         String[] projection = {
                 WaitersEntry.COLUMN_NAME_ID,
                 WaitersEntry.COLUMN_NAME_NAME,
-                WaitersEntry.COLUMN_NAME_PIN
+                WaitersEntry.COLUMN_NAME_PHONE,
+                WaitersEntry.COLUMN_NAME_PASSWORD
         };
 
         String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
@@ -94,7 +97,8 @@ public class WaitersLocalDataSource implements WaitersDataSource {
         ContentValues contentValues = new ContentValues();
         contentValues.put(WaitersEntry.COLUMN_NAME_ID, item.getId());
         contentValues.put(WaitersEntry.COLUMN_NAME_NAME, item.getName());
-        contentValues.put(WaitersEntry.COLUMN_NAME_PIN, item.getPin());
+        contentValues.put(WaitersEntry.COLUMN_NAME_PHONE, item.getPhone());
+        contentValues.put(WaitersEntry.COLUMN_NAME_PASSWORD, item.getPassword());
         long rowId = mDatabaseHelper.insert(WaitersEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }
@@ -109,8 +113,10 @@ public class WaitersLocalDataSource implements WaitersDataSource {
     @Override
     public int update(Waiter item) {
         ContentValues values = new ContentValues();
-        values.put(WaitersEntry.COLUMN_NAME_NAME, item.getName());
-        values.put(WaitersEntry.COLUMN_NAME_PIN, item.getPin());
+        values.put(WaitersEntry.COLUMN_NAME_ID, item.getName());
+        values.put(WaitersEntry.COLUMN_NAME_NAME, item.getPhone());
+        values.put(WaitersEntry.COLUMN_NAME_PHONE, item.getPhone());
+        values.put(WaitersEntry.COLUMN_NAME_PASSWORD, item.getPhone());
         String selection = WaitersEntry.COLUMN_NAME_ID + " LIKE?";
         String[] selectionArgs = {item.getId()};
         return mDatabaseHelper.update(WaitersEntry.TABLE_NAME, values, selection, selectionArgs);
@@ -130,18 +136,22 @@ public class WaitersLocalDataSource implements WaitersDataSource {
     }
 
     @Override
-    public Observable<Waiter> getWaiterFromPin(String pin) {
+    public Observable<Waiter> getWaiterFromPhoneAndPassword(String phone,String password) {
         String[] projection = {
                 WaitersEntry.COLUMN_NAME_ID,
                 WaitersEntry.COLUMN_NAME_NAME,
-                WaitersEntry.COLUMN_NAME_PIN
+                WaitersEntry.COLUMN_NAME_PHONE,
+                WaitersEntry.COLUMN_NAME_PASSWORD
         };
 
-        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
-                TextUtils.join(",", projection), WaitersEntry.TABLE_NAME, WaitersEntry.COLUMN_NAME_PIN);
+        String sql = String.format("SELECT %s FROM %s WHERE %s = ? AND %s = ?",
+                TextUtils.join(",", projection), WaitersEntry.TABLE_NAME, WaitersEntry.COLUMN_NAME_PHONE,WaitersEntry.COLUMN_NAME_PASSWORD);
+
         rx.Observable<Waiter> waiterObservableV1 = mDatabaseHelper.createQuery(WaitersEntry.TABLE_NAME,
-                sql, pin).mapToOneOrDefault(mWaiterMapperFunction, new Waiter());
+                sql, phone,password).mapToOneOrDefault(mWaiterMapperFunction, new Waiter());
+
         Observable<Waiter> waiterObservableV2 = RxJavaInterop.toV2Observable(waiterObservableV1);
+
         return waiterObservableV2;
     }
 

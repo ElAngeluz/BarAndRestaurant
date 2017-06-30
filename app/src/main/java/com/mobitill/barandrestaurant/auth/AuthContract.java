@@ -32,7 +32,7 @@ public interface AuthContract {
         void login();
 
 
-        void performLogin(String s, List<Waiter> waiters);
+        void performLogin(String phone,String password, List<Waiter> waiters);
     }
 
 }

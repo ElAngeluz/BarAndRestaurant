@@ -1,6 +1,7 @@
 package com.mobitill.barandrestaurant.data.waiter.source.remote;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.mobitill.barandrestaurant.data.ApiEndpointInterface;
@@ -62,8 +63,12 @@ public class WaitersRemoteDataSource implements WaitersDataSource{
                             Waiter waiter = new Waiter();
                             waiter.setId(cashier.getId());
                             waiter.setName(cashier.getName());
-                            waiter.setPin(cashier.getPassword());
+                            waiter.setPhone(cashier.getPhone());
+                            waiter.setPassword(cashier.getPassword());
+                            Log.d(TAG, "getAll: " + waiter.getPassword());
+                            Log.d(TAG, "getAll: " + waiter.getPhone());
                             ListOfwaiters.add(waiter);
+
                         }
 
                     }
@@ -104,7 +109,7 @@ public class WaitersRemoteDataSource implements WaitersDataSource{
     }
 
     @Override
-    public Observable<Waiter> getWaiterFromPin(String pin) {
+    public Observable<Waiter> getWaiterFromPhoneAndPassword(String phone, String password) {
         return null;
     }
 }

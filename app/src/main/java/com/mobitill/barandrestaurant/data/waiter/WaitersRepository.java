@@ -1,6 +1,7 @@
 package com.mobitill.barandrestaurant.data.waiter;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.Local;
 import com.mobitill.barandrestaurant.data.Remote;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.Nullable;
+import io.reactivex.functions.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -194,49 +196,56 @@ public class WaitersRepository implements WaitersDataSource {
         return null;
     }
 
-    @Override
-    public Observable<Waiter> getWaiterFromPin(String pin) {
-//        checkNotNull(pin);
+    public Observable<Waiter> getWaiterFromPhoneAndPassword(String phone,String password) {
+//        checkNotNull(phone);
 
-        final Waiter cachedWaiter = getWaiterWithPin(pin);
+        final Waiter cachedWaiter = getWaiterWithPhoneAndPassword(phone, password);
 
         if (isWaiterCached(cachedWaiter)) {
             return Observable.just(cachedWaiter);
         }
 
         // Is the waiter in the local data source if no query the network
-        Observable<Waiter> localWaiter = getWaiterWithPinFromLocalRepository(pin);
+        Observable<Waiter> localWaiter = getWaiterWithPhoneAndPasswordFromLocalRepository(phone,password);
+        localWaiter.doOnNext(new Consumer<Waiter>() {
+            @Override
+            public void accept(Waiter waiter) throws Exception {
+                String name = waiter.getName();
+            }
+        });
+
         Observable<Waiter> remoteWaiter = mWaitersRemoteDataSource
                 .getAll()
-                .flatMap(waiters -> Observable
+                .flatMap((List<Waiter> waiters) -> Observable
                         .fromArray(waiters.toArray(new Waiter[waiters.size()]))
-                        .filter(waiter -> waiter.getPin().equals(pin))
+                        .filter(waiter -> waiter.getPhone().equals(phone) && waiter.getPassword().equals(password))
                         .firstElement()
                         .toObservable());
 
         return Observable.concat(localWaiter, remoteWaiter)
                 .firstOrError()
                 .map(waiter -> {
-                    if(waiter.getPin() == null){
-                        throw new NoSuchElementException("No waiter found with Pin " + pin);
+                    if(waiter.getPhone() == null && waiter.getPassword() == null){
+                        throw new NoSuchElementException("No waiter found with Phone Number" + phone);
                     }
                     return waiter;
                 }).toObservable();
     }
 
-    private Observable<Waiter> getWaiterWithPinFromLocalRepository(String pin) {
+    private Observable<Waiter> getWaiterWithPhoneAndPasswordFromLocalRepository(String phone, String password) {
         return mWaitersLocalDataSource
-                .getWaiterFromPin(pin);
+                .getWaiterFromPhoneAndPassword(phone,password);
     }
 
-    private Waiter getWaiterWithPin(@NonNull String pin) {
-        checkNotNull(pin);
-
+    private Waiter getWaiterWithPhoneAndPassword(@NonNull String phone, String password) {
+        checkNotNull(phone);
+        checkNotNull(password);
         if(mCachedWaiters == null || mCachedWaiters.isEmpty()){
             return null;
         } else {
             for(Map.Entry<String, Waiter> entry: mCachedWaiters.entrySet()){
-                if(entry.getValue().getId().equals(pin)){
+                if(entry.getValue().getPhone().equals(phone) && entry.getValue().getPassword().equals(password)){
+                    Log.d(TAG, "getWaiterWithPhoneAndPassword: " + entry.getValue().getPhone() + " " + entry.getValue().getPassword());
                     return entry.getValue();
                 }
             }

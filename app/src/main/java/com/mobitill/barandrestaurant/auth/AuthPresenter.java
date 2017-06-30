@@ -3,6 +3,7 @@ package com.mobitill.barandrestaurant.auth;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
@@ -93,12 +94,14 @@ public class AuthPresenter implements AuthContract.Presenter {
     }
 
     @Override
-    public void performLogin(String s, List<Waiter> waiters) {
-       mWaitersRepository.getWaiterFromPin(s)
+    public void performLogin(String phone,String password, List<Waiter> waiters) {
+       mWaitersRepository.getWaiterFromPhoneAndPassword(phone,password)
         .observeOn(mScheduleProvider.ui())
         .subscribe(
                 waiter -> {
-                    if(waiter.getPin() != null && waiter.getPin().equals(s)){
+                    Toast.makeText(mContext, waiter.getPhone(), Toast.LENGTH_SHORT).show();
+                    if(waiter.getPhone() != null && waiter.getPassword() != null
+                            && waiter.getPhone().equals(phone) && waiter.getPassword().equals(password)){
                         Preference<String> waiterId = mRxSharedPreferences.getString(mContext.getString(R.string.key_waiter_id));
                         waiterId.set(waiter.getId());
 
@@ -109,6 +112,7 @@ public class AuthPresenter implements AuthContract.Presenter {
                 },
                 throwable -> {
                     Log.e(TAG, "performLogin: ", throwable);
+
                     mView.showLoginFailed();
                     //mView.showWaiterLoginError();
                 },

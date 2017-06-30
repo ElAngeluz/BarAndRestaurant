@@ -13,9 +13,21 @@ public class Waiter {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("pin")
+
+//    phone is used as a user's unique identifier LIKE your PIN
+    @SerializedName("phone")
     @Expose
-    private String pin;
+    private String phone;
+
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     final long timestamp;
 
@@ -23,10 +35,12 @@ public class Waiter {
         this.timestamp = System.currentTimeMillis();
     }
 
-    public Waiter(String id, String name, String pin) {
+    public Waiter(String id, String name, String phone,String password) {
         this.id = id;
         this.name = name;
-        this.pin = pin;
+        this.phone = phone;
+        this.password = password;
+
         timestamp = System.currentTimeMillis();
     }
 
@@ -46,12 +60,12 @@ public class Waiter {
         this.name = name;
     }
 
-    public String getPin() {
-        return pin;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPin(String pin) {
-        this.pin = pin;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public boolean isUpToDate(){

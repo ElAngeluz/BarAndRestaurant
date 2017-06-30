@@ -31,7 +31,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     WaitersEntry._ID + INTEGER_TYPE + " PRIMARY KEY," +
                     WaitersEntry.COLUMN_NAME_ID + TEXT_TYPE + " UNIQUE," +
                     WaitersEntry.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
-                    WaitersEntry.COLUMN_NAME_PIN + TEXT_TYPE + " )";
+                    WaitersEntry.COLUMN_NAME_PHONE + TEXT_TYPE + COMMA_SEP +
+                    WaitersEntry.COLUMN_NAME_PASSWORD + TEXT_TYPE + " )";
 
     //NewProduct Table
     private static final String SQL_CREATE_PRODUCT_ENTRIES =

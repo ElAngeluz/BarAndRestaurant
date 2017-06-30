@@ -17,7 +17,8 @@ public final class WaitersPersistenceContract {
         public static final String TABLE_NAME = "waiter";
         public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_NAME = "name";
-        public static final String COLUMN_NAME_PIN = "pin";
+        public static final String COLUMN_NAME_PHONE = "phone";
+        public static final String COLUMN_NAME_PASSWORD = "password";
     }
 
 

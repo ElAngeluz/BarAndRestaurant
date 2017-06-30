@@ -21,10 +21,7 @@ public class EncryptionResponseInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request =  chain.request();
         Response response = chain.proceed(request);
-
         ResponseBody oldBody = response.body();
-
-        //Buffer buffer = new Buffer();
         String strOldBody = oldBody.string();
         MediaType mediaType = oldBody.contentType();
         try {
@@ -34,7 +31,6 @@ public class EncryptionResponseInterceptor implements Interceptor {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return response;
 
     }

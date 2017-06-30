@@ -3,10 +3,7 @@ package com.mobitill.barandrestaurant.utils.interceptors;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.mobitill.barandrestaurant.data.order.source.local.OrderLocalDataSource;
-import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
 
 import java.io.IOException;
 
@@ -39,7 +36,6 @@ public class EncryptionInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-//        Response response = chain.proceed(request);
         RequestBody oldBody = request.body();
         Buffer buffer = new Buffer();
         oldBody.writeTo(buffer);
@@ -56,30 +52,14 @@ public class EncryptionInterceptor implements Interceptor {
         } catch (Exception e) {
             Log.d("NetworkThrows Exception", " Failed to connect ");
             Log.d("Intercept Old body", strOldBody);
-//            throw new  IOException(e.getMessage());
-            try {
-                Gson gson = new GsonBuilder().create();
-                OrderRemoteRequest orderRemoteRequest = gson.fromJson(strOldBody, OrderRemoteRequest.class);
-                InjectInterceptor injectInterceptor = new InjectInterceptor();
-                int OrderId = orderRemoteRequest.getOrderId();
-//                Log.d(TAG, "process state is : " + orderRemoteRequest.getClass());
-                Log.d(TAG, String.valueOf("mOrderLocalDatasource is it null : " + mOrderLocalDataSource == null));
-//                mOrderLocalDataSource.testFunc();
-//                injectInterceptor.getUpdatedState(String.valueOf(OrderId));
-//                mOrderLocalDataSource.updateSyncState(String.valueOf(OrderId),0);
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                Log.d("Serialize Exception", ex.getMessage());
-            }
-
-            //mOrder.getEntryId();
-//            e.printStackTrace();
+//            try {
+//                Gson gson = new GsonBuilder().create();
+//                OrderRemoteRequest orderRemoteRequest = gson.fromJson(strOldBody, OrderRemoteRequest.class);
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
             throw new  IOException(e.getMessage());
         }
-//        return response;
-//        return null;
-
     }
 
 }

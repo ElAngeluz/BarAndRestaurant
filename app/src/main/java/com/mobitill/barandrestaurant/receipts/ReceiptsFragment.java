@@ -123,7 +123,20 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
             if (receiptsOrdersAdapter == null){
 
                 receiptsOrdersAdapter = new ReceiptsOrdersAdapter(orders, getActivity());
+                receiptsOrdersAdapter.AdapterListener(new ReceiptsOrdersAdapter.AdapterCommunication() {
+                    @Override
+                    public void removeOrderFromList(int position) {
+                        orders.remove(position);
+                        receiptsOrdersAdapter.notifyItemRemoved(position);
+                        receiptsOrdersAdapter.notifyItemRangeChanged(position, orders.size()+1);
+                        receiptsOrdersAdapter.notifyDataSetChanged();
+                    }
 
+                    @Override
+                    public void removeFromDB(int position,String orderId) {
+                        mReceiptsPresenter.deleteOrderFromDB(orders.get(position).getEntryId());
+                    }
+                });
                 receiptsRecyclerView.setAdapter(receiptsOrdersAdapter);
             }else {
             }

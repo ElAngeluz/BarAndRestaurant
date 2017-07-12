@@ -128,7 +128,7 @@ public class OrderLocalDataSource implements OrderDataSource {
 
     @Override
     public int delete(String id) {
-        String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + "LIKE ?";
+        String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE ? ";
         String selectionArgs[] = {id};
         return mDatabaseHelper.delete(OrderEntry.TABLE_NAME, selection, selectionArgs);
     }
@@ -243,10 +243,6 @@ public class OrderLocalDataSource implements OrderDataSource {
             return 0;
 
         }
-    }
-    public String testFunc(){
-
-        return "working";
     }
 }
 

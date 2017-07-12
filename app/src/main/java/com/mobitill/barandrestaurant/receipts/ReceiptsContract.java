@@ -3,8 +3,6 @@ package com.mobitill.barandrestaurant.receipts;
 import com.mobitill.barandrestaurant.BasePresenter;
 import com.mobitill.barandrestaurant.BaseView;
 import com.mobitill.barandrestaurant.data.order.model.Order;
-import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
-import com.mobitill.barandrestaurant.data.product.models.Product;
 
 import java.util.List;
 
@@ -32,6 +30,8 @@ public interface ReceiptsContract {
         void isNotCheckedOut();
 
         void getOrders();
+
+        void deleteOrderFromDB(String orderId);
 
     }
 }

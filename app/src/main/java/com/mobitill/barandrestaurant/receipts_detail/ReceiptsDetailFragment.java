@@ -174,7 +174,6 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
             itemsLinearLayout.addView(view);
         }
 
-//        mTotal = String.valueOf(total);
         getTotal();
         mTextViewSumTotal.setText(mTotal);
     }

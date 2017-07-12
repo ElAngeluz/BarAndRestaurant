@@ -94,4 +94,10 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
        compositeDisposable.add(disposable);
 
     }
+
+    @Override
+    public void deleteOrderFromDB(String orderId) {
+     orderRepository.delete(orderId);
+
+    }
 }

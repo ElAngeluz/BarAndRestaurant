@@ -3,6 +3,7 @@ package com.mobitill.barandrestaurant.receipts;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mobitill.barandrestaurant.R;
@@ -24,6 +25,9 @@ public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder implements
     @BindView(R.id.tv_set_checkout)
     TextView mTextViewSetCheckout;
 
+    @BindView(R.id.delete_img)
+    ImageView mImageViewDelete;
+
     private Order mOrder;
     private Context mContext;
 
@@ -34,6 +38,7 @@ public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder implements
         itemView.setOnClickListener(this);
         mContext = context;
     }
+
 
     public void bindView(Order order){
         mOrder = order;
@@ -50,5 +55,6 @@ public class ReceiptsOrdersViewHolder extends RecyclerView.ViewHolder implements
     @Override
     public void onClick(View v) {
        mContext.startActivity(ReceiptsDetailActivity.newIntent(mContext, mOrder.getEntryId().toString()));
+
     }
 }

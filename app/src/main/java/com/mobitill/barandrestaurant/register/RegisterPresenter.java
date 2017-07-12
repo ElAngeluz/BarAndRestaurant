@@ -26,6 +26,7 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -112,13 +113,16 @@ public class RegisterPresenter implements RegisterContract.Presenter {
                 .getAll()
                 .subscribe(
                         //onNext
-                        products -> {
-                            if (products != null && !products.isEmpty()) {
-                                mView.showProducts(products);
-                            } else {
-                                mView.showNoProducts();
-                            }
+                        new Consumer<List<Product>>() {
+                            @Override
+                            public void accept(List<Product> products) throws Exception {
+                                if (products != null && !products.isEmpty()) {
+                                    mView.showProducts(products);
+                                } else {
+                                    mView.showNoProducts();
+                                }
 
+                            }
                         },
                         throwable -> {
                             Log.e(TAG, "getProducts: ", throwable);

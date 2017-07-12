@@ -22,4 +22,6 @@
     <string name="key_products_version">products_version</string>
     <string name="ticket">Ticket</string>
     <string name="request_order">Request Order</string>
+    <string name="Checkout">CheckOutOrder</string>
+    <string name="OrderList">Orders</string>
 </resources>

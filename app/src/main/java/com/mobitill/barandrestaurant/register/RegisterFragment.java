@@ -31,8 +31,6 @@ import com.mobitill.barandrestaurant.jobs.OrderRequestJob;
 import com.mobitill.barandrestaurant.register.adapter.AdapterCallback;
 import com.mobitill.barandrestaurant.register.adapter.RegisterAdapter;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -62,7 +60,9 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
     @Inject
     RegisterPresenter mRegisterPresenter;
 
+//This enables us to talk to the presenter through an interface
     private RegisterContract.Presenter mPresenter;
+
     private Unbinder mUnbinder;
 
     @BindView(R.id.productsRecyclerView)
@@ -114,7 +114,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
 
     @OnClick(R.id.button_request)
     public void completeOrderRequest(View view){
-        Toast.makeText(getContext(), "Order Request", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Request Sent!!", Toast.LENGTH_SHORT).show();
         mPresenter.completeOrderRequest();
     }
     @Override

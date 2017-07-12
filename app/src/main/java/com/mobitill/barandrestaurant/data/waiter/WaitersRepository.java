@@ -1,7 +1,6 @@
 package com.mobitill.barandrestaurant.data.waiter;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.Local;
 import com.mobitill.barandrestaurant.data.Remote;
@@ -18,7 +17,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.Nullable;
-import io.reactivex.functions.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -207,13 +205,6 @@ public class WaitersRepository implements WaitersDataSource {
 
         // Is the waiter in the local data source if no query the network
         Observable<Waiter> localWaiter = getWaiterWithPhoneAndPasswordFromLocalRepository(phone,password);
-        localWaiter.doOnNext(new Consumer<Waiter>() {
-            @Override
-            public void accept(Waiter waiter) throws Exception {
-                String name = waiter.getName();
-            }
-        });
-
         Observable<Waiter> remoteWaiter = mWaitersRemoteDataSource
                 .getAll()
                 .flatMap((List<Waiter> waiters) -> Observable
@@ -245,7 +236,6 @@ public class WaitersRepository implements WaitersDataSource {
         } else {
             for(Map.Entry<String, Waiter> entry: mCachedWaiters.entrySet()){
                 if(entry.getValue().getPhone().equals(phone) && entry.getValue().getPassword().equals(password)){
-                    Log.d(TAG, "getWaiterWithPhoneAndPassword: " + entry.getValue().getPhone() + " " + entry.getValue().getPassword());
                     return entry.getValue();
                 }
             }

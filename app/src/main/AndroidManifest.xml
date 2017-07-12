@@ -7,9 +7,9 @@
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/launcher_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/launcher_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -26,8 +26,12 @@
         <activity
             android:name=".receipts_detail.ReceiptsDetailActivity"
             android:parentActivityName=".receipts.ReceiptsActivity" />
-        <activity android:name=".receipts.ReceiptsActivity" />
-        <activity android:name=".checkout.CheckOutActivity"></activity>
+        <activity
+            android:label="@string/OrderList"
+            android:name=".receipts.ReceiptsActivity" />
+        <activity
+            android:label="@string/Checkout"
+            android:name=".checkout.CheckOutActivity"></activity>
     </application>
 
 </manifest>

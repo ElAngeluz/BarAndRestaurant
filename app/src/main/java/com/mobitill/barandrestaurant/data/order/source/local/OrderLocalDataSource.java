@@ -128,6 +128,7 @@ public class OrderLocalDataSource implements OrderDataSource {
 
     @Override
     public int delete(String id) {
+        Log.d(TAG, "delete: " + id);
         String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE ? ";
         String selectionArgs[] = {id};
         return mDatabaseHelper.delete(OrderEntry.TABLE_NAME, selection, selectionArgs);

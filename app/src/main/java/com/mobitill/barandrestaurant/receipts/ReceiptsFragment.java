@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,13 +129,15 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
                     public void removeOrderFromList(int position) {
                         orders.remove(position);
                         receiptsOrdersAdapter.notifyItemRemoved(position);
-                        receiptsOrdersAdapter.notifyItemRangeChanged(position, orders.size()+1);
+                        receiptsOrdersAdapter.notifyItemRangeChanged(position, orders.size()-1);
                         receiptsOrdersAdapter.notifyDataSetChanged();
                     }
 
                     @Override
-                    public void removeFromDB(int position,String orderId) {
-                        mReceiptsPresenter.deleteOrderFromDB(orders.get(position).getEntryId());
+                    public void removeFromDB(String orderId) {
+                        Log.d(TAG, "position and Id: " + orderId);
+                        mReceiptsPresenter.deleteOrderFromDB(orderId);
+                        Log.d(TAG, "before deleting: " + orderId);
                     }
                 });
                 receiptsRecyclerView.setAdapter(receiptsOrdersAdapter);

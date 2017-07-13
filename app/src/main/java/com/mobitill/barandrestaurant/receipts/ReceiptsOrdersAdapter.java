@@ -2,6 +2,7 @@ package com.mobitill.barandrestaurant.receipts;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,14 @@ public class ReceiptsOrdersAdapter extends RecyclerView.Adapter<ReceiptsOrdersVi
         Order order = orders.get(position);
         holder.bindView(order);
         holder.mImageViewDelete.setOnClickListener(v -> {
+
+            Log.d("onBindViewHolder", "position " + position);
+            String orderId = orders.get(position).getEntryId();
                 removeItem(position);
                 try {
-                    mCommunication.removeFromDB(position,orders.get(position).getEntryId());
+
+                    mCommunication.removeFromDB(orderId);
+                    Log.d("LOG ID", "onBindViewHolder: " +orderId);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(mContext, "Error deleting from Database", Toast.LENGTH_SHORT).show();
@@ -74,6 +80,6 @@ public class ReceiptsOrdersAdapter extends RecyclerView.Adapter<ReceiptsOrdersVi
     }
     public interface AdapterCommunication{
         void removeOrderFromList(int position);
-        void removeFromDB(int position, String orderId);
+        void removeFromDB(String orderId);
     }
 }

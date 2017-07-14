@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -87,7 +86,6 @@ public class OrderLocalDataSource implements OrderDataSource {
     @Override
     public Observable<Order> getOne(String id) {
         checkNotNull(id);
-        Log.i(TAG, "getOne: ");
         String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ?",
                 TextUtils.join(",", projection), OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_ENTRY_ID);
         rx.Observable<Order> orderObservableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME,
@@ -128,7 +126,6 @@ public class OrderLocalDataSource implements OrderDataSource {
 
     @Override
     public int delete(String id) {
-        Log.d(TAG, "delete: " + id);
         String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE ? ";
         String selectionArgs[] = {id};
         return mDatabaseHelper.delete(OrderEntry.TABLE_NAME, selection, selectionArgs);
@@ -216,10 +213,8 @@ public class OrderLocalDataSource implements OrderDataSource {
         Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
         if (cursor.moveToNext()) {
             int state = cursor.getInt(0);
-            Log.d("orderlocaldatasource", "getProcessState: " + state);
             return state;
         } else {
-            Log.d("orderlocaldatasource", "getProcessState: 0");
             return 0;
 
         }
@@ -237,10 +232,8 @@ public class OrderLocalDataSource implements OrderDataSource {
         Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
         if(cursor.moveToNext()) {
             int state = cursor.getInt(0);
-            Log.d("orderlocaldatasource", "getSyncState: "+state);
             return state;
         }else{
-            Log.d("orderlocaldatasource", "getSyncState: 0");
             return 0;
 
         }

@@ -78,7 +78,6 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                     case ORDER_REQUEST:
                         OrderRemoteRequest orderRemoteRequest =(OrderRemoteRequest) msg.obj;
                         handleRequest(orderRemoteRequest);
-                        //TODO handler request2
                         handleRequest2(orderRemoteRequest);
                         break;
                     case CHECK_REQUEST:
@@ -142,15 +141,14 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                                 if (updated > -1) {
 //                                                    force the next order not synced to be processed
                                                     OrderRequestJob.scheduleJob();
-                                                    Toast.makeText(mContext, "Order " + orderRemoteRequest.getOrderId() + " sent Successfully", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mContext, "Order "+ order.getDisplayId() + " sent Successfully", Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sending failed");
-                                                    Toast.makeText(mContext, "Order not sent", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mContext, "Order "+ order.getDisplayId() + " not sent", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                 });
                     } else {
-                        Log.d(" Order Remote Request", "catch exceptions");
+
                     }
                 });
 
@@ -178,16 +176,13 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                                 if (updated > -1) {
 //                                                    force the next order not synced to be processed
                                                     OrderRequestJob.scheduleJob();
-                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sent Successfully ");
-                                                    Toast.makeText(mContext, "Order " + orderRemoteRequest.getOrderId() + " sent Successfully", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mContext, "Order " + order.getDisplayId() + " sent Successfully", Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + "Order sending failed");
-                                                    Toast.makeText(mContext, "Order not sent", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mContext, "Order " + order.getDisplayId() + " not sent", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                 });
                     } else {
-                        Log.d(" Order Remote Request", "catch exceptions");
                     }
                 });
 
@@ -210,12 +205,9 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                     mOrderRepository.getOne(String.valueOf(orderRemoteResponse.getOrderId()))
                                             .subscribe(order -> {
                                                 order.setCheckedOut(1);
-                                                Log.i(TAG, "handleRequest: ");
                                                 int updated = mOrderRepository.update(order);
                                                 if (updated > -1) {
-                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + " is checked out");
                                                 } else {
-                                                    Log.i(TAG, "handleRequest: " + order.getEntryId() + " checkout failed out");
                                                 }
                                             });
                                 });

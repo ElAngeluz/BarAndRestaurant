@@ -2,7 +2,6 @@ package com.mobitill.barandrestaurant.data.orderItem;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.Local;
 import com.mobitill.barandrestaurant.data.Remote;
@@ -225,16 +224,12 @@ public class OrderItemRepository implements OrderItemDataSource {
     @Override
     public Observable<OrderRemoteResponse> orderRequest(OrderRemoteRequest orderRemoteRequest, String counter) {
         for (OrderRemoteItem item :orderRemoteRequest.getRequestbody().getOrder()) {
-            Log.d("order remote request L",String.format("name [%s] quantity [%d] subtotal [%d]",item.getName(),item.getQuantity(),item.getSubtotal()));
         }
-        Log.d("order remote request W",orderRemoteRequest.getRequestbody().getWaiter().getName());
-        Log.d("order remote request ID",orderRemoteRequest.getOrderId().toString());
         return orderItemRemoteDataSource
                 .orderRequest(orderRemoteRequest, counter)
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Log.d(TAG, "Observable error: " + throwable.getMessage());
                     }
                 });
     }

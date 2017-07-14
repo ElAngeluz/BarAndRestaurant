@@ -2,7 +2,6 @@ package com.mobitill.barandrestaurant.data.orderItem.source.remote;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.mobitill.barandrestaurant.data.ApiEndpointInterface;
@@ -116,7 +115,6 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
                  .doOnError(new Consumer<Throwable>() {
                      @Override
                      public void accept(Throwable throwable) throws Exception {
-                         Log.d(TAG, "Observable error: " + throwable.getMessage());
                          mOrderLocalDataSource.updateSyncState(order.getOrderId().toString(),0);
                          mOrderLocalDataSource.updateProcessState(order.getOrderId().toString(),0);
                      }

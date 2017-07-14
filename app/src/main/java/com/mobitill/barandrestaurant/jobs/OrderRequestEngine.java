@@ -1,7 +1,5 @@
 package com.mobitill.barandrestaurant.jobs;
 
-import android.util.Log;
-
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
@@ -77,9 +75,12 @@ public class OrderRequestEngine  {
                                     order.setProcessState(1);
                                     //mOrderRepository.;
                                     mOrderLocalDataSource.updateProcessState(order.getEntryId(),1);
-                                    Log.d(TAG, "order prep for sending");
                                     orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
-                                    break;
+
+                                    /*
+                                    * the break below is commented out to allow multiple requests at a go
+                                    * */
+                                    //break;
                                 }
                             }
 //                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(orders.get(0)));
@@ -149,7 +150,7 @@ public class OrderRequestEngine  {
         orderRemoteRequest.setRequestbody(orderRemoteRequestbody);
         orderRemoteRequest.setRequestId("181");
         orderRemoteRequest.setRequestname("orderrequest");
-//        orderRemoteRequest.setCategory();
+//        orderRemoteRequest.setLocation();
         return orderRemoteRequest;
     }
 

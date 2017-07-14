@@ -138,7 +138,7 @@ public class OrderItemLocalDataSource implements OrderItemDataSource{
 //        contentValues.put(OrderItemEntry.COLUMN_NAME_COUNTER, item.getCounter());
 //        contentValues.put(OrderItemEntry.COLUMN_NAME_SYNCED, item.getSynced());
 //        contentValues.put(OrderItemEntry.COLUMN_NAME_CHECKED_OUT, item.getCheckedOut());
-//        contentValues.put(OrderItemEntry.COLUMN_NAME_CATEGORY, item.getCategory());
+//        contentValues.put(OrderItemEntry.COLUMN_NAME_CATEGORY, item.getLocation());
 //        String selection = OrderItemEntry.COLUMN_NAME_ID + "LIKE ?";
 //        String[] selectionArgs = {item.getOrderId()};
 //        return databaseHelper.update(OrderItemEntry.TABLE_NAME, contentValues, selection, selectionArgs);

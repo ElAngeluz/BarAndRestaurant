@@ -27,7 +27,6 @@ public class AuthActivity extends AppCompatActivity {
             authFragment = AuthFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), authFragment, R.id.contentFrame);
         }
-
         DaggerAuthComponent.builder()
                 .authPresenterModule(new AuthPresenterModule(authFragment))
                 .baseComponent(((MainApplication) getApplication()).mBaseComponent())

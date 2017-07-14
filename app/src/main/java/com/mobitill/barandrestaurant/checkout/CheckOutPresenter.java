@@ -92,7 +92,6 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
                         order.setTransactionId(mView.setTransactionsId());
                         int updated = mOrderRepository.update(order);
                         if (updated > -1) {
-                            Log.i(TAG, "checkout: order: " + order.getEntryId());
                             CheckOutJob.scheduleJob();
                         }
                     });

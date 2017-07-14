@@ -9,8 +9,8 @@ import javax.annotation.Generated;
 @SuppressWarnings("unused")
 public class NewProduct {
 
-    @SerializedName("category")
-    private String mCategory;
+    @SerializedName("location")
+    private String mLocation;
     @SerializedName("description")
     private String mDescription;
     @SerializedName("id")
@@ -19,13 +19,23 @@ public class NewProduct {
     private Long mPrice;
     @SerializedName("sku")
     private Long mSku;
+    @SerializedName("vat")
+    private String mVat;
 
-    public String getCategory() {
-        return mCategory;
+    public String getVat() {
+        return mVat;
     }
 
-    public void setCategory(String category) {
-        mCategory = category;
+    public void setVat(String vat) {
+        mVat = vat;
+    }
+
+    public String getLocation() {
+        return mLocation;
+    }
+
+    public void setLocation(String location) {
+        mLocation = location;
     }
 
     public String getDescription() {

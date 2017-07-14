@@ -2,7 +2,7 @@ package com.mobitill.barandrestaurant.data.product.source.remote;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.mobitill.barandrestaurant.data.ApiEndpointInterface;
@@ -70,37 +70,52 @@ public class ProductRemoteDataSource implements ProductDataSource {
 
     @Override
     public Observable<List<Product>> getAll() {
-        ApiEndpointInterface apiEndpointInterface = mMobitillRetrofit.create(ApiEndpointInterface.class);
-        return apiEndpointInterface
+
+
+        ApiEndpointInterface apiEndpointInterface = null;
+        try {
+            apiEndpointInterface = mMobitillRetrofit.create(ApiEndpointInterface.class);
+            return apiEndpointInterface
 //                .getProducts(DataUtils.getRequest())
-                .getProducts(DataUtils.makeProductsRequest())
-                .subscribeOn(mScheduleProvider.io())
-                .observeOn(mScheduleProvider.ui())
+                    .getProducts(DataUtils.makeProductsRequest())
+                    .subscribeOn(mScheduleProvider.io())
+                    .observeOn(mScheduleProvider.ui())
 //                .doOnNext(response -> mRxSharedPreferences
 //                        .getInteger(mContext.getString(R.string.key_products_version))
 //                        .set(response.getProductsVersion()))
-                .flatMap((ProductsResponseModel productResponse) -> {
-                    List<NewProduct> products = productResponse.getData().getOrganization().getProducts();
-                    List<Product> ListOfProducts = new ArrayList<>();
-                    for (NewProduct item: products) {
-                        Product p = new Product();
-                        p.setBarcode("");
-                        p.setId(item.getId());
-                        p.setIdentifier(String.valueOf(item.getSku()));
-                        p.setName(item.getDescription());
-                        p.setPrice(String.valueOf(item.getPrice()));
-                        p.setVat(" ");
-                        p.setCategory(item.getCategory());
-                        Log.d(TAG, "getAll: " + item.getCategory());
+                    .flatMap((ProductsResponseModel productResponse) -> {
+                        List<NewProduct> products = null;
+                        try {
+                            products = productResponse.getData().getOrganization().getProducts();
+                        } catch (Exception e) {
+                            Toast.makeText(mContext, "Product List empty!", Toast.LENGTH_SHORT).show();
+                            return Observable.empty();
+                        }
+                        List<Product> ListOfProducts = new ArrayList<>();
+                        for (NewProduct item: products) {
+                            Product p = new Product();
+                            p.setBarcode("");
+                            p.setId(item.getId());
+                            p.setIdentifier(String.valueOf(item.getSku()));
+                            p.setName(item.getDescription()== null ? "product name" : item.getDescription());
+                            p.setPrice(String.valueOf(item.getPrice()));
+                            p.setVat(item.getVat()== null ? " vat " : item.getVat());
 
+                            p.setCategory(item.getLocation() == null ? "" : item.getLocation());
                         /*TODO SET VAT & CATEGORY*/
 
-                        ListOfProducts.add(p);
+                            ListOfProducts.add(p);
 
-                    }
+                        }
 //                    return Observable.fromArray(products.toArray(new Product[products.size()])).toList().toObservable();
-                    return Observable.fromArray(ListOfProducts.toArray(new Product[ListOfProducts.size()])).toList().toObservable();
-                });
+                        return Observable.fromArray(ListOfProducts.toArray(new Product[ListOfProducts.size()])).toList().toObservable();
+
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Observable.empty();
+        }
+
     }
 
 

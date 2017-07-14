@@ -4,7 +4,6 @@ package com.mobitill.barandrestaurant.receipts_detail;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,7 +135,7 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
     public void showOrder(Order order) {
         mEditTextReceiptDetailOrderNumber.setText(order.getDisplayId());
         checkout = order.getCheckedOut();
-        Log.d(TAG, "checkout = " + order.getCheckedOut());
+        mOrder = order;
     }
 
     @Override
@@ -188,9 +187,12 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
         if (checkout == 1){
             Toast.makeText(getActivity(), "Order already CheckedOut", Toast.LENGTH_SHORT).show();
             mButtonCheckOut.setEnabled(false);
-        }else {
+        }else if(mOrder.getSynced()==1){
 
             startActivity(CheckOutActivity.newIntent(getActivity(), mOrderId,mTotal));
+        }else{
+            Toast.makeText(getActivity(), "Order not Synced with device", Toast.LENGTH_SHORT).show();
+            mButtonCheckOut.setEnabled(false);
         }
     }
 

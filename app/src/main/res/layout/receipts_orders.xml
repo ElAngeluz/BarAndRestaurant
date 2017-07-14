@@ -14,26 +14,18 @@
             android:padding="@dimen/dp10"
             android:layout_marginLeft="@dimen/dp16"
             android:layout_height="wrap_content"
+            android:text="Order 1"
             android:textSize="20sp"/>
-
-        <!-- android:text="Order 1"-->
-        <!--android:text="Set CheckOut"-->
 
         <TextView
             android:id="@+id/tv_set_checkout"
             android:layout_width="wrap_content"
-            android:layout_toRightOf="@+id/tv_order"
+            android:layout_alignParentRight="true"
             android:layout_alignBaseline="@id/tv_order"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp120"
-            android:textSize="@dimen/sp20"/>
-        <ImageView
-            android:id="@+id/delete_img"
-            android:layout_width="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dp16"
-            android:src="@drawable/ic_action_delete"
-           />
+            android:text="Set CheckOut"
+            android:textSize="@dimen/sp20"/>
+
     </RelativeLayout>
 </LinearLayout>

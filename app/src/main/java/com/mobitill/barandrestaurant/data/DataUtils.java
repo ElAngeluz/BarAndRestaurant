@@ -32,7 +32,7 @@ public class DataUtils {
     public static ProductsRequestModel makeProductsRequest(){
 
         ProductsRequestModel productsRequestModel = new ProductsRequestModel();
-        productsRequestModel.setQuery("query { organization (id:\"800199888779522\") {products{id,sku,description,price,category}} }");
+        productsRequestModel.setQuery("query { organization (id:\"800199888779522\") {products{id,sku,description,price,location,vat}} }");
         return productsRequestModel;
     }
 }

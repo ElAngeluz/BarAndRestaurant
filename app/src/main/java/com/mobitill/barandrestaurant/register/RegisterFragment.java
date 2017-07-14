@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -114,7 +113,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
 
     @OnClick(R.id.button_request)
     public void completeOrderRequest(View view){
-        Toast.makeText(getContext(), "Request Sent!!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Order Request Sent!", Toast.LENGTH_SHORT).show();
         mPresenter.completeOrderRequest();
     }
     @Override
@@ -171,13 +170,11 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d(TAG, "onQueryTextSubmit: " + query);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i(TAG, "onQueryTextChange: " + newText);
                 final List<Product> filteredProductList = filter(mProducts, newText);
                 mRegisterAdapter.replaceAll(filteredProductList);
                 recyclerView.scrollToPosition(0);

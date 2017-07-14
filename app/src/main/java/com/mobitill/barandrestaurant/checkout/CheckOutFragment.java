@@ -72,7 +72,6 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View,
         super.onCreate(savedInstanceState);
         orderId = getArguments().getString(ID);
         mTotal = getArguments().getString(ARG_TOAL);
-        Log.d(TAG, "Total : " + mTotal);
         DaggerCheckOutComponent.builder()
                 .checkOutPresenterModule(new CheckOutPresenterModule(this))
                 .baseComponent(((MainApplication) getActivity().getApplication()).mBaseComponent())
@@ -92,11 +91,7 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View,
        mUnbinder = ButterKnife.bind(this,view);
        mCheckBoxCash.setChecked(true);
         mEditTextCash.setText(mTotal);
-        Log.d(TAG, "Total amount is : " + mTotal);
        mEditTextMpesa.setEnabled(false);
-//        ReceiptsDetailFragment fragment = new ReceiptsDetailFragment();
-//        String Total = fragment.getTotal();
-//        mEditTextCash.setText(Total);
         return view;
     }
 

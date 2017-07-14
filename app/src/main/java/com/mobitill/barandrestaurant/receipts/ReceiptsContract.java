@@ -31,7 +31,6 @@ public interface ReceiptsContract {
 
         void getOrders();
 
-        void deleteOrderFromDB(String orderId);
 
     }
 }

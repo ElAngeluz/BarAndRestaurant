@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
@@ -136,14 +134,12 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                     mOrderRepository.getOne(String.valueOf(orderRemoteResponse.getOrderId()))
                                             .subscribe(order -> {
                                                 order.setSynced(1);
-                                                Log.i(TAG, "handleRequest: ");
                                                 int updated = mOrderRepository.update(order);
                                                 if (updated > -1) {
 //                                                    force the next order not synced to be processed
                                                     OrderRequestJob.scheduleJob();
-                                                    Toast.makeText(mContext, "Order "+ order.getDisplayId() + " sent Successfully", Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    Toast.makeText(mContext, "Order "+ order.getDisplayId() + " not sent", Toast.LENGTH_SHORT).show();
+
                                                 }
                                             });
                                 });
@@ -171,14 +167,11 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                     mOrderRepository.getOne(String.valueOf(orderRemoteResponse.getOrderId()))
                                             .subscribe(order -> {
                                                 order.setSynced(1);
-                                                Log.i(TAG, "handleRequest: ");
                                                 int updated = mOrderRepository.update(order);
                                                 if (updated > -1) {
 //                                                    force the next order not synced to be processed
                                                     OrderRequestJob.scheduleJob();
-                                                    Toast.makeText(mContext, "Order " + order.getDisplayId() + " sent Successfully", Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    Toast.makeText(mContext, "Order " + order.getDisplayId() + " not sent", Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                 });

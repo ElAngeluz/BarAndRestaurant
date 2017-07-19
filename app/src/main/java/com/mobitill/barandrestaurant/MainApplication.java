@@ -1,7 +1,7 @@
 package com.mobitill.barandrestaurant;
 
-import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import com.evernote.android.job.JobManager;
 import com.mobitill.barandrestaurant.jobs.JobsCreator;
@@ -10,8 +10,11 @@ import com.mobitill.barandrestaurant.jobs.JobsCreator;
 /**
  * Created by james on 4/27/2017.
  */
-
-public class MainApplication extends Application {
+/*
+*
+*Extending multiDex application solved NoClassDefFoundError in Lollipop devices thanks to @Arash-gm and @HugoMatilla
+* */
+public class MainApplication extends MultiDexApplication {
 
     private BaseComponent mBaseComponent;
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:src="@drawable/restaurant_menu"
+        />
+
+    <TextView
+        android:id="@+id/date_container"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginRight="@dimen/dp16"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_vertical"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:text="datecontainer"
+        android:textSize="@dimen/sp20"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/drop_down_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp16"
+        android:layout_marginLeft="@dimen/dp16"
+        android:src="@drawable/ic_action_dropdown"/>
+
+</LinearLayout>

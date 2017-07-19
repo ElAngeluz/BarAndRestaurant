@@ -20,11 +20,13 @@ public interface AuthContract {
 
         void onWaitersLoaded(List<Waiter> waiters);
 
-        void showPlaceOrderActivity();
+        void showPlaceOrderActivity(String waiterName);
 
         void showWaiterLoginError();
 
         void showLoginFailed();
+
+        void invalidCredentials();
     }
 
     interface  Presenter extends BasePresenter{

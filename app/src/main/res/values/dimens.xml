@@ -13,4 +13,5 @@
     <dimen name="sp20">20sp</dimen>
     <dimen name="sp15">15sp</dimen>
     <dimen name="dp120">120dp</dimen>
+    <dimen name="dp250">250dp</dimen>
 </resources>

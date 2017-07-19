@@ -25,7 +25,15 @@ tools:context="com.mobitill.barandrestaurant.checkout.CheckOutActivity">
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/Toolbar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+            <TextView
+                android:id="@+id/toolbar_tv"
+                android:layout_width="match_parent"
+                android:text="Fragment Title"
+                android:textSize="@dimen/sp20"
+                android:textStyle="bold"
+                android:layout_height="wrap_content"/>
+        </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout

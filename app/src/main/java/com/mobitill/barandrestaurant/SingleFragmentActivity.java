@@ -11,9 +11,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mobitill.barandrestaurant.jobs.OrderRequestJob;
 import com.mobitill.barandrestaurant.receipts.ReceiptsFragment;
 import com.mobitill.barandrestaurant.register.RegisterFragment;
 
@@ -32,6 +32,10 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
     @Nullable
     @BindView(R.id.nav_view) BottomNavigationView mNavigationView;
 
+    @Nullable
+    @BindView(R.id.toolbar_tv)
+    TextView mToolbarTextView;
+
     protected abstract Fragment createFragment();
 
     @LayoutRes
@@ -44,6 +48,8 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
         ButterKnife.bind(this);
+
+        mToolbarTextView.setEnabled(false);
 
         setSupportActionBar(mToolbar);
 //        ActionBar actionBar = getSupportActionBar();

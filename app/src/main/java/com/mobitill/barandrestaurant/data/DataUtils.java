@@ -25,14 +25,14 @@ public class DataUtils {
     public static WaitersRequestModel makeWaitersRequest(){
 
         WaitersRequestModel waitersRequestModel = new WaitersRequestModel();
-        waitersRequestModel.setQuery("query { organization (id:\"800199888779522\") {cashiers{id,name,phone,roles,password}} }");
+        waitersRequestModel.setQuery("query { organization (id:\"816443890285020\") {cashiers{id,name,phone,roles,password}} }");
         return waitersRequestModel;
     }
 
     public static ProductsRequestModel makeProductsRequest(){
 
         ProductsRequestModel productsRequestModel = new ProductsRequestModel();
-        productsRequestModel.setQuery("query { organization (id:\"800199888779522\") {products{id,sku,description,price,location,vat}} }");
+        productsRequestModel.setQuery("query { organization (id:\"816443890285020\") {products{id,sku,description,price,location,vat}} }");
         return productsRequestModel;
     }
 }

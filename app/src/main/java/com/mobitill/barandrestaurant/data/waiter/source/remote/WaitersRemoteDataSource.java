@@ -65,8 +65,6 @@ public class WaitersRemoteDataSource implements WaitersDataSource{
                             waiter.setName(cashier.getName());
                             waiter.setPhone(cashier.getPhone());
                             waiter.setPassword(cashier.getPassword());
-                            Log.d(TAG, "getAll: " + waiter.getPassword());
-                            Log.d(TAG, "getAll: " + waiter.getPhone());
                             ListOfwaiters.add(waiter);
 
                         }

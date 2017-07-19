@@ -10,8 +10,8 @@ android {
         applicationId "com.mobitill.barandrestaurant"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 2
-        versionName "1.1"
+        versionCode 4
+        versionName "1.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -46,6 +46,7 @@ dependencies {
     compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    compile 'com.thoughtbot:expandablerecyclerview:1.3'
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
     compile "com.google.guava:guava:$rootProject.guavaVersion"

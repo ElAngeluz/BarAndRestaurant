@@ -1,7 +1,9 @@
 package com.mobitill.barandrestaurant.auth;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +29,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AuthFragment extends Fragment implements AuthContract.View {
+public class AuthFragment extends Fragment implements AuthContract.View{
 
     private static final String TAG = AuthFragment.class.getSimpleName();
+    public static final String WAITER_NAME = "waiter_name";
 
     private AuthContract.Presenter mPresenter;
     private Unbinder mUnbinder;
@@ -82,15 +85,16 @@ public class AuthFragment extends Fragment implements AuthContract.View {
 
     @OnClick(R.id.btnOk)
     public void onClickSubmit(Button button){
-        if (mPasswordEditText==null) {
-            mPasswordEditText.setError("Password field is Empty");
+        if (mPhoneNumber.getText().toString().isEmpty() | mPasswordEditText.getText().toString().isEmpty()){
+            Toast.makeText(getActivity(), "Some fields are empty", Toast.LENGTH_SHORT).show();
         }
-        if (mPhoneNumber == null){
-            mPhoneNumber.setError("Phone Number field is Empty");
-        }if (mPhoneNumber!=null && mPasswordEditText!=null){
+        else if (mPhoneNumber!=null && mPasswordEditText!=null){
         mPresenter.performLogin(mPhoneNumber.getText().toString(),mPasswordEditText.getText().toString(), mWaiters);
         mPasswordEditText.setText("");
         mPhoneNumber.setText("");
+        }else{
+            Toast.makeText(getActivity(), R.string.login_error, Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -120,8 +124,18 @@ public class AuthFragment extends Fragment implements AuthContract.View {
     }
 
     @Override
-    public void showPlaceOrderActivity() {
-        startActivity(RegisterActivity.newIntent(getActivity()));
+    public void showPlaceOrderActivity(String waiterName) {
+        startActivity(RegisterActivity.newIntent(getActivity(),waiterName));
+        sendWaiterName(waiterName);
+    }
+    /*
+    * SharedPreferences is used here to send waiter name to Checkout Activity
+    * */
+    public void sendWaiterName(String waiterName){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(WAITER_NAME,waiterName);
+        editor.commit();
     }
 
     @Override
@@ -134,4 +148,10 @@ public class AuthFragment extends Fragment implements AuthContract.View {
 //        Snackbar.make(mButtonOk, R.string.login_failed, Snackbar.LENGTH_LONG).show();
         Toast.makeText(getActivity(), R.string.login_failed, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void invalidCredentials() {
+        Toast.makeText(getActivity(), "Invalid Credentials", Toast.LENGTH_SHORT).show();
+    }
+
 }

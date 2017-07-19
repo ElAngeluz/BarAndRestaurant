@@ -2,7 +2,6 @@ package com.mobitill.barandrestaurant.auth;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
@@ -53,7 +52,7 @@ public class AuthPresenter implements AuthContract.Presenter {
                   @NonNull Context context,
                   @NonNull WaitersRepository waitersRepository,
                   @NonNull BaseScheduleProvider scheduleProvider,
-                  @NonNull RxSharedPreferences rxSharedPreferences){
+                  @NonNull RxSharedPreferences rxSharedPreferences) {
         mContext = checkNotNull(context);
         mView = checkNotNull(view);
         mWaitersRepository = checkNotNull(waitersRepository);
@@ -69,7 +68,6 @@ public class AuthPresenter implements AuthContract.Presenter {
     void setupListeners() {
         mView.setPresenter(this);
     }
-
 
 
     @Override
@@ -98,34 +96,43 @@ public class AuthPresenter implements AuthContract.Presenter {
     }
 
     @Override
-    public void performLogin(String phone,String password, List<Waiter> waiters) {
-       mWaitersRepository.getWaiterFromPhoneAndPassword(phone,password)
-        .observeOn(mScheduleProvider.ui())
-        .subscribe(
-                waiter -> {
-                    if(waiter.getPhone() != null && waiter.getPassword() != null
-                            && waiter.getPhone().equals(phone) && waiter.getPassword().equals(password)){
-                        Preference<String> waiterId = mRxSharedPreferences.getString(mContext.getString(R.string.key_waiter_id));
-                        waiterId.set(waiter.getId());
+    public void performLogin(String phone, String password, List<Waiter> waiters) {
+        mWaitersRepository.getWaiterFromPhoneAndPassword(phone, password)
+                .observeOn(mScheduleProvider.ui())
+                .subscribe(
+                        new Consumer<Waiter>() {
+                            @Override
+                            public void accept(Waiter waiter) throws Exception {
+                                if (waiter.getPhone() != null && waiter.getPassword() != null
+                                        && waiter.getPhone().equals(phone) && waiter.getPassword().equals(password)) {
+                                    Preference<String> waiterId = mRxSharedPreferences.getString(mContext.getString(R.string.key_waiter_id));
+                                    waiterId.set(waiter.getId());
 
-                        mView.showPlaceOrderActivity();
-                    } else {
-                        mView.showLoginFailed();
-                    }
-                },
-                throwable -> {
+                                    mView.showPlaceOrderActivity(waiter.getName());
+                                }  else {
+                                    mView.showLoginFailed();
+                                }
+                            }
+                        },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
 
-                    mView.showLoginFailed();
-                    //mView.showWaiterLoginError();
-                },
-                () -> {}
-        );
+                                mView.invalidCredentials();
+                                return;
+//                                mView.showWaiterLoginError();
+                            }
+                        },
+                        () -> {
+
+                        }
+                );
     }
 
 
     @Override
     public void subscribe() {
-       login();
+        login();
     }
 
     @Override

@@ -16,7 +16,7 @@
     <string name="_0">0</string>
     <string name="ok">OK</string>
     <string name="_4">4</string>
-    <string name="login_error">Error occurred during login</string>
+    <string name="login_error">Error occurred during login, Check Network</string>
     <string name="login_failed">Login Failed Please Try Again</string>
     <string name="key_waiter_id">waiter_id</string>
     <string name="key_products_version">products_version</string>
@@ -24,4 +24,6 @@
     <string name="request_order">Request Order</string>
     <string name="Checkout">CheckOutOrder</string>
     <string name="OrderList">Orders</string>
+    <string name="date">Date :</string>
+    <string name="order_details">Order Details</string>
 </resources>

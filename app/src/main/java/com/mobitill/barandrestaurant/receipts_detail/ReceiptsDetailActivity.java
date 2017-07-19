@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.SingleFragmentActivity;
@@ -20,8 +21,12 @@ public class ReceiptsDetailActivity extends SingleFragmentActivity{
     private static final String TAG = ReceiptsDetailActivity.class.getSimpleName();
     private static final String EXTRA_ORDER_ID = "extra_order_id";
 
+
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+
+    @BindView(R.id.toolbar_tv)
+    TextView mToolbarTextView;
 
     @Inject
     ReceiptsDetailPresenter receiptsDetailPresenter;
@@ -37,6 +42,8 @@ public class ReceiptsDetailActivity extends SingleFragmentActivity{
         super.onCreate(savedInstanceState);
 
         ButterKnife.bind(this);
+        mToolbarTextView.setEnabled(true);
+        mToolbarTextView.setText(R.string.app_name);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

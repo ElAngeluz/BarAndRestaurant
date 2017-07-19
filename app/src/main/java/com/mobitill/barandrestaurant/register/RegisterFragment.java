@@ -19,13 +19,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.product.models.Product;
+import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
 import com.mobitill.barandrestaurant.jobs.OrderRequestJob;
 import com.mobitill.barandrestaurant.register.adapter.AdapterCallback;
 import com.mobitill.barandrestaurant.register.adapter.RegisterAdapter;
@@ -59,6 +59,9 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
     @Inject
     RegisterPresenter mRegisterPresenter;
 
+    @Inject
+    WaitersRepository mWaitersRepository;
+
 //This enables us to talk to the presenter through an interface
     private RegisterContract.Presenter mPresenter;
 
@@ -73,7 +76,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
     @BindView(R.id.button_request)
     public Button mButtonRequest;
 
-
     private RegisterAdapter mRegisterAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Product> mProducts = new ArrayList<>();
@@ -86,7 +88,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
     public static RegisterFragment newInstance() {
 
         Bundle args = new Bundle();
-
         RegisterFragment fragment = new RegisterFragment();
         fragment.setArguments(args);
         return fragment;
@@ -113,7 +114,6 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
 
     @OnClick(R.id.button_request)
     public void completeOrderRequest(View view){
-        Toast.makeText(getContext(), "Order Request Sent!", Toast.LENGTH_SHORT).show();
         mPresenter.completeOrderRequest();
     }
     @Override

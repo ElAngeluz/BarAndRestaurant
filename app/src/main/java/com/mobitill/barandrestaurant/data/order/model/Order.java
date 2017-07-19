@@ -1,5 +1,8 @@
 package com.mobitill.barandrestaurant.data.order.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -12,7 +15,7 @@ import java.util.UUID;
  * Created by andronicus on 5/16/2017.
  */
 
-public class Order {
+public class Order implements Parcelable{
 
     @SerializedName("id")
     @Expose
@@ -52,6 +55,54 @@ public class Order {
 
     private String category;
 
+    protected Order(Parcel in) {
+        entryId = in.readString();
+        name = in.readString();
+        displayId = in.readString();
+        waiterId = in.readString();
+        if (in.readByte() == 0) {
+            synced = null;
+        } else {
+            synced = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            checkedOut = null;
+        } else {
+            checkedOut = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            processState = null;
+        } else {
+            processState = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            timeStamp = null;
+        } else {
+            timeStamp = in.readLong();
+        }
+        if (in.readByte() == 0) {
+            checkoutFlagged = null;
+        } else {
+            checkoutFlagged = in.readInt();
+        }
+        paymentMethod = in.readString();
+        amount = in.readString();
+        transactionId = in.readString();
+        category = in.readString();
+    }
+
+    public static final Creator<Order> CREATOR = new Creator<Order>() {
+        @Override
+        public Order createFromParcel(Parcel in) {
+            return new Order(in);
+        }
+
+        @Override
+        public Order[] newArray(int size) {
+            return new Order[size];
+        }
+    };
+
     public String getCategory() {
         return category;
     }
@@ -67,8 +118,6 @@ public class Order {
         this.synced = 0;
         this.checkedOut = 0;
         this.checkoutFlagged = 0;
-
-//        refactored
         this.paymentMethod = "";
         this.amount = "";
         this.transactionId = "";
@@ -235,4 +284,50 @@ public class Order {
         return val;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(entryId);
+        dest.writeString(name);
+        dest.writeString(displayId);
+        dest.writeString(waiterId);
+        if (synced == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(synced);
+        }
+        if (checkedOut == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(checkedOut);
+        }
+        if (processState == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(processState);
+        }
+        if (timeStamp == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(timeStamp);
+        }
+        if (checkoutFlagged == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(checkoutFlagged);
+        }
+        dest.writeString(paymentMethod);
+        dest.writeString(amount);
+        dest.writeString(transactionId);
+        dest.writeString(category);
+    }
 }

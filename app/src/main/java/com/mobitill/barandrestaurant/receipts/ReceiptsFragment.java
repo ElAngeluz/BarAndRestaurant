@@ -14,9 +14,7 @@ import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,9 +36,9 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     private ReceiptsContract.Presenter presenter;
     private Unbinder unbinder;
 
-//    private ReceiptsOrdersAdapter receiptsOrdersAdapter;
+    private ReceiptsOrdersAdapter receiptsOrdersAdapter;
 
-    private ReceiptOrdersAdapter mReceiptOrdersAdapter;
+//    private ReceiptOrdersAdapter mReceiptOrdersAdapter;
     private RecyclerView.LayoutManager manager;
     private List<Order> orders = new ArrayList<>();
 
@@ -122,38 +120,38 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
     @Override
     public void showOrders(List<Order> orders) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        List<ReceiptOrders> receiptOrders = new ArrayList<>();
-        for (int i = 0; i <6 ; i++) {
-
-            receiptOrders.add(new ReceiptOrders(sdf.format(Calendar.getInstance().getTime()),orders));
-        }
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+//        List<ReceiptOrders> receiptOrders = new ArrayList<>();
+//        for (int i = 0; i <6 ; i++) {
+//
+//            receiptOrders.add(new ReceiptOrders(sdf.format(Calendar.getInstance().getTime()),orders));
+//        }
          /*
         *
         * displaying normal recyclerview
         * */
-//        if(isAdded()){
-//            if (receiptsOrdersAdapter == null){
-//
-//                receiptsOrdersAdapter = new ReceiptsOrdersAdapter(orders, getActivity());
-//                receiptsRecyclerView.setAdapter(receiptsOrdersAdapter);
-//            }else {
-//            }
-//        }
+        if(isAdded()){
+            if (receiptsOrdersAdapter == null){
+
+                receiptsOrdersAdapter = new ReceiptsOrdersAdapter(orders, getActivity());
+                receiptsRecyclerView.setAdapter(receiptsOrdersAdapter);
+            }else {
+            }
+        }
 
         /*
         *
         * displaying expandable recyclerview
         * */
 
-        if(isAdded()){
-            if (mReceiptOrdersAdapter == null){
-
-                mReceiptOrdersAdapter = new ReceiptOrdersAdapter(receiptOrders,getActivity());
-                receiptsRecyclerView.setAdapter(mReceiptOrdersAdapter);
-            }else {
-            }
-        }
+//        if(isAdded()){
+//            if (mReceiptOrdersAdapter == null){
+//
+//                mReceiptOrdersAdapter = new ReceiptOrdersAdapter(receiptOrders,getActivity());
+//                receiptsRecyclerView.setAdapter(mReceiptOrdersAdapter);
+//            }else {
+//            }
+//        }
 
 
     }

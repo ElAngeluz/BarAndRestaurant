@@ -16,15 +16,6 @@
             android:layout_height="wrap_content"
             android:text="Order 1"
             android:textSize="20sp"/>
-        <TextView
-            android:layout_centerHorizontal="true"
-            android:layout_alignBaseline="@id/tv_order"
-            android:layout_width="wrap_content"
-            android:padding = "@dimen/dp10"
-            android:textSize="@dimen/sp20"
-            android:drawableEnd="@drawable/ic_action_forward"
-            android:layout_height="wrap_content"
-            android:text="Order Details"/>
 
         <TextView
             android:id="@+id/tv_set_checkout"

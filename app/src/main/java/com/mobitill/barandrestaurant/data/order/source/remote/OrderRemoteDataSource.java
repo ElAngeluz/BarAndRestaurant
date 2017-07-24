@@ -3,6 +3,7 @@ package com.mobitill.barandrestaurant.data.order.source.remote;
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.order.source.local.OrderDataSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -66,6 +67,11 @@ public class OrderRemoteDataSource implements OrderDataSource {
 
     @Override
     public Observable<List<Order>> getOrdersForCheckout(Integer checkout, Integer checkoutFlagged) {
+        return null;
+    }
+
+    @Override
+    public ArrayList<String> getOrdersWithTimestamp() {
         return null;
     }
 }

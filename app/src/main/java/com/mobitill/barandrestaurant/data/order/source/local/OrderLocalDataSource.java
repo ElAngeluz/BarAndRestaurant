@@ -5,10 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.squareup.sqlbrite.BriteDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -197,6 +199,22 @@ public class OrderLocalDataSource implements OrderDataSource {
         // convert observable from rxjava1 observable to rxjava2 observable
         Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
         return observableV2;
+    }
+
+    @Override
+    public ArrayList<String> getOrdersWithTimestamp() {
+        String sql = " SELECT date(timestamp) FROM order_table  GROUP BY date(timestamp) ORDER BY timestamp ";
+
+        Cursor cursor = mDatabaseHelper.query(sql, (String[]) null);
+        ArrayList<String> timeStamps = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            String state = cursor.getString(0);
+            Log.d(TAG, "state: " + state);
+            timeStamps.add(state);
+        }
+        cursor.close();
+
+        return timeStamps;
     }
 
     public void updateProcessState(String entryId,int state){

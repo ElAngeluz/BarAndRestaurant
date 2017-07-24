@@ -8,6 +8,7 @@ import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.order.source.local.OrderDataSource;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -95,5 +96,10 @@ public class OrderRepository implements OrderDataSource {
     @Override
     public Observable<List<Order>> getOrdersForCheckout(Integer checkout, Integer checkoutFlagged) {
         return mOrderLocalDataSource.getOrdersForCheckout(checkout, checkoutFlagged);
+    }
+
+    @Override
+    public ArrayList<String> getOrdersWithTimestamp() {
+        return mOrderLocalDataSource.getOrdersWithTimestamp();
     }
 }

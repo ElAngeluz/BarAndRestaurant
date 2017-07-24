@@ -71,6 +71,9 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
     @Override
     public void getOrders() {
 
+
+        Log.d(TAG, "timestamp list size is : " + orderRepository.getOrdersWithTimestamp().size());
+
         compositeDisposable.clear();
         Disposable disposable = orderRepository
                 .getAll()

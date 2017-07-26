@@ -94,6 +94,16 @@ public class OrderRepository implements OrderDataSource {
     }
 
     @Override
+    public Observable<List<Order>> getOrdersWithCounterASynced(Integer isCounterASynced) {
+        return mOrderLocalDataSource.getOrdersWithCounterASynced(isCounterASynced);
+    }
+
+    @Override
+    public Observable<List<Order>> getOrdersWithCounterBSynced(Integer isCounterBSynced) {
+        return mOrderLocalDataSource.getOrdersWithCounterBSynced(isCounterBSynced);
+    }
+
+    @Override
     public Observable<List<Order>> getOrdersForCheckout(Integer checkout, Integer checkoutFlagged) {
         return mOrderLocalDataSource.getOrdersForCheckout(checkout, checkoutFlagged);
     }

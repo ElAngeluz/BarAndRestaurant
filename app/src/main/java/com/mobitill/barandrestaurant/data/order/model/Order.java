@@ -55,6 +55,10 @@ public class Order implements Parcelable{
 
     private String category;
 
+    private Integer counterASync;
+
+    private Integer counterBSync;
+
     protected Order(Parcel in) {
         entryId = in.readString();
         name = in.readString();
@@ -64,6 +68,16 @@ public class Order implements Parcelable{
             synced = null;
         } else {
             synced = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            counterASync = null;
+        } else {
+            counterASync = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            counterBSync = null;
+        } else {
+            counterBSync = in.readInt();
         }
         if (in.readByte() == 0) {
             checkedOut = null;
@@ -122,6 +136,8 @@ public class Order implements Parcelable{
         this.amount = "";
         this.transactionId = "";
         this.processState = 0;
+        this.counterASync = 0;
+        this.counterBSync = 0;
 
     }
 
@@ -133,12 +149,12 @@ public class Order implements Parcelable{
         this.synced = 0;
         this.checkedOut = 0;
         this.checkoutFlagged = 0;
-
-//        refactored
         this.paymentMethod = "";
         this.amount = "";
         this.transactionId = "";
         this.processState = 0;
+        this.counterASync = 0;
+        this.counterBSync = 0;
     }
 
 
@@ -153,7 +169,9 @@ public class Order implements Parcelable{
                  String paymentMethod,
                  String amount,
                  String transactionId,
-                 Integer processState) {
+                 Integer processState,
+                 Integer counterASync,
+                 Integer counterBSync) {
 
         this.entryId = entryId;
         this.displayId = displayId;
@@ -167,6 +185,24 @@ public class Order implements Parcelable{
         this.amount = amount;
         this.transactionId = transactionId;
         this.processState = processState;
+        this.counterASync = counterASync;
+        this.counterBSync = counterBSync;
+    }
+
+    public Integer getCounterASync() {
+        return counterASync;
+    }
+
+    public void setCounterASync(Integer counterASync) {
+        this.counterASync = counterASync;
+    }
+
+    public Integer getCounterBSync() {
+        return counterBSync;
+    }
+
+    public void setCounterBSync(Integer counterBSync) {
+        this.counterBSync = counterBSync;
     }
 
     public String getEntryId() {
@@ -300,6 +336,18 @@ public class Order implements Parcelable{
         } else {
             dest.writeByte((byte) 1);
             dest.writeInt(synced);
+        }
+        if (counterASync == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(counterASync);
+        }
+        if (counterBSync == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(counterBSync);
         }
         if (checkedOut == null) {
             dest.writeByte((byte) 0);

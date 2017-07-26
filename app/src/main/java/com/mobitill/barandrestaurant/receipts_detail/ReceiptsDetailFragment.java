@@ -187,11 +187,11 @@ public class ReceiptsDetailFragment extends Fragment implements ReceiptsDetailCo
         if (checkout == 1){
             Toast.makeText(getActivity(), "Order already CheckedOut", Toast.LENGTH_SHORT).show();
             mButtonCheckOut.setEnabled(false);
-        }else if(mOrder.getSynced()==1){
+        }else if(mOrder.getCounterASync()== 1 && mOrder.getCounterBSync() == 1){
 
             startActivity(CheckOutActivity.newIntent(getActivity(), mOrderId,mTotal));
         }else{
-            Toast.makeText(getActivity(), "Order not Synced with device", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Order not Sent to device", Toast.LENGTH_SHORT).show();
             mButtonCheckOut.setEnabled(false);
         }
     }

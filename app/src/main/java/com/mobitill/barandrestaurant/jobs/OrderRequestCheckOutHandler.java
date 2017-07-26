@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 
+import com.evernote.android.job.JobManager;
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
@@ -69,7 +71,11 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
 
     @Override
     protected void onLooperPrepared() {
-        mRequestHandler = new Handler(){
+        /*
+        * getLooper passes this looper to the handler
+        *
+        * */
+        mRequestHandler = new Handler(getLooper()){
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what){
@@ -123,17 +129,24 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                         Constants.RetrofitSource.COUNTERA)
                 .subscribeOn(mScheduleProvider.computation())
                 .subscribe(orderRemoteResponse -> {
+                    Log.d("OkHttp:", "handleRequestA Size of Jobs: " +JobManager.instance().getAllJobRequests().size());
+
                     if (orderRemoteResponse.getMessage().equals("ok")) {
                         mOrderItemRepository
                                 .getOrderItemWithOrderId(String.valueOf(orderRemoteRequest.getOrderId()))
                                 .subscribe(orderItems -> {
-                                    for (OrderItem orderItem : orderItems) {
-                                        orderItem.setSynced(1);
-                                        mOrderItemRepository.update(orderItem);
-                                    }
+
+                                    /*
+                                    * Commented out to prevent setting global sync to 0
+                                    *
+                                    * */
+//                                    for (OrderItem orderItem : orderItems) {
+//                                        orderItem.setSynced(1);
+//                                        mOrderItemRepository.update(orderItem);
+//                                    }
                                     mOrderRepository.getOne(String.valueOf(orderRemoteResponse.getOrderId()))
                                             .subscribe(order -> {
-                                                order.setSynced(1);
+                                                order.setCounterASync(1);
                                                 int updated = mOrderRepository.update(order);
                                                 if (updated > -1) {
 //                                                    force the next order not synced to be processed
@@ -156,17 +169,23 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                         Constants.RetrofitSource.COUNTERB)
                 .subscribeOn(mScheduleProvider.computation())
                 .subscribe(orderRemoteResponse -> {
+                    Log.d("OkHttp:", "handleRequestB Size of Jobs: " +JobManager.instance().getAllJobRequests().size());
                     if (orderRemoteResponse.getMessage().equals("ok")) {
                         mOrderItemRepository
                                 .getOrderItemWithOrderId(String.valueOf(orderRemoteRequest.getOrderId()))
                                 .subscribe(orderItems -> {
-                                    for (OrderItem orderItem : orderItems) {
-                                        orderItem.setSynced(1);
-                                        mOrderItemRepository.update(orderItem);
-                                    }
+
+                                    /*
+                                    * Commented out to prevent setting global sync to 0
+                                    *
+                                    * */
+//                                    for (OrderItem orderItem : orderItems) {
+//                                        orderItem.setSynced(1);
+//                                        mOrderItemRepository.update(orderItem);
+//                                    }
                                     mOrderRepository.getOne(String.valueOf(orderRemoteResponse.getOrderId()))
                                             .subscribe(order -> {
-                                                order.setSynced(1);
+                                                order.setCounterBSync(1);
                                                 int updated = mOrderRepository.update(order);
                                                 if (updated > -1) {
 //                                                    force the next order not synced to be processed

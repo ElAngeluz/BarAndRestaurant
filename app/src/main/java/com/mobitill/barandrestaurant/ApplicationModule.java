@@ -58,7 +58,7 @@ public class ApplicationModule {
     @Provides
     HttpLoggingInterceptor provideHttpLoggingInterceptor(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return interceptor;
     }
 
@@ -81,6 +81,7 @@ public class ApplicationModule {
                 .connectTimeout(120, TimeUnit.SECONDS)
                 .readTimeout(120,TimeUnit.SECONDS)
                 .addInterceptor(encryptionInterceptor)
+                .retryOnConnectionFailure(true)
                 .addInterceptor(encryptionResponseInterceptor)
                 .addInterceptor(httpLoggingInterceptor)
                 .build();

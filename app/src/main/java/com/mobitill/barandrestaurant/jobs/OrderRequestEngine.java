@@ -58,6 +58,17 @@ public class OrderRequestEngine  {
         mOrderRequestCheckOutHandler.getLooper();
     }
 
+    public boolean extractSycA(){
+
+        if ( mOrderLocalDataSource.getSyncStateA() == 1){
+            return true;
+        }else
+       return false;
+    }
+    public boolean extractSycB(){
+        mOrderLocalDataSource.getSyncStateB();
+        return true;
+    }
     public void orderRequest() {
         Queue<OrderRemoteRequest> orderRemoteRequestQueue = new LinkedBlockingQueue<>();
         mOrderRepository.getOrdersWithSynced(0)
@@ -76,11 +87,70 @@ public class OrderRequestEngine  {
                                     //mOrderRepository.;
                                     mOrderLocalDataSource.updateProcessState(order.getEntryId(),1);
                                     orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
+                                }
+                            }
+//                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(orders.get(0)));
+                        }
+                    }
+                    return orderRemoteRequestQueue;
+                })
+                .subscribe(orderRemoteRequests -> {
+                    for (OrderRemoteRequest orderRemoteRequest : orderRemoteRequests) {
+                        mOrderRequestCheckOutHandler.queueRequest(orderRemoteRequest);
+                    }
+                });
+    }
 
-                                    /*
-                                    * the break below is commented out to allow multiple requests at a go
-                                    * */
-                                    //break;
+    public void orderRequestA() {
+        Queue<OrderRemoteRequest> orderRemoteRequestQueue = new LinkedBlockingQueue<>();
+        mOrderRepository.getOrdersWithCounterASynced(0)
+                .observeOn(mScheduleProvider.io())
+                .map(orders -> {
+//                        for (Order order : orders) {
+//                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
+//                        }
+//                        Refactor to retrieve only one order
+                    if (orders != null){
+                        if (orders.size() > 0){
+                            for(Order order: orders){
+                                //if(order.getProcessState() == 0){
+                                if(mOrderLocalDataSource.getProcessState(order.getEntryId()) == 0){
+                                    order.setProcessState(1);
+                                    //mOrderRepository.;
+                                    mOrderLocalDataSource.updateProcessState(order.getEntryId(),1);
+                                    orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
+                                }
+                            }
+//                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(orders.get(0)));
+                        }
+                    }
+                    return orderRemoteRequestQueue;
+                })
+                .subscribe(orderRemoteRequests -> {
+                    for (OrderRemoteRequest orderRemoteRequest : orderRemoteRequests) {
+                        mOrderRequestCheckOutHandler.queueRequest(orderRemoteRequest);
+                    }
+                });
+    }
+
+    public void orderRequestB() {
+        Queue<OrderRemoteRequest> orderRemoteRequestQueue = new LinkedBlockingQueue<>();
+        mOrderRepository.getOrdersWithCounterBSynced(0)
+                .observeOn(mScheduleProvider.io())
+                .map(orders -> {
+//                        for (Order order : orders) {
+//                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
+//                        }
+//                        Refactor to retrieve only one order
+                    if (orders != null){
+                        if (orders.size() > 0){
+                            for(Order order: orders){
+                                //if(order.getProcessState() == 0){
+                                if(mOrderLocalDataSource.getProcessState(order.getEntryId()) == 0){
+                                    order.setProcessState(1);
+                                    //mOrderRepository.;
+                                    mOrderLocalDataSource.updateProcessState(order.getEntryId(),1);
+                                    orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
                                 }
                             }
 //                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(orders.get(0)));

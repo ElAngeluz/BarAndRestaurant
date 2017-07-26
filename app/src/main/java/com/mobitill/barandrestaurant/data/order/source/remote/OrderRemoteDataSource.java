@@ -66,6 +66,16 @@ public class OrderRemoteDataSource implements OrderDataSource {
     }
 
     @Override
+    public Observable<List<Order>> getOrdersWithCounterASynced(Integer isCounterASynced) {
+        return null;
+    }
+
+    @Override
+    public Observable<List<Order>> getOrdersWithCounterBSynced(Integer isCounterBSynced) {
+        return null;
+    }
+
+    @Override
     public Observable<List<Order>> getOrdersForCheckout(Integer checkout, Integer checkoutFlagged) {
         return null;
     }

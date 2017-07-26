@@ -3,6 +3,7 @@ package com.mobitill.barandrestaurant.utils.interceptors;
 
 import android.util.Log;
 
+import com.evernote.android.job.JobManager;
 import com.mobitill.barandrestaurant.data.order.source.local.OrderLocalDataSource;
 
 import java.io.IOException;
@@ -50,8 +51,10 @@ public class EncryptionInterceptor implements Interceptor {
                     .method(request.method(), body).build();
             return chain.proceed(request);
         } catch (Exception e) {
+            Log.d("OkHttp:", "intercept Size of getAllJobs: " + JobManager.instance().getAllJobs().size());
+            Log.d("OkHttp:", "Interceptor Exception Size of Jobs: " + JobManager.instance().getAllJobRequests().size());
             Log.d("NetworkThrows Exception", " Failed to connect ");
-            Log.d("Intercept Old body", strOldBody);
+            Log.d("OkHttp:","Intercept Old body" + strOldBody);
 //            try {
 //                Gson gson = new GsonBuilder().create();
 //                OrderRemoteRequest orderRemoteRequest = gson.fromJson(strOldBody, OrderRemoteRequest.class);

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,6 +121,11 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
     @Override
     public void showOrders(List<Order> orders) {
+
+        for (Order order:orders) {
+            Log.d(TAG, "Log Order Id : " + order.getEntryId());
+        }
+
 //        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 //        List<ReceiptOrders> receiptOrders = new ArrayList<>();
 //        for (int i = 0; i <6 ; i++) {

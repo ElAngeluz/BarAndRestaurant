@@ -23,9 +23,6 @@ public class CheckOutActivity extends SingleFragmentActivity {
     private static final String ID = "orderId";
     private static final String TOTAL = "sumTotal";
 
-    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    String waiterName = sharedPreferences.getString(WAITER_NAME,"CheckOutActivity");
-
     @BindView(R.id.toolbar_tv)
     TextView mTextViewToolbar;
 
@@ -35,6 +32,8 @@ public class CheckOutActivity extends SingleFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String waiterName = sharedPreferences.getString(WAITER_NAME,"CheckOutActivity");
         setContentView(R.layout.check_out_activity);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
@@ -54,6 +53,5 @@ public class CheckOutActivity extends SingleFragmentActivity {
     protected Fragment createFragment() {
         return CheckOutFragment.newInstance(getIntent().getStringExtra(ID),getIntent().getStringExtra(TOTAL));
     }
-
 
 }

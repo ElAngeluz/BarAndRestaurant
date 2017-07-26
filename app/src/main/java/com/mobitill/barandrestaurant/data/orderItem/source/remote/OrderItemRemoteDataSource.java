@@ -115,6 +115,12 @@ public class OrderItemRemoteDataSource implements OrderItemDataSource{
                  .doOnError(new Consumer<Throwable>() {
                      @Override
                      public void accept(Throwable throwable) throws Exception {
+                         if (counter == Constants.RetrofitSource.COUNTERA){
+                             mOrderLocalDataSource.updateCounterASyncState(counter,order.getOrderId().toString(),0);
+                         }
+                         if (counter == Constants.RetrofitSource.COUNTERB){
+                             mOrderLocalDataSource.updateCounterBSyncState(counter,order.getOrderId().toString(),0);
+                         }
                          mOrderLocalDataSource.updateSyncState(order.getOrderId().toString(),0);
                          mOrderLocalDataSource.updateProcessState(order.getOrderId().toString(),0);
                      }

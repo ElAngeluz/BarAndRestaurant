@@ -18,7 +18,6 @@ public class OrderRequestJob extends Job {
     private static final String PARAM_ORDER_REQUEST = "order_request";
 
 
-
     public OrderRequestJob() {
 
     }
@@ -36,27 +35,25 @@ public class OrderRequestJob extends Job {
     }
 
     private boolean orderRequest() {
+
+        //if countsync  > o
         OrderRequestEngine orderRequestEngine = new OrderRequestEngine();
-        orderRequestEngine.orderRequest();
-//        for(int i = 0; i < 10000; i++){
-//            Log.i(TAG, "orderRequest: " + i);
-//            return true;
-//        }
-//        try {
-//            Log.d("start time", "start sleep");
-//            Thread.sleep(5000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        Log.d("stoppage time", "stop thread");
-//        Log.i(TAG, "orderRequest: ");
+//        orderRequestEngine.orderRequest();
+      //  while (orderRequestEngine.extractSycA()){
+            orderRequestEngine.orderRequestA();
+        //}
+
+        //while (orderRequestEngine.extractSycB()){
+            orderRequestEngine.orderRequestB();
+       // }
+
         return false;
     }
 
     public static void scheduleJob(){
 
         new JobRequest.Builder(OrderRequestJob.TAG)
-                .setExecutionWindow(5000L, 5000L)
+                .setExecutionWindow(1000L, 5000L)
                 .setBackoffCriteria(TimeUnit.MINUTES.toMillis(5), JobRequest.BackoffPolicy.LINEAR )
                 .setRequiredNetworkType( JobRequest.NetworkType.ANY )
                 .setRequiresDeviceIdle(false)

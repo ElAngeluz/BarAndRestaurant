@@ -47,6 +47,8 @@ public class OrderLocalDataSource implements OrderDataSource {
             OrderEntry.COLUMN_NAME_NAME,
             OrderEntry.COLUMN_NAME_WAITER_ID,
             OrderEntry.COLUMN_NAME_SYNCED,
+            OrderEntry.COLUMN_NAME_COUNTERA_SYNCED,
+            OrderEntry.COLUMN_NAME_COUNTERB_SYNCED,
             OrderEntry.COLUMN_NAME_CHECKED_OUT,
             OrderEntry.COLUMN_NAME_TIME_STAMP,
             OrderEntry.COLUMN_NAME_FLAGGED_FOR_CHECKOUT,
@@ -69,8 +71,10 @@ public class OrderLocalDataSource implements OrderDataSource {
         String amount = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_AMOUNT));
         String transactionId = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_TRANSACTION_ID));
         Integer processState = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_PROCESS_STATE));
+        Integer counterASync = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_COUNTERA_SYNCED));
+        Integer counterBSync = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_COUNTERA_SYNCED));
         return new Order(entryId, displayId, name, waiterId, synced, checkedOut, timestamp,
-                checkOutFlagged,paymentMethod,amount,transactionId,processState);
+                checkOutFlagged,paymentMethod,amount,transactionId,processState,counterASync,counterBSync);
 
     }
 
@@ -113,6 +117,8 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_AMOUNT, item.getAmount());
         contentValues.put(OrderEntry.COLUMN_NAME_TRANSACTION_ID, item.getTransactionId());
         contentValues.put(OrderEntry.COLUMN_NAME_PROCESS_STATE, item.getProcessState());
+        contentValues.put(OrderEntry.COLUMN_NAME_COUNTERA_SYNCED, item.getCounterASync());
+        contentValues.put(OrderEntry.COLUMN_NAME_COUNTERB_SYNCED, item.getCounterBSync());
         long rowId = mDatabaseHelper.insert(OrderEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }
@@ -148,6 +154,8 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_AMOUNT, item.getAmount());
         contentValues.put(OrderEntry.COLUMN_NAME_TRANSACTION_ID, item.getTransactionId());
         contentValues.put(OrderEntry.COLUMN_NAME_PROCESS_STATE, item.getProcessState());
+        contentValues.put(OrderEntry.COLUMN_NAME_COUNTERA_SYNCED, item.getCounterASync());
+        contentValues.put(OrderEntry.COLUMN_NAME_COUNTERB_SYNCED, item.getCounterBSync());
         String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE?";
         String[] selectionArgs = {item.getEntryId()};
         return mDatabaseHelper.update(OrderEntry.TABLE_NAME, contentValues, selection, selectionArgs);
@@ -173,6 +181,34 @@ public class OrderLocalDataSource implements OrderDataSource {
     public Observable<List<Order>> getOrdersWithSynced(Integer isSynced) {
         String sql = String.format("SELECT %s FROM %s WHERE %s = %d", TextUtils.join(",", projection),
                 OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_SYNCED, isSynced);
+        rx.Observable<List<Order>> observableV1 =
+                mDatabaseHelper
+                        .createQuery(OrderEntry.TABLE_NAME, sql)
+                        .mapToList(mOrderMapperFunction)
+                        .take(1000, TimeUnit.MILLISECONDS);
+        // convert observable from rxjava1 observable to rxjava2 observable
+        Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
+        return observableV2;
+    }
+
+    @Override
+    public Observable<List<Order>> getOrdersWithCounterASynced(Integer isCounterASynced) {
+        String sql = String.format("SELECT %s FROM %s WHERE %s = %d", TextUtils.join(",", projection),
+                OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_COUNTERA_SYNCED, isCounterASynced);
+        rx.Observable<List<Order>> observableV1 =
+                mDatabaseHelper
+                        .createQuery(OrderEntry.TABLE_NAME, sql)
+                        .mapToList(mOrderMapperFunction)
+                        .take(1000, TimeUnit.MILLISECONDS);
+        // convert observable from rxjava1 observable to rxjava2 observable
+        Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
+        return observableV2;
+    }
+
+    @Override
+    public Observable<List<Order>> getOrdersWithCounterBSynced(Integer isCounterBSynced) {
+        String sql = String.format("SELECT %s FROM %s WHERE %s = %d", TextUtils.join(",", projection),
+                OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_COUNTERB_SYNCED, isCounterBSynced);
         rx.Observable<List<Order>> observableV1 =
                 mDatabaseHelper
                         .createQuery(OrderEntry.TABLE_NAME, sql)
@@ -239,18 +275,62 @@ public class OrderLocalDataSource implements OrderDataSource {
     }
 
     public void updateSyncState(String entryId,int state){
-        String selectQuery = " UPDATE " + OrderEntry.TABLE_NAME + " set  " + OrderEntry.COLUMN_NAME_SYNCED + " = "+state+" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
+        String selectQuery = " UPDATE " + OrderEntry.TABLE_NAME + " set  " + OrderEntry.COLUMN_NAME_SYNCED + " = "
+                +state+" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
+//        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        mDatabaseHelper.execute(selectQuery);
+//        cursor.close();
+
+    }
+
+    public void updateCounterASyncState(String counter, String entryId,int state){
+        String selectQuery = " UPDATE " + OrderEntry.TABLE_NAME + " set  " + OrderEntry.COLUMN_NAME_COUNTERA_SYNCED + " = "
+                +state+" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
+//        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        mDatabaseHelper.execute(selectQuery);
+//        cursor.close();
+
+    }
+
+    public void updateCounterBSyncState(String counter,String entryId,int state){
+        String selectQuery = " UPDATE " + OrderEntry.TABLE_NAME + " set  " + OrderEntry.COLUMN_NAME_COUNTERB_SYNCED + " = "
+                +state+" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
 //        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
         mDatabaseHelper.execute(selectQuery);
 //        cursor.close();
 
     }
     public int getSyncState(String entryId){
-        String selectQuery = " SELECT "+OrderEntry.COLUMN_NAME_SYNCED +" FROM "+ OrderEntry.TABLE_NAME +" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
+        String selectQuery = " SELECT "+OrderEntry.COLUMN_NAME_SYNCED +" FROM "+ OrderEntry.TABLE_NAME
+                +" WHERE " + OrderEntry.COLUMN_NAME_ENTRY_ID + String.format(" = '%s'",entryId) ;
         Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
         if(cursor.moveToNext()) {
             int state = cursor.getInt(0);
             return state;
+        }else{
+            return 0;
+
+        }
+    }
+    public int getSyncStateA(){
+        String selectQuery = " SELECT case WHEN ( " + OrderEntry.COLUMN_NAME_COUNTERA_SYNCED + " == 0) THEN 1 else 0 end " +
+                " FROM order_table WHERE " +OrderEntry.COLUMN_NAME_COUNTERA_SYNCED + " = 0 LIMIT 1 ";
+        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        if(cursor.moveToNext()) {
+            int counter = cursor.getInt(0);
+            return counter;
+        }else{
+            return 0;
+
+        }
+    }
+    public int getSyncStateB(){
+        String selectQuery = " SELECT case WHEN ( " + OrderEntry.COLUMN_NAME_COUNTERB_SYNCED + " == 0) THEN 1 else 0 end " +
+                " FROM order_table WHERE " +OrderEntry.COLUMN_NAME_COUNTERB_SYNCED + " = 0 LIMIT 1 ";
+        Cursor cursor = mDatabaseHelper.query(selectQuery, (String[]) null);
+        if(cursor.moveToNext()) {
+            int counter = cursor.getInt(0);
+            return counter;
         }else{
             return 0;
 

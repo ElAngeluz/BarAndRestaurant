@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.evernote.android.job.JobManager;
 import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.mobitill.barandrestaurant.R;
@@ -127,7 +128,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
                         throwable -> {
                             Log.e(TAG, "getProducts: ", throwable);
                             mView.showNoProducts();
-                        },
+    },
                         () -> {
                         }
 
@@ -220,6 +221,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
             mOrder = null;
             mView.showOrderRequestComplete();
             OrderRequestJob.scheduleJob();
+            Log.d("OkHttp:", "completeOrderRequest Job Size: " + JobManager.instance().getAllJobRequests().size());
         }
     }
 

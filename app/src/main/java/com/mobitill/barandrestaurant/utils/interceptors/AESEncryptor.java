@@ -100,7 +100,7 @@ public class AESEncryptor {
 
         SecretKey secretKey = factory.generateSecret(spec);
         SecretKeySpec secret = new SecretKeySpec(secretKey.getEncoded(), "AES");
-        Log.i(TAG, "decrypt: KEY" + bytesToHex(secret.getEncoded()));
+        Log.i("OkHttp:", "decrypt: KEY" + bytesToHex(secret.getEncoded()));
 
         // Decrypt the message
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -126,7 +126,7 @@ public class AESEncryptor {
                 //e.printStackTrace();
             }
         }
-        Log.d("Plain text decrypt:", new String(decryptedTextBytes));
+        Log.d("OkHttp:", "Plain text " + new String(decryptedTextBytes));
 
         return new String(decryptedTextBytes);
 

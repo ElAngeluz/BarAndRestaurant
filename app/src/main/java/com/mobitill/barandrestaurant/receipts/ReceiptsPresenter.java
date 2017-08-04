@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -95,6 +97,11 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
                 );
        compositeDisposable.add(disposable);
 
+    }
+
+    @Override
+    public List<String> getDate() {
+        return orderRepository.getDate();
     }
 
 }

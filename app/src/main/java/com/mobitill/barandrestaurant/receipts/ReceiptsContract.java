@@ -31,6 +31,8 @@ public interface ReceiptsContract {
 
         void getOrders();
 
+        List<String> getDate();
+
 
     }
 }

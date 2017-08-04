@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -59,11 +60,14 @@ public class Order implements Parcelable{
 
     private Integer counterBSync;
 
+    private String date;
+
     protected Order(Parcel in) {
         entryId = in.readString();
         name = in.readString();
         displayId = in.readString();
         waiterId = in.readString();
+        date = in.readString();
         if (in.readByte() == 0) {
             synced = null;
         } else {
@@ -138,6 +142,7 @@ public class Order implements Parcelable{
         this.processState = 0;
         this.counterASync = 0;
         this.counterBSync = 0;
+        this.date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
     }
 
@@ -155,6 +160,7 @@ public class Order implements Parcelable{
         this.processState = 0;
         this.counterASync = 0;
         this.counterBSync = 0;
+        this.date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
     }
 
 
@@ -171,7 +177,8 @@ public class Order implements Parcelable{
                  String transactionId,
                  Integer processState,
                  Integer counterASync,
-                 Integer counterBSync) {
+                 Integer counterBSync,
+                 String date) {
 
         this.entryId = entryId;
         this.displayId = displayId;
@@ -187,6 +194,15 @@ public class Order implements Parcelable{
         this.processState = processState;
         this.counterASync = counterASync;
         this.counterBSync = counterBSync;
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public Integer getCounterASync() {
@@ -331,6 +347,7 @@ public class Order implements Parcelable{
         dest.writeString(name);
         dest.writeString(displayId);
         dest.writeString(waiterId);
+        dest.writeString(date);
         if (synced == null) {
             dest.writeByte((byte) 0);
         } else {

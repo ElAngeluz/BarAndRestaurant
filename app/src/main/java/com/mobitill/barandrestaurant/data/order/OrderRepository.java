@@ -112,4 +112,9 @@ public class OrderRepository implements OrderDataSource {
     public ArrayList<String> getOrdersWithTimestamp() {
         return mOrderLocalDataSource.getOrdersWithTimestamp();
     }
+
+    @Override
+    public List<String> getDate() {
+        return mOrderLocalDataSource.getDate();
+    }
 }

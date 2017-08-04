@@ -30,6 +30,7 @@ public final class OrderPersistenceContract{
         public static final String COLUMN_NAME_AMOUNT = "amount";
         public static final String COLUMN_NAME_TRANSACTION_ID = "transaction_id";
         public static final String COLUMN_NAME_PROCESS_STATE = "process_state";
+        public static final String COLUMN_NAME_DATE = "date";
     }
 
 }

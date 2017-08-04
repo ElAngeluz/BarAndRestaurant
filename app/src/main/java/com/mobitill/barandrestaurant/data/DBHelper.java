@@ -62,7 +62,9 @@ public class DBHelper extends SQLiteOpenHelper {
                     OrderEntry.COLUMN_NAME_AMOUNT + TEXT_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_TRANSACTION_ID + TEXT_TYPE + COMMA_SEP +
                     OrderEntry.COLUMN_NAME_PROCESS_STATE+INTEGER_TYPE+COMMA_SEP +
-                    OrderEntry.COLUMN_NAME_TIME_STAMP + INTEGER_TYPE + " )";
+                    OrderEntry.COLUMN_NAME_TIME_STAMP + INTEGER_TYPE + COMMA_SEP +
+                    OrderEntry.COLUMN_NAME_DATE + TEXT_TYPE +
+                    " )";
 
     //OrderItems Table
     private static final String SQL_CREATE_ORDER_ITEM_ENTRIES =

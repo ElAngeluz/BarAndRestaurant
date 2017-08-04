@@ -84,4 +84,9 @@ public class OrderRemoteDataSource implements OrderDataSource {
     public ArrayList<String> getOrdersWithTimestamp() {
         return null;
     }
+
+    @Override
+    public List<String> getDate() {
+        return null;
+    }
 }

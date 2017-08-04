@@ -16,9 +16,7 @@ import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -129,13 +127,26 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
     @Override
     public void showOrders(List<Order> orders) {
-        Long timeStamp = orders.get(1).getTimeStamp();
-        SimpleDateFormat sdf = new SimpleDateFormat();
-        Date date = new Date(timeStamp);
+        List<String> orderDates = mReceiptsPresenter.getDate();
         List<ReceiptOrders> receiptOrders = new ArrayList<>();
-        for (int i = 0; i < 1 ; i++) {
-            receiptOrders.add(new ReceiptOrders(sdf.format(date),orders));
+        //List orderDates
+        //for(Sring strdate : orderDates){
+            //get orders where strdate == date
+            //receiptOrders.add(new ReceiptOrders(date.toString(),orders));
+        //}
+        List<Order> newList = new ArrayList<>();
+        for (String date:orderDates) {
+            for (Order order:orders){
+                if (order.getDate().equals(date)){
+                   newList.add(order);
+                }
+            }
+                for (int i = 0; i < orderDates.size(); i++) {
+                //get orders where strdate == date
+                receiptOrders.add(new ReceiptOrders(date,newList));
+            }
         }
+
          /*
         *
         * displaying normal recyclerview

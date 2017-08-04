@@ -55,7 +55,8 @@ public class OrderLocalDataSource implements OrderDataSource {
             OrderEntry.COLUMN_NAME_PAYMENT_METHOD,
             OrderEntry.COLUMN_NAME_AMOUNT,
             OrderEntry.COLUMN_NAME_TRANSACTION_ID,
-            OrderEntry.COLUMN_NAME_PROCESS_STATE
+            OrderEntry.COLUMN_NAME_PROCESS_STATE,
+            OrderEntry.COLUMN_NAME_DATE
     };
 
     private Order getOrder(@NonNull Cursor c) {
@@ -73,8 +74,9 @@ public class OrderLocalDataSource implements OrderDataSource {
         Integer processState = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_PROCESS_STATE));
         Integer counterASync = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_COUNTERA_SYNCED));
         Integer counterBSync = c.getInt(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_COUNTERA_SYNCED));
+        String date = c.getString(c.getColumnIndexOrThrow(OrderEntry.COLUMN_NAME_DATE));
         return new Order(entryId, displayId, name, waiterId, synced, checkedOut, timestamp,
-                checkOutFlagged,paymentMethod,amount,transactionId,processState,counterASync,counterBSync);
+                checkOutFlagged,paymentMethod,amount,transactionId,processState,counterASync,counterBSync,date);
 
     }
 
@@ -119,6 +121,7 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_PROCESS_STATE, item.getProcessState());
         contentValues.put(OrderEntry.COLUMN_NAME_COUNTERA_SYNCED, item.getCounterASync());
         contentValues.put(OrderEntry.COLUMN_NAME_COUNTERB_SYNCED, item.getCounterBSync());
+        contentValues.put(OrderEntry.COLUMN_NAME_DATE, item.getDate());
         long rowId = mDatabaseHelper.insert(OrderEntry.TABLE_NAME, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return getLastCreated();
     }
@@ -156,6 +159,7 @@ public class OrderLocalDataSource implements OrderDataSource {
         contentValues.put(OrderEntry.COLUMN_NAME_PROCESS_STATE, item.getProcessState());
         contentValues.put(OrderEntry.COLUMN_NAME_COUNTERA_SYNCED, item.getCounterASync());
         contentValues.put(OrderEntry.COLUMN_NAME_COUNTERB_SYNCED, item.getCounterBSync());
+        contentValues.put(OrderEntry.COLUMN_NAME_DATE, item.getDate());
         String selection = OrderEntry.COLUMN_NAME_ENTRY_ID + " LIKE?";
         String[] selectionArgs = {item.getEntryId()};
         return mDatabaseHelper.update(OrderEntry.TABLE_NAME, contentValues, selection, selectionArgs);
@@ -334,7 +338,19 @@ public class OrderLocalDataSource implements OrderDataSource {
         }else{
             return 0;
 
+
+
         }
+    }
+    public List<String> getDate(){
+        String selectQuery =  "SELECT date FROM order_table GROUP BY date ORDER BY date DESC";
+        Cursor cursor = mDatabaseHelper.query(selectQuery,(String[]) null);
+        List<String> orderDates = new ArrayList<>();
+            while (cursor.moveToNext()){
+                String date = cursor.getString(0);
+                orderDates.add(date);
+            }
+        return orderDates;
     }
 }
 

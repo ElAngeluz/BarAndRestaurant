@@ -21,6 +21,8 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
     private static final String TAG = "ReceiptOrdersAdapter";
     private Context mContext;
     private ReceiptsFragment.CommunicationHandler mHandler;
+    private Order mOrder;
+    private ReceiptOrdersChildViewHolder mViewHolder;
 
     public ReceiptOrdersAdapter(List<? extends ExpandableGroup> groups,Context context,ReceiptsFragment.CommunicationHandler communicationHandler) {
         super(groups);
@@ -44,7 +46,9 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
     public void onBindChildViewHolder(ReceiptOrdersChildViewHolder holder, int position, ExpandableGroup group, int childIndex) {
 
         Order order = (Order) group.getItems().get(childIndex);
+        mOrder = order;
         holder.bindView(order);
+        mViewHolder = holder;
     }
 
     @Override
@@ -53,5 +57,8 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
         holder.setDate(group.getTitle());
     }
 
+    public Long getTimeStamp(){
+        return mViewHolder.getOrderTimeStamp();
+    }
 
 }

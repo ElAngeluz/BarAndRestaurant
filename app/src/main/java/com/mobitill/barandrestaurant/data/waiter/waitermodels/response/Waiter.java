@@ -1,9 +1,12 @@
 package com.mobitill.barandrestaurant.data.waiter.waitermodels.response;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Waiter {
+public class Waiter implements Parcelable{
 
     private static final long STALE_MS = 5 * 1000;
 
@@ -20,6 +23,26 @@ public class Waiter {
     private String phone;
 
     private String password;
+
+    protected Waiter(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        phone = in.readString();
+        password = in.readString();
+        timestamp = in.readLong();
+    }
+
+    public static final Creator<Waiter> CREATOR = new Creator<Waiter>() {
+        @Override
+        public Waiter createFromParcel(Parcel in) {
+            return new Waiter(in);
+        }
+
+        @Override
+        public Waiter[] newArray(int size) {
+            return new Waiter[size];
+        }
+    };
 
     public String getPassword() {
         return password;
@@ -75,5 +98,19 @@ public class Waiter {
     @Override
     public String toString() {
         return super.toString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(phone);
+        dest.writeString(password);
+        dest.writeLong(timestamp);
     }
 }

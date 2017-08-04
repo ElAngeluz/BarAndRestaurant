@@ -26,4 +26,6 @@
     <string name="OrderList">Orders</string>
     <string name="date">Date :</string>
     <string name="order_details">Order Details</string>
+    <string name="string_ok">OK</string>
+    <string name="string_cancel">CANCEL</string>
 </resources>

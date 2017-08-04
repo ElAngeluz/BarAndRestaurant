@@ -1,13 +1,12 @@
 package com.mobitill.barandrestaurant.auth;
 
 
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -168,21 +167,10 @@ public class AuthFragment extends Fragment implements AuthContract.View,ClicksHa
 
     @Override
     public void onItemClicked(View view, int position) {
+        FragmentManager manager = getFragmentManager();
 
-        mInputEditText = new TextInputEditText(getActivity());
-        mInputEditText.setMaxLines(1);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(mWaiters.get(position).getName());
-        dialog.setView(mInputEditText);
-        dialog.setPositiveButton("OK", (dialog1, which) -> {
-            Toast.makeText(getActivity(), "Logging in...", Toast.LENGTH_SHORT).show();
-        });
-        dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+        AuthDialogFragment dialogFragment = AuthDialogFragment.newInstance(mWaiters.get(position).getName(),mWaiters.get(position).getPhone(), (ArrayList<Waiter>) mWaiters);
+        dialogFragment.show(manager,null);
+        dialogFragment.setPresenter(mPresenter);
     }
 }

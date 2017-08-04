@@ -3,6 +3,7 @@ package com.mobitill.barandrestaurant.receipts;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
@@ -53,5 +54,9 @@ public class ReceiptOrdersChildViewHolder extends ChildViewHolder implements Vie
         mHandler.onOrderClick(mOrder.getEntryId());
 //        mContext.startActivity(ReceiptsDetailActivity.newIntent(mContext, mOrder.getEntryId().toString()));
 
+    }
+    public Long getOrderTimeStamp(){
+        Toast.makeText(mContext, mOrder.getTimeStamp().toString(), Toast.LENGTH_SHORT).show();
+        return mOrder.getTimeStamp();
     }
 }

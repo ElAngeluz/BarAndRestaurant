@@ -1,6 +1,7 @@
 package com.mobitill.barandrestaurant.receipts;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,9 @@ import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,16 +39,18 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
     private ReceiptsContract.Presenter presenter;
     private Unbinder unbinder;
+    private CommunicationHandler mHandler;
 
-    private ReceiptsOrdersAdapter receiptsOrdersAdapter;
+//    private ReceiptsOrdersAdapter receiptsOrdersAdapter;
 
-//    private ReceiptOrdersAdapter mReceiptOrdersAdapter;
+    private ReceiptOrdersAdapter mReceiptOrdersAdapter;
     private RecyclerView.LayoutManager manager;
     private List<Order> orders = new ArrayList<>();
 
 
     @BindView(R.id.recView_receipts_orders)
     public RecyclerView receiptsRecyclerView;
+    private Long mOrderTimeStamp;
 
     public static ReceiptsFragment newInstance() {
 
@@ -60,6 +65,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
         // Required empty public constructor
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +76,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
                 .baseComponent(((MainApplication) getActivity().getApplication()).mBaseComponent())
                 .build()
                 .inject(this);
+
     }
 
 
@@ -112,6 +119,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     @Override
     public void checkedOut() {
 
+
     }
 
     @Override
@@ -121,43 +129,36 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
     @Override
     public void showOrders(List<Order> orders) {
-
-        for (Order order:orders) {
-            Log.d(TAG, "Log Order Id : " + order.getEntryId());
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        List<ReceiptOrders> receiptOrders = new ArrayList<>();
+        for (int i = 0; i < 1 ; i++) {
+            receiptOrders.add(new ReceiptOrders(sdf.format(Calendar.getInstance().getTime()),orders));
         }
-
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-//        List<ReceiptOrders> receiptOrders = new ArrayList<>();
-//        for (int i = 0; i <6 ; i++) {
-//
-//            receiptOrders.add(new ReceiptOrders(sdf.format(Calendar.getInstance().getTime()),orders));
-//        }
          /*
         *
         * displaying normal recyclerview
         * */
-        if(isAdded()){
-            if (receiptsOrdersAdapter == null){
-
-                receiptsOrdersAdapter = new ReceiptsOrdersAdapter(orders, getActivity());
-                receiptsRecyclerView.setAdapter(receiptsOrdersAdapter);
-            }else {
-            }
-        }
+//        if(isAdded()){
+//            if (receiptsOrdersAdapter == null){
+//
+//                receiptsOrdersAdapter = new ReceiptsOrdersAdapter(orders, getActivity());
+//                receiptsRecyclerView.setAdapter(receiptsOrdersAdapter);
+//            }else {
+//            }
+//        }
 
         /*
         *
         * displaying expandable recyclerview
         * */
 
-//        if(isAdded()){
-//            if (mReceiptOrdersAdapter == null){
-//
-//                mReceiptOrdersAdapter = new ReceiptOrdersAdapter(receiptOrders,getActivity());
-//                receiptsRecyclerView.setAdapter(mReceiptOrdersAdapter);
-//            }else {
-//            }
-//        }
+        if(isAdded()){
+            if (mReceiptOrdersAdapter == null){
+
+                mReceiptOrdersAdapter = new ReceiptOrdersAdapter(receiptOrders,getActivity(),mHandler);
+                receiptsRecyclerView.setAdapter(mReceiptOrdersAdapter);
+            }
+        }
 
 
     }
@@ -167,4 +168,22 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
     }
 
+    /*
+    * Interface for communication with host activity
+    * */
+
+    interface CommunicationHandler{
+        void onOrderClick(String orderId);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mHandler = (CommunicationHandler) context;
+        } catch (ClassCastException e) {
+            Log.i(TAG, "onAttach: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

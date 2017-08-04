@@ -18,11 +18,14 @@ import java.util.List;
 
 public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptOrdersParentViewHolder,ReceiptOrdersChildViewHolder> {
 
+    private static final String TAG = "ReceiptOrdersAdapter";
     private Context mContext;
+    private ReceiptsFragment.CommunicationHandler mHandler;
 
-    public ReceiptOrdersAdapter(List<? extends ExpandableGroup> groups,Context context) {
+    public ReceiptOrdersAdapter(List<? extends ExpandableGroup> groups,Context context,ReceiptsFragment.CommunicationHandler communicationHandler) {
         super(groups);
         mContext = context;
+        mHandler = communicationHandler;
     }
 
     @Override
@@ -34,7 +37,7 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
     @Override
     public ReceiptOrdersChildViewHolder onCreateChildViewHolder(ViewGroup parent, int position) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.receipts_orders,parent,false);
-        return new ReceiptOrdersChildViewHolder(view,mContext);
+        return new ReceiptOrdersChildViewHolder(view, mContext, mHandler);
     }
 
     @Override
@@ -49,4 +52,6 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
 
         holder.setDate(group.getTitle());
     }
+
+
 }

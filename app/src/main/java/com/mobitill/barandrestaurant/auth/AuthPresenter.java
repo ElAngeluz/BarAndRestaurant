@@ -2,6 +2,7 @@ package com.mobitill.barandrestaurant.auth;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
@@ -80,6 +81,10 @@ public class AuthPresenter implements AuthContract.Presenter {
                         new Consumer<List<Waiter>>() {
                             @Override
                             public void accept(List<Waiter> waiters) throws Exception {
+                                Log.d(TAG, "size: " + waiters.size());
+                                for (Waiter waiter:waiters) {
+                                    Log.d(TAG, "Names: " + waiter.getName());
+                                }
                                 mView.onWaitersLoaded(waiters);
                             }
                         },

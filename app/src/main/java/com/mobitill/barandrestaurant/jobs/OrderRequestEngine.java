@@ -58,17 +58,6 @@ public class OrderRequestEngine  {
         mOrderRequestCheckOutHandler.getLooper();
     }
 
-    public boolean extractSycA(){
-
-        if ( mOrderLocalDataSource.getSyncStateA() == 1){
-            return true;
-        }else
-       return false;
-    }
-    public boolean extractSycB(){
-        mOrderLocalDataSource.getSyncStateB();
-        return true;
-    }
     public void orderRequest() {
         Queue<OrderRemoteRequest> orderRemoteRequestQueue = new LinkedBlockingQueue<>();
         mOrderRepository.getOrdersWithSynced(0)

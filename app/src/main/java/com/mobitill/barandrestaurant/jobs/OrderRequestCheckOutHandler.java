@@ -75,7 +75,9 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
         * getLooper passes this looper to the handler
         *
         * */
+
         mRequestHandler = new Handler(getLooper()){
+
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what){
@@ -151,13 +153,9 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                                 if (updated > -1) {
 //                                                    force the next order not synced to be processed
                                                     OrderRequestJob.scheduleJob();
-                                                } else {
-
                                                 }
                                             });
                                 });
-                    } else {
-
                     }
                 });
 
@@ -194,12 +192,10 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                                 }
                                             });
                                 });
-                    } else {
                     }
                 });
 
     }
-
     private void handleCheckout(final OrderRemoteRequest orderRemoteRequest){
         mOrderItemRepository
                 .orderRequest(orderRemoteRequest,
@@ -219,6 +215,8 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                                 order.setCheckedOut(1);
                                                 int updated = mOrderRepository.update(order);
                                                 if (updated > -1) {
+
+                                                    //Do something
                                                 } else {
                                                 }
                                             });

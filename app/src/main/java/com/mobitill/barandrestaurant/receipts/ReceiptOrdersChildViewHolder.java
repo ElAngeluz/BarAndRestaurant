@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.order.model.Order;
-import com.mobitill.barandrestaurant.receipts_detail.ReceiptsDetailActivity;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 
 import butterknife.BindView;
@@ -26,13 +25,15 @@ public class ReceiptOrdersChildViewHolder extends ChildViewHolder implements Vie
 
     private Order mOrder;
     private Context mContext;
+    private ReceiptsFragment.CommunicationHandler mHandler;
 
-    public ReceiptOrdersChildViewHolder(View itemView, Context context) {
+    public ReceiptOrdersChildViewHolder(View itemView, Context context,ReceiptsFragment.CommunicationHandler communicationHandler) {
         super(itemView);
         ButterKnife.bind(this,itemView);
         itemView.setClickable(true);
         itemView.setOnClickListener(this);
         mContext = context;
+        mHandler = communicationHandler;
     }
 
     public void bindView(Order order){
@@ -49,7 +50,8 @@ public class ReceiptOrdersChildViewHolder extends ChildViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-        mContext.startActivity(ReceiptsDetailActivity.newIntent(mContext, mOrder.getEntryId().toString()));
+        mHandler.onOrderClick(mOrder.getEntryId());
+//        mContext.startActivity(ReceiptsDetailActivity.newIntent(mContext, mOrder.getEntryId().toString()));
 
     }
 }

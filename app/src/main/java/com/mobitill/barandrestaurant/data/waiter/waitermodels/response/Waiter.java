@@ -72,4 +72,8 @@ public class Waiter {
         return System.currentTimeMillis() - timestamp < STALE_MS;
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

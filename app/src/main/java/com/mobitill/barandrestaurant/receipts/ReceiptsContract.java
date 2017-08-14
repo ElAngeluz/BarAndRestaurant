@@ -22,6 +22,8 @@ public interface ReceiptsContract {
 
         void showNoOrders();
 
+        void showOrdersPerDate(List<Order> sortedList);
+
     }
     interface Presenter extends BasePresenter{
 
@@ -32,6 +34,8 @@ public interface ReceiptsContract {
         void getOrders();
 
         List<String> getDate();
+
+        void getOrdersPerDate(String date);
 
 
     }

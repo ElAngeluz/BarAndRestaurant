@@ -104,4 +104,13 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
         return orderRepository.getDate();
     }
 
+    @Override
+    public void getOrdersPerDate(String date) {
+        compositeDisposable.clear();
+        Disposable disposable = orderRepository
+                .getOrdersPerDate(date)
+                .subscribe(orders -> view.showOrdersPerDate(orders));
+        compositeDisposable.add(disposable);
+    }
+
 }

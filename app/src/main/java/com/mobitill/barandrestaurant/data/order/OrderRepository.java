@@ -117,4 +117,9 @@ public class OrderRepository implements OrderDataSource {
     public List<String> getDate() {
         return mOrderLocalDataSource.getDate();
     }
+
+    @Override
+    public Observable<List<Order>> getOrdersPerDate(String date) {
+        return mOrderLocalDataSource.getOrdersPerDate(date);
+    }
 }

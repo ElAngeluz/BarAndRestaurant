@@ -58,7 +58,7 @@ public class ApplicationModule {
     @Provides
     HttpLoggingInterceptor provideHttpLoggingInterceptor(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         return interceptor;
     }
 

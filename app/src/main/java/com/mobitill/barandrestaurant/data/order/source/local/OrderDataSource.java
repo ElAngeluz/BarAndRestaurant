@@ -20,4 +20,5 @@ public interface OrderDataSource extends DataSource<Order, String> {
     Observable<List<Order>>  getOrdersForCheckout(Integer checkout, Integer checkoutFlagged);
     ArrayList<String> getOrdersWithTimestamp();
     List<String> getDate();
+    Observable<List<Order>>  getOrdersPerDate(String date);
 }

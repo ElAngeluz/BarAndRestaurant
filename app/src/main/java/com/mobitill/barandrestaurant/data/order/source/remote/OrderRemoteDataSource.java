@@ -89,4 +89,9 @@ public class OrderRemoteDataSource implements OrderDataSource {
     public List<String> getDate() {
         return null;
     }
+
+    @Override
+    public Observable<List<Order>> getOrdersPerDate(String date) {
+        return null;
+    }
 }

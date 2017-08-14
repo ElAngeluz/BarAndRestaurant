@@ -4,14 +4,19 @@ package com.mobitill.barandrestaurant.auth;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.TextInputEditText;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.R;
@@ -19,8 +24,10 @@ import com.mobitill.barandrestaurant.data.waiter.waitermodels.response.Waiter;
 import com.mobitill.barandrestaurant.register.RegisterActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -37,10 +44,12 @@ public class AuthFragment extends Fragment implements AuthContract.View,ClicksHa
     private AuthContract.Presenter mPresenter;
     private Unbinder mUnbinder;
 
-    private TextInputEditText mInputEditText;
     public RecyclerView mRecyclerView;
     public WaitersListAdapter mListAdapter;
     public RecyclerView.LayoutManager mLayoutManager;
+    private LinearLayout mLinearLayout;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 //    @BindView(R.id.et_password) EditText mPasswordEditText;
 //    @BindView(R.id.phoneNumber)EditText mPhoneNumber;
 //    @BindView(R.id.btnOk) Button mButtonOk;
@@ -60,12 +69,22 @@ public class AuthFragment extends Fragment implements AuthContract.View,ClicksHa
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        setHasOptionsMenu(true);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.new_auth_fragment, container, false);
+        mLinearLayout = (LinearLayout) view.findViewById(R.id.new_auth_list_item_layout);
         mUnbinder = ButterKnife.bind(this, view);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.waiters_list_rv);
-        mLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        mLayoutManager = new GridLayoutManager(getActivity(),3);
+//        mLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         return view;
     }
@@ -130,8 +149,17 @@ public class AuthFragment extends Fragment implements AuthContract.View,ClicksHa
     @Override
     public void onWaitersLoaded(List<Waiter> waiters) {
         mWaiters = waiters;
-        mListAdapter = new WaitersListAdapter(mWaiters,getActivity(),this);
+        Collections.sort(mWaiters, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
+        mListAdapter = new WaitersListAdapter(mWaiters, getActivity(), this);
         mRecyclerView.setAdapter(mListAdapter);
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.auth_fragment,menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -171,6 +199,7 @@ public class AuthFragment extends Fragment implements AuthContract.View,ClicksHa
 
         AuthDialogFragment dialogFragment = AuthDialogFragment.newInstance(mWaiters.get(position).getName(),mWaiters.get(position).getPhone(), (ArrayList<Waiter>) mWaiters);
         dialogFragment.show(manager,null);
+        dialogFragment.setCancelable(false);
         dialogFragment.setPresenter(mPresenter);
     }
 }

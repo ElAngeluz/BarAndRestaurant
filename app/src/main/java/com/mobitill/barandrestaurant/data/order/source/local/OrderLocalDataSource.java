@@ -91,6 +91,16 @@ public class OrderLocalDataSource implements OrderDataSource {
         return observableV2;
     }
 
+    public Observable<List<Order>> getOrdersPerDate(String date) {
+
+        String sql = String.format("SELECT %s FROM %s WHERE " + OrderEntry.COLUMN_NAME_DATE + " = ? " + date, TextUtils.join(",", projection), OrderEntry.TABLE_NAME);
+        rx.Observable<List<Order>> observableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME, sql)
+                .mapToList(mOrderMapperFunction);
+        // convert observable from rxjava1 observable to rxjava2 observable
+        Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
+        return observableV2;
+    }
+
     @Override
     public Observable<Order> getOne(String id) {
         checkNotNull(id);

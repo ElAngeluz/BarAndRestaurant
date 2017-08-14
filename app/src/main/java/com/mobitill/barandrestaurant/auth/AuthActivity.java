@@ -19,7 +19,6 @@ public class AuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
-
         AuthFragment authFragment =
                 (AuthFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
 
@@ -33,6 +32,4 @@ public class AuthActivity extends AppCompatActivity {
                 .build()
                 .inject(this);
     }
-
-
 }

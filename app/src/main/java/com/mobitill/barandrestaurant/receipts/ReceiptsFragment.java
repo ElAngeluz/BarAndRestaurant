@@ -38,6 +38,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     private ReceiptsContract.Presenter presenter;
     private Unbinder unbinder;
     private CommunicationHandler mHandler;
+    private List<Order> mSortedList;
 
 //    private ReceiptsOrdersAdapter receiptsOrdersAdapter;
 
@@ -129,21 +130,10 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     public void showOrders(List<Order> orders) {
         List<String> orderDates = mReceiptsPresenter.getDate();
         List<ReceiptOrders> receiptOrders = new ArrayList<>();
-        //List orderDates
-        //for(Sring strdate : orderDates){
-            //get orders where strdate == date
-            //receiptOrders.add(new ReceiptOrders(date.toString(),orders));
-        //}
         List<Order> newList = new ArrayList<>();
         for (String date:orderDates) {
-            for (Order order:orders){
-                if (order.getDate().equals(date)){
-                   newList.add(order);
-                }
-            }
                 for (int i = 0; i < orderDates.size(); i++) {
-                //get orders where strdate == date
-                receiptOrders.add(new ReceiptOrders(date,newList));
+                receiptOrders.add(new ReceiptOrders(date,mSortedList));
             }
         }
 
@@ -179,6 +169,11 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     @Override
     public void showNoOrders() {
 
+    }
+
+    @Override
+    public void showOrdersPerDate(List<Order> sortedList) {
+        mSortedList = sortedList;
     }
 
     /*

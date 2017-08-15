@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.mobitill.barandrestaurant.R;
 import com.mobitill.barandrestaurant.data.waiter.waitermodels.response.Waiter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,5 +72,11 @@ public class WaitersListAdapter extends RecyclerView.Adapter<WaitersListAdapter.
             int position = getAdapterPosition();
             mClicksHandler.onItemClicked(v,position);
         }
+    }
+    public void setFilter(List<Waiter> waiters){
+        mWaiters = new ArrayList<>();
+        mWaiters.addAll(waiters);
+        notifyDataSetChanged();
+
     }
 }

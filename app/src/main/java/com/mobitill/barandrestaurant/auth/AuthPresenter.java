@@ -81,10 +81,6 @@ public class AuthPresenter implements AuthContract.Presenter {
                         new Consumer<List<Waiter>>() {
                             @Override
                             public void accept(List<Waiter> waiters) throws Exception {
-                                Log.d(TAG, "size: " + waiters.size());
-                                for (Waiter waiter:waiters) {
-                                    Log.d(TAG, "Names: " + waiter.getName());
-                                }
                                 mView.onWaitersLoaded(waiters);
                             }
                         },

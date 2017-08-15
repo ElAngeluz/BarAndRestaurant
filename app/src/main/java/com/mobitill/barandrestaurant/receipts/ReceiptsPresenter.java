@@ -1,7 +1,6 @@
 package com.mobitill.barandrestaurant.receipts;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
 
@@ -73,9 +72,6 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
     @Override
     public void getOrders() {
 
-
-        Log.d(TAG, "timestamp list size is : " + orderRepository.getOrdersWithTimestamp().size());
-
         compositeDisposable.clear();
         Disposable disposable = orderRepository
                 .getAll()
@@ -109,7 +105,7 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
         compositeDisposable.clear();
         Disposable disposable = orderRepository
                 .getOrdersPerDate(date)
-                .subscribe(orders -> view.showOrdersPerDate(orders));
+                .subscribe(sortedList -> view.showOrdersPerDate(sortedList));
         compositeDisposable.add(disposable);
     }
 

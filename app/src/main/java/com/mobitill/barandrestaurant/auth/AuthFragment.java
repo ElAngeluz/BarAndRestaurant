@@ -4,19 +4,19 @@ package com.mobitill.barandrestaurant.auth;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.R;
@@ -48,8 +48,8 @@ public class AuthFragment extends Fragment implements AuthContract.View,ClicksHa
     public WaitersListAdapter mListAdapter;
     public RecyclerView.LayoutManager mLayoutManager;
     private LinearLayout mLinearLayout;
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+    @BindView(R.id.empty_recyclerview_tv)
+    TextView mTextViewEmptyRecView;
 //    @BindView(R.id.et_password) EditText mPasswordEditText;
 //    @BindView(R.id.phoneNumber)EditText mPhoneNumber;
 //    @BindView(R.id.btnOk) Button mButtonOk;
@@ -67,21 +67,14 @@ public class AuthFragment extends Fragment implements AuthContract.View,ClicksHa
     public AuthFragment() {
         // Required empty public constructor
     }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-
-        setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.new_auth_fragment, container, false);
-        mLinearLayout = (LinearLayout) view.findViewById(R.id.new_auth_list_item_layout);
         mUnbinder = ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
+        mTextViewEmptyRecView.setVisibility(View.GONE);
+        mLinearLayout = (LinearLayout) view.findViewById(R.id.new_auth_list_item_layout);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.waiters_list_rv);
         mLayoutManager = new GridLayoutManager(getActivity(),3);
 //        mLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
@@ -148,6 +141,9 @@ public class AuthFragment extends Fragment implements AuthContract.View,ClicksHa
 
     @Override
     public void onWaitersLoaded(List<Waiter> waiters) {
+        if (waiters.size() == 0){
+            mTextViewEmptyRecView.setVisibility(View.VISIBLE);
+        }
         mWaiters = waiters;
         Collections.sort(mWaiters, (o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()));
         mListAdapter = new WaitersListAdapter(mWaiters, getActivity(), this);
@@ -157,10 +153,38 @@ public class AuthFragment extends Fragment implements AuthContract.View,ClicksHa
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.auth_fragment,menu);
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.auth_fragment,menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_auth_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                List<Waiter> filteredWaitersList = filter(mWaiters,newText);
+                mListAdapter.setFilter(filteredWaitersList);
+                mRecyclerView.scrollToPosition(0);
+                return true;
+            }
+        });
     }
+    private List<Waiter> filter(List<Waiter> waiters, String newText){
+        String convertedToLowerCase = newText.toLowerCase();
+        List<Waiter> filteredList = new ArrayList<>();
+        for (Waiter waiter: waiters){
+            String Name = waiter.getName().toLowerCase();
+            if (Name.contains(convertedToLowerCase)){
+                filteredList.add(waiter);
+            }
+        }
+        return filteredList;
+    }
+
 
     @Override
     public void showPlaceOrderActivity(String waiterName) {

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
@@ -44,12 +45,9 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
     private ReceiptOrdersAdapter mReceiptOrdersAdapter;
     private RecyclerView.LayoutManager manager;
-    private List<Order> orders = new ArrayList<>();
-
 
     @BindView(R.id.recView_receipts_orders)
     public RecyclerView receiptsRecyclerView;
-    private Long mOrderTimeStamp;
 
     public static ReceiptsFragment newInstance() {
 
@@ -127,13 +125,19 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     }
 
     @Override
+    public void showOrdersPerDate(List<Order> sortedList) {
+        mSortedList = sortedList;
+    }
+    @Override
     public void showOrders(List<Order> orders) {
+
         List<String> orderDates = mReceiptsPresenter.getDate();
         List<ReceiptOrders> receiptOrders = new ArrayList<>();
-        List<Order> newList = new ArrayList<>();
         for (String date:orderDates) {
+            mReceiptsPresenter.getOrdersPerDate(date);
                 for (int i = 0; i < orderDates.size(); i++) {
                 receiptOrders.add(new ReceiptOrders(date,mSortedList));
+                    Log.d(TAG, "showOrdersPerDate: " + mSortedList.size());
             }
         }
 
@@ -169,13 +173,8 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     @Override
     public void showNoOrders() {
 
+        Toast.makeText(getActivity(), "No orders!", Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    public void showOrdersPerDate(List<Order> sortedList) {
-        mSortedList = sortedList;
-    }
-
     /*
     * Interface for communication with host activity
     * */

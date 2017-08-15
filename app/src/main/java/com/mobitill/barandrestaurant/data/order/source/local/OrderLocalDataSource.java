@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -92,9 +91,12 @@ public class OrderLocalDataSource implements OrderDataSource {
     }
 
     public Observable<List<Order>> getOrdersPerDate(String date) {
+        if (date == null){
+            return Observable.empty();
+        }
 
-        String sql = String.format("SELECT %s FROM %s WHERE " + OrderEntry.COLUMN_NAME_DATE + " = ? " + date, TextUtils.join(",", projection), OrderEntry.TABLE_NAME);
-        rx.Observable<List<Order>> observableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME, sql)
+        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ? " , TextUtils.join(",", projection), OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_DATE);
+        rx.Observable<List<Order>> observableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME, sql,date)
                 .mapToList(mOrderMapperFunction);
         // convert observable from rxjava1 observable to rxjava2 observable
         Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
@@ -259,7 +261,6 @@ public class OrderLocalDataSource implements OrderDataSource {
         ArrayList<String> timeStamps = new ArrayList<>();
         while (cursor.moveToNext()) {
             String state = cursor.getString(0);
-            Log.d(TAG, "state: " + state);
             timeStamps.add(state);
         }
         cursor.close();

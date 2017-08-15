@@ -43,6 +43,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
 //    private ReceiptsOrdersAdapter receiptsOrdersAdapter;
 
+    private List<ReceiptOrders> receiptOrders = new ArrayList<>();
     private ReceiptOrdersAdapter mReceiptOrdersAdapter;
     private RecyclerView.LayoutManager manager;
 
@@ -95,11 +96,28 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
         super.onDestroyView();
         unbinder.unbind();
     }
-
+    @Override
+    public void showOrdersPerDate(List<Order> sortedList) {
+        mSortedList = sortedList;
+    }
     @Override
     public void onResume() {
         super.onResume();
         presenter.subscribe();
+        List<String> orderDates = mReceiptsPresenter.getDate();
+        for (String date:orderDates) {
+            mReceiptsPresenter.getOrdersPerDate(date);
+            for (int i = 0; i < orderDates.size(); i++) {
+                receiptOrders.add(new ReceiptOrders(date,mSortedList));
+            }
+        }
+        if(isAdded()){
+            if (mReceiptOrdersAdapter == null){
+
+                mReceiptOrdersAdapter = new ReceiptOrdersAdapter(receiptOrders,getActivity(),mHandler);
+                receiptsRecyclerView.setAdapter(mReceiptOrdersAdapter);
+            }
+        }
     }
 
     @Override
@@ -125,21 +143,17 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     }
 
     @Override
-    public void showOrdersPerDate(List<Order> sortedList) {
-        mSortedList = sortedList;
-    }
-    @Override
     public void showOrders(List<Order> orders) {
 
-        List<String> orderDates = mReceiptsPresenter.getDate();
-        List<ReceiptOrders> receiptOrders = new ArrayList<>();
-        for (String date:orderDates) {
-            mReceiptsPresenter.getOrdersPerDate(date);
-                for (int i = 0; i < orderDates.size(); i++) {
-                receiptOrders.add(new ReceiptOrders(date,mSortedList));
-                    Log.d(TAG, "showOrdersPerDate: " + mSortedList.size());
-            }
-        }
+//        List<String> orderDates = mReceiptsPresenter.getDate();
+//        List<ReceiptOrders> receiptOrders = new ArrayList<>();
+//        for (String date:orderDates) {
+//            mReceiptsPresenter.getOrdersPerDate(date);
+//                for (int i = 0; i < orderDates.size(); i++) {
+//                receiptOrders.add(new ReceiptOrders(date,mSortedList));
+//                    Log.d(TAG, "showOrdersPerDate: " + mSortedList.size());
+//            }
+//        }
 
          /*
         *
@@ -159,13 +173,13 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
         * displaying expandable recyclerview
         * */
 
-        if(isAdded()){
-            if (mReceiptOrdersAdapter == null){
-
-                mReceiptOrdersAdapter = new ReceiptOrdersAdapter(receiptOrders,getActivity(),mHandler);
-                receiptsRecyclerView.setAdapter(mReceiptOrdersAdapter);
-            }
-        }
+//        if(isAdded()){
+//            if (mReceiptOrdersAdapter == null){
+//
+//                mReceiptOrdersAdapter = new ReceiptOrdersAdapter(receiptOrders,getActivity(),mHandler);
+//                receiptsRecyclerView.setAdapter(mReceiptOrdersAdapter);
+//            }
+//        }
 
 
     }

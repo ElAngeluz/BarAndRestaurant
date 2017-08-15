@@ -3,6 +3,7 @@ package com.mobitill.barandrestaurant.receipts;
 import android.support.annotation.NonNull;
 
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
+import com.mobitill.barandrestaurant.data.order.model.Order;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ReceiptsPresenter implements ReceiptsContract.Presenter {
 
     private static final String TAG = ReceiptsPresenter.class.getSimpleName();
+
+    private List<Order> mOrderList;
 
     @NonNull
     private final OrderRepository orderRepository;
@@ -51,6 +54,7 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
     @Override
     public void subscribe() {
         getOrders();
+        getSortedOrders();
     }
 
     @Override
@@ -105,8 +109,18 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
         compositeDisposable.clear();
         Disposable disposable = orderRepository
                 .getOrdersPerDate(date)
-                .subscribe(sortedList -> view.showOrdersPerDate(sortedList));
+                .subscribe(sortedList ->
+                        {
+                            mOrderList = sortedList;
+                            view.showOrdersPerDate(sortedList);
+                        }
+                        );
         compositeDisposable.add(disposable);
+    }
+
+    @Override
+    public List<Order> getSortedOrders() {
+        return mOrderList;
     }
 
 }

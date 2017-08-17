@@ -43,6 +43,7 @@ public class AuthDialogFragment extends DialogFragment {
         args.putString(PHONE_NUMBER,phoneNumber);
         args.putParcelableArrayList(WAITERS,waiters);
 
+
         AuthDialogFragment fragment = new AuthDialogFragment();
         fragment.setArguments(args);
         return fragment;
@@ -63,7 +64,7 @@ public class AuthDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                        password = mEditTextPassword.getText().toString();
                         if (phoneNumber.isEmpty() | password.isEmpty()) {
-                            Toast.makeText(getActivity(), "Some fields are empty", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Please Enter Password!", Toast.LENGTH_SHORT).show();
                         } else if (phoneNumber != null && password != null) {
                             mPresenter.performLogin(phoneNumber, password, mWaiters);
                         } else {

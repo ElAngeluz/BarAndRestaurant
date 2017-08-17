@@ -22,8 +22,6 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
 
     private static final String TAG = ReceiptsPresenter.class.getSimpleName();
 
-    private List<Order> mOrderList;
-
     @NonNull
     private final OrderRepository orderRepository;
 
@@ -53,8 +51,8 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
 
     @Override
     public void subscribe() {
-        getOrders();
-        getSortedOrders();
+//        getOrders();
+//        getSortedOrders();
     }
 
     @Override
@@ -111,16 +109,26 @@ public class ReceiptsPresenter implements ReceiptsContract.Presenter {
                 .getOrdersPerDate(date)
                 .subscribe(sortedList ->
                         {
-                            mOrderList = sortedList;
                             view.showOrdersPerDate(sortedList);
+                            sortedList.size();
                         }
                         );
+
         compositeDisposable.add(disposable);
     }
 
     @Override
-    public List<Order> getSortedOrders() {
-        return mOrderList;
+    public void getSortedOrders() {
+        List<String> orderDates = getDate();
+        for (String date:orderDates){
+            getOrdersPerDate(date);
+        }
+    }
+
+    @Override
+    public List<Order> getOrdersForEachDate(String date) {
+
+        return orderRepository.getOrdersForEachDate(date);
     }
 
 }

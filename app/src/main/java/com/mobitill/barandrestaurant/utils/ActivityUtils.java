@@ -20,7 +20,7 @@ public class ActivityUtils {
         checkNotNull(fragment);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(frameId, fragment);
+        transaction.replace(frameId, fragment);
         transaction.commit();
     }
 

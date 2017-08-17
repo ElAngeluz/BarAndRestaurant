@@ -22,12 +22,13 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
     private Context mContext;
     private ReceiptsFragment.CommunicationHandler mHandler;
     private Order mOrder;
-    private ReceiptOrdersChildViewHolder mViewHolder;
+    private String mWaiterName;
 
-    public ReceiptOrdersAdapter(List<? extends ExpandableGroup> groups,Context context,ReceiptsFragment.CommunicationHandler communicationHandler) {
+    public ReceiptOrdersAdapter(List<? extends ExpandableGroup> groups,Context context,ReceiptsFragment.CommunicationHandler communicationHandler, String waiterName) {
         super(groups);
         mContext = context;
         mHandler = communicationHandler;
+        this.mWaiterName = waiterName;
     }
 
     @Override
@@ -39,7 +40,7 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
     @Override
     public ReceiptOrdersChildViewHolder onCreateChildViewHolder(ViewGroup parent, int position) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.receipts_orders,parent,false);
-        return new ReceiptOrdersChildViewHolder(view, mContext, mHandler);
+        return new ReceiptOrdersChildViewHolder(view, mContext, mHandler,mWaiterName);
     }
 
     @Override
@@ -48,7 +49,6 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
         Order order = (Order) group.getItems().get(childIndex);
         mOrder = order;
         holder.bindView(order);
-        mViewHolder = holder;
     }
 
     @Override
@@ -56,9 +56,4 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
 
         holder.setDate(group.getTitle());
     }
-
-    public Long getTimeStamp(){
-        return mViewHolder.getOrderTimeStamp();
-    }
-
 }

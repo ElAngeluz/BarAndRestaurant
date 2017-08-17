@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import android.widget.EditText;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
+import com.mobitill.barandrestaurant.receipts.ReceiptsActivity;
 
 import javax.inject.Inject;
 
@@ -125,7 +125,8 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View,
                 mPresenter.makeCall(orderId);
             }else{
                 mPresenter.checkout(orderId);
-                getActivity().finish();
+                startActivity(ReceiptsActivity.newIntent(getActivity()));
+//                getActivity().finish();
             }
 //                mPresenter.checkout(orderId);
 //                getActivity().finish();

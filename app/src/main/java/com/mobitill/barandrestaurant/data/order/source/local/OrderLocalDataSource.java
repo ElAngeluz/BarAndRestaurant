@@ -37,7 +37,7 @@ public class OrderLocalDataSource implements OrderDataSource {
     @Inject
     public OrderLocalDataSource(@NonNull BriteDatabase briteDatabaseHelper) {
         mDatabaseHelper = checkNotNull(briteDatabaseHelper);
-        mOrderMapperFunction = this::getOrder;
+        mOrderMapperFunction = c -> OrderLocalDataSource.this.getOrder(c);
     }
 
     String[] projection = {
@@ -85,19 +85,6 @@ public class OrderLocalDataSource implements OrderDataSource {
         String sql = String.format("SELECT %s FROM %s", TextUtils.join(",", projection), OrderEntry.TABLE_NAME);
         rx.Observable<List<Order>> observableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME, sql)
                 .mapToList(mOrderMapperFunction).take(2000, TimeUnit.MILLISECONDS);
-        // convert observable from rxjava1 observable to rxjava2 observable
-        Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
-        return observableV2;
-    }
-
-    public Observable<List<Order>> getOrdersPerDate(String date) {
-        if (date == null){
-            return Observable.empty();
-        }
-
-        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ? " , TextUtils.join(",", projection), OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_DATE);
-        rx.Observable<List<Order>> observableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME, sql,date)
-                .mapToList(mOrderMapperFunction);
         // convert observable from rxjava1 observable to rxjava2 observable
         Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
         return observableV2;
@@ -362,6 +349,36 @@ public class OrderLocalDataSource implements OrderDataSource {
                 orderDates.add(date);
             }
         return orderDates;
+    }
+    public Observable<List<Order>> getOrdersPerDate(String date) {
+        if (date == null){
+            return Observable.empty();
+        }
+        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ? " ,
+                TextUtils.join(",", projection), OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_DATE);
+        rx.Observable<List<Order>> observableV1 = mDatabaseHelper.createQuery(OrderEntry.TABLE_NAME, sql,date)
+                .mapToList(mOrderMapperFunction);
+        // convert observable from rxjava1 observable to rxjava2 observable
+        Observable<List<Order>> observableV2 = RxJavaInterop.toV2Observable(observableV1);
+        return observableV2;
+    }
+
+    @Override
+    public List<Order> getOrdersForEachDate(String date) {
+        String sql = String.format("SELECT %s FROM %s WHERE %s LIKE ? " ,
+                TextUtils.join(",", projection), OrderEntry.TABLE_NAME, OrderEntry.COLUMN_NAME_DATE);
+       Cursor cursor = mDatabaseHelper.query(sql,date);
+       List<Order> orderList = new ArrayList<>();
+        try {
+            while (cursor.moveToNext()){
+                Order order = getOrder(cursor);
+                orderList.add(order);
+            }
+             return orderList;
+        } finally {
+            cursor.close();
+
+        }
     }
 }
 

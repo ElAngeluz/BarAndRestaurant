@@ -28,4 +28,6 @@
     <string name="order_details">Order Details</string>
     <string name="string_ok">OK</string>
     <string name="string_cancel">CANCEL</string>
+    <string name="checked_out">CheckedOut</string>
+    <string name="not_checked_out">NotCheckedOut</string>
 </resources>

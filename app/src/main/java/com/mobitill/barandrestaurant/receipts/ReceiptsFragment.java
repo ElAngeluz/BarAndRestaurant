@@ -33,13 +33,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     private static final String TAG = ReceiptsFragment.class.getSimpleName();
+    public static final String WAITER_NAME = "waiter_name";
+
+    private String mWaiterName;
 
     @Inject ReceiptsPresenter mReceiptsPresenter;
 
     private ReceiptsContract.Presenter presenter;
     private Unbinder unbinder;
     private CommunicationHandler mHandler;
-    private List<Order> mSortedList;
+    private List<Order> mSortedList = new ArrayList<>();
 
 //    private ReceiptsOrdersAdapter receiptsOrdersAdapter;
 
@@ -50,9 +53,10 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     @BindView(R.id.recView_receipts_orders)
     public RecyclerView receiptsRecyclerView;
 
-    public static ReceiptsFragment newInstance() {
+    public static ReceiptsFragment newInstance(String waiterName) {
 
         Bundle args = new Bundle();
+        args.putString(WAITER_NAME,waiterName);
 
         ReceiptsFragment fragment = new ReceiptsFragment();
         fragment.setArguments(args);
@@ -68,7 +72,8 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        Bundle bundle = getArguments();
+        mWaiterName = bundle.getString(WAITER_NAME);
         DaggerReceiptsComponent.builder()
                 .receiptsPresenterModule(new ReceiptsPresenterModule(this))
                 .baseComponent(((MainApplication) getActivity().getApplication()).mBaseComponent())
@@ -106,15 +111,13 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
         presenter.subscribe();
         List<String> orderDates = mReceiptsPresenter.getDate();
         for (String date:orderDates) {
-            mReceiptsPresenter.getOrdersPerDate(date);
-            for (int i = 0; i < orderDates.size(); i++) {
-                receiptOrders.add(new ReceiptOrders(date,mSortedList));
-            }
+//            mReceiptsPresenter.getOrdersPerDate(date);
+            receiptOrders.add(new ReceiptOrders(date,mReceiptsPresenter.getOrdersForEachDate(date)));
         }
         if(isAdded()){
             if (mReceiptOrdersAdapter == null){
 
-                mReceiptOrdersAdapter = new ReceiptOrdersAdapter(receiptOrders,getActivity(),mHandler);
+                mReceiptOrdersAdapter = new ReceiptOrdersAdapter(receiptOrders,getActivity(),mHandler,mWaiterName);
                 receiptsRecyclerView.setAdapter(mReceiptOrdersAdapter);
             }
         }

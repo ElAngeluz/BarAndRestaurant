@@ -37,10 +37,12 @@ public class ReceiptsActivity extends AppCompatActivity implements ReceiptsFragm
 
     private boolean dualPane;
     public static final String WAITER_NAME = "waiter_name";
+    private static final String ORDER_ID = "order_Id";
 
     private static final String TAG = ReceiptsActivity.class.getSimpleName();
 
     private String mWaiter;
+    private String mOrderId;
 
     @Nullable
     @BindView(R.id.toolbar)
@@ -58,8 +60,7 @@ public class ReceiptsActivity extends AppCompatActivity implements ReceiptsFragm
     ReceiptsPresenter presenter;
 
     public static Intent newIntent(Context context){
-        Intent intent = new Intent(context, ReceiptsActivity.class);
-        return intent;
+        return new Intent(context, ReceiptsActivity.class);
     }
 
     @Override
@@ -67,8 +68,6 @@ public class ReceiptsActivity extends AppCompatActivity implements ReceiptsFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.receipt_activity);
         ButterKnife.bind(this);
-//        mToolbarTextView.setEnabled(false);
-
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String waiterName = sharedPreferences.getString(WAITER_NAME,"CheckOutActivity");
         mWaiter = waiterName;
@@ -86,24 +85,24 @@ public class ReceiptsActivity extends AppCompatActivity implements ReceiptsFragm
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.listFrame);
         if (fragment == null){
-            fragment = ReceiptsFragment.newInstance();
+            fragment = ReceiptsFragment.newInstance(mWaiter);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.listFrame,fragment)
                     .commit();
         }
     }
-
     @Override
     public void onOrderClick(String orderId) {
+        mOrderId = orderId;
 
         if (dualPane){
-            Fragment fragment = ReceiptsDetailFragment.newInstance(orderId);
+            Fragment fragment = ReceiptsDetailFragment.newInstance(mOrderId);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.detailFrame,fragment)
                     .commit();
         }else
         {
-            startActivity(ReceiptsDetailActivity.newIntent(ReceiptsActivity.this,orderId));
+            startActivity(ReceiptsDetailActivity.newIntent(ReceiptsActivity.this,mOrderId));
         }
     }
     private void setUpDrawerContent(BottomNavigationView navigationView) {

@@ -27,8 +27,6 @@ public class CheckOutJob extends Job{
         CheckoutJobEngine checkoutJobEngine = new CheckoutJobEngine();
         checkoutJobEngine.checkout();
     }
-
-
     public static void scheduleJob(){
         new JobRequest.Builder(CheckOutJob.TAG)
                 .setExecutionWindow(1000L, 5000L)
@@ -40,5 +38,4 @@ public class CheckOutJob extends Job{
                 .build()
                 .schedule();
     }
-
 }

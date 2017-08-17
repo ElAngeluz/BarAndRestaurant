@@ -46,9 +46,9 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
     @Override
     public void onBindChildViewHolder(ReceiptOrdersChildViewHolder holder, int position, ExpandableGroup group, int childIndex) {
 
-        Order order = (Order) group.getItems().get(childIndex);
-        mOrder = order;
-        holder.bindView(order);
+            Order order = (Order) group.getItems().get(childIndex);
+            mOrder = order;
+            holder.bindView(order);
     }
 
     @Override
@@ -56,4 +56,5 @@ public class ReceiptOrdersAdapter extends ExpandableRecyclerViewAdapter<ReceiptO
 
         holder.setDate(group.getTitle());
     }
+
 }

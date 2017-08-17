@@ -17,7 +17,6 @@ import android.widget.EditText;
 
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.R;
-import com.mobitill.barandrestaurant.receipts.ReceiptsActivity;
 
 import javax.inject.Inject;
 
@@ -119,24 +118,14 @@ public class CheckOutFragment extends Fragment implements CheckOutContract.View,
     }
 
     @OnClick(R.id.btn_checked_out_ok)
-    public void OkButtonClick(){
-        //startActivity(ReceiptsDetailActivity.newIntent(getActivity(),orderId));
-            if (mCheckBoxMpesa.isChecked()) {
-                mPresenter.makeCall(orderId);
-            }else{
-                mPresenter.checkout(orderId);
-                startActivity(ReceiptsActivity.newIntent(getActivity()));
-//                getActivity().finish();
-            }
-//                mPresenter.checkout(orderId);
-//                getActivity().finish();
-//            }else{
-//                    mPresenter.checkout(orderId);
-//                    getActivity().finish();
-            }
-//            startActivity(ReceiptsActivity.newIntent(getActivity()));
-//            getActivity().finish();
-
+    public void OkButtonClick() {
+        if (mCheckBoxMpesa.isChecked()) {
+            mPresenter.makeCall(orderId);
+        } else {
+            mPresenter.checkout(orderId);
+            getActivity().finish();
+        }
+    }
 
     @Override
     public String setPaymentMethod() {

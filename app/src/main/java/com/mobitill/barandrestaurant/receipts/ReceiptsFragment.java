@@ -46,7 +46,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
 
 //    private ReceiptsOrdersAdapter receiptsOrdersAdapter;
 
-    private List<ReceiptOrders> receiptOrders = new ArrayList<>();
+    private List<ReceiptOrders> receiptOrders;
     private ReceiptOrdersAdapter mReceiptOrdersAdapter;
     private RecyclerView.LayoutManager manager;
 
@@ -109,9 +109,9 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     public void onResume() {
         super.onResume();
         presenter.subscribe();
+        receiptOrders  = new ArrayList<>();
         List<String> orderDates = mReceiptsPresenter.getDate();
         for (String date:orderDates) {
-//            mReceiptsPresenter.getOrdersPerDate(date);
             receiptOrders.add(new ReceiptOrders(date,mReceiptsPresenter.getOrdersForEachDate(date)));
         }
         if(isAdded()){
@@ -124,6 +124,7 @@ public class ReceiptsFragment extends Fragment implements ReceiptsContract.View{
     }
 
     @Override
+
     public void onPause() {
         super.onPause();
         presenter.unsubscribe();

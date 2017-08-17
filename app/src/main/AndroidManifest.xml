@@ -28,6 +28,7 @@
             android:parentActivityName=".receipts.ReceiptsActivity" />
         <activity
             android:label="@string/OrderList"
+            android:launchMode="singleTop"
             android:name=".receipts.ReceiptsActivity" />
         <activity
             android:label="@string/Checkout"

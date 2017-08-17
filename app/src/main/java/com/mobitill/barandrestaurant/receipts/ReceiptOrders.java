@@ -13,4 +13,5 @@ public class ReceiptOrders extends ExpandableGroup{
     public ReceiptOrders(String title, List items) {
         super(title, items);
     }
+
 }

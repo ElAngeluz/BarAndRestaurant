@@ -26,7 +26,6 @@ import com.mobitill.barandrestaurant.data.order.model.Order;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
 import com.mobitill.barandrestaurant.data.product.models.Product;
 import com.mobitill.barandrestaurant.data.waiter.WaitersRepository;
-import com.mobitill.barandrestaurant.jobs.OrderRequestJob;
 import com.mobitill.barandrestaurant.register.adapter.AdapterCallback;
 import com.mobitill.barandrestaurant.register.adapter.RegisterAdapter;
 
@@ -108,7 +107,7 @@ public class RegisterFragment extends Fragment implements RegisterContract.View,
                 .build()
                 .inject(this);
 
-        OrderRequestJob.scheduleJob();
+//        OrderRequestJob.scheduleJob();
 
     }
 

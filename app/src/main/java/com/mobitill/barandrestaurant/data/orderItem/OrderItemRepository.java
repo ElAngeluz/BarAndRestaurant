@@ -7,7 +7,6 @@ import com.mobitill.barandrestaurant.data.Local;
 import com.mobitill.barandrestaurant.data.Remote;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
 import com.mobitill.barandrestaurant.data.orderItem.model.OrderItem;
-import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteItem;
 import com.mobitill.barandrestaurant.data.request.remotemodels.request.OrderRemoteRequest;
 import com.mobitill.barandrestaurant.data.request.remotemodels.response.OrderRemoteResponse;
 import com.mobitill.barandrestaurant.utils.schedulers.BaseScheduleProvider;
@@ -223,8 +222,6 @@ public class OrderItemRepository implements OrderItemDataSource {
 
     @Override
     public Observable<OrderRemoteResponse> orderRequest(OrderRemoteRequest orderRemoteRequest, String counter) {
-        for (OrderRemoteItem item :orderRemoteRequest.getRequestbody().getOrder()) {
-        }
         return orderItemRemoteDataSource
                 .orderRequest(orderRemoteRequest, counter)
                 .doOnError(new Consumer<Throwable>() {

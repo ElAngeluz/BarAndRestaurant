@@ -108,9 +108,10 @@ public class OrderRequestEngine  {
                                     //mOrderRepository.;
                                     mOrderLocalDataSource.updateProcessState(order.getEntryId(),1);
                                     orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(order));
+
+
                                 }
                             }
-//                            orderRemoteRequestQueue.add(OrderRequestEngine.this.getOrderOrderRemoteRequestItem(orders.get(0)));
                         }
                     }
                     return orderRemoteRequestQueue;
@@ -121,7 +122,6 @@ public class OrderRequestEngine  {
                     }
                 });
     }
-
     public void orderRequestB() {
         Queue<OrderRemoteRequest> orderRemoteRequestQueue = new LinkedBlockingQueue<>();
         mOrderRepository.getOrdersWithCounterBSynced(0)
@@ -210,6 +210,9 @@ public class OrderRequestEngine  {
         orderRemoteRequest.setRequestId("181");
         orderRemoteRequest.setRequestname("orderrequest");
 //        orderRemoteRequest.setLocation();
+
+        //send
+
         return orderRemoteRequest;
     }
 

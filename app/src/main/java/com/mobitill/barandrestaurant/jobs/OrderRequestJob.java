@@ -36,17 +36,9 @@ public class OrderRequestJob extends Job {
 
     private boolean orderRequest() {
 
-        //if countsync  > o
         OrderRequestEngine orderRequestEngine = new OrderRequestEngine();
-//        orderRequestEngine.orderRequest();
-      //  while (orderRequestEngine.extractSycA()){
             orderRequestEngine.orderRequestA();
-        //}
-
-        //while (orderRequestEngine.extractSycB()){
             orderRequestEngine.orderRequestB();
-       // }
-
         return false;
     }
 
@@ -62,6 +54,10 @@ public class OrderRequestJob extends Job {
                 .setPersisted( true )
                 .build()
                 .schedule();
+
+
+
+
     }
 
 }

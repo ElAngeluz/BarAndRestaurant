@@ -123,13 +123,10 @@ public class CheckOutPresenter implements CheckOutContract.Presenter {
             public void onResponse(Call<MpesaResponse> call, Response<MpesaResponse> response) {
                 if (response.body().getMessage().equals("ok")){
                     mTalkToFragment.hideProgressDialog();
-
-                    Log.d(TAG, "onResponse: " + response.body().getResponse().getMessage());
                     mTalkToFragment.showDialog1(response.body().getResponse().getMessage());
                 }else {
 
                     mTalkToFragment.hideProgressDialog();
-                    Log.d(TAG, "Error Message: " + response.body().getResponse().getMessage());
                     mTalkToFragment.showDialog2(response.body().getResponse().getMessage());
                 }
             }

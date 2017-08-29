@@ -4,9 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.util.Log;
 
-import com.evernote.android.job.JobManager;
 import com.mobitill.barandrestaurant.ApplicationModule;
 import com.mobitill.barandrestaurant.MainApplication;
 import com.mobitill.barandrestaurant.data.order.OrderRepository;
@@ -131,8 +129,6 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                         Constants.RetrofitSource.COUNTERA)
                 .subscribeOn(mScheduleProvider.computation())
                 .subscribe(orderRemoteResponse -> {
-                    Log.d("OkHttp:", "handleRequestA Size of Jobs: " +JobManager.instance().getAllJobRequests().size());
-
                     if (orderRemoteResponse.getMessage().equals("ok")) {
                         mOrderItemRepository
                                 .getOrderItemWithOrderId(String.valueOf(orderRemoteRequest.getOrderId()))
@@ -156,6 +152,8 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                                 }
                                             });
                                 });
+                    }else{
+                        OrderRequestJob.scheduleJob();
                     }
                 });
 
@@ -167,7 +165,6 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                         Constants.RetrofitSource.COUNTERB)
                 .subscribeOn(mScheduleProvider.computation())
                 .subscribe(orderRemoteResponse -> {
-                    Log.d("OkHttp:", "handleRequestB Size of Jobs: " +JobManager.instance().getAllJobRequests().size());
                     if (orderRemoteResponse.getMessage().equals("ok")) {
                         mOrderItemRepository
                                 .getOrderItemWithOrderId(String.valueOf(orderRemoteRequest.getOrderId()))
@@ -188,10 +185,11 @@ public class OrderRequestCheckOutHandler extends HandlerThread{
                                                 if (updated > -1) {
 //                                                    force the next order not synced to be processed
                                                     OrderRequestJob.scheduleJob();
-                                                } else {
                                                 }
                                             });
                                 });
+                    }else{
+                        OrderRequestJob.scheduleJob();
                     }
                 });
 
